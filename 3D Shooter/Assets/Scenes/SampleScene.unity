@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -508,7 +508,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262788818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.703022, y: -0.7261944, z: -5.379694}
+  m_LocalPosition: {x: 3.5, y: -0.9, z: -5.379694}
   m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -664,6 +664,7 @@ GameObject:
   - component: {fileID: 597775480}
   - component: {fileID: 597775479}
   - component: {fileID: 597775478}
+  - component: {fileID: 597775482}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -704,7 +705,11 @@ MonoBehaviour:
   _shell: {fileID: 5208885607240577540, guid: 2fbc2827006208043972b3bb28e2850f, type: 3}
   _shootPoint: {fileID: 2111362278}
   _shellPoint: {fileID: 1586698091}
+  _cooldownTime: 0.5
+  _shellImpulse: 0.5
+  _monoBehaviour: {fileID: 1914071563}
   _speed: 1
+  _damage: 10
 --- !u!65 &597775479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -768,6 +773,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 597775476}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &597775482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597775476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30b96fdd28d7ac46acc55ae1b6d75d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetLook: {fileID: 140283155}
+  _shootPoint: {fileID: 2111362278}
+  _cameraTransform: {fileID: 963194228}
 --- !u!1 &662683359
 GameObject:
   m_ObjectHideFlags: 0
