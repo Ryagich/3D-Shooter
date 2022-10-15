@@ -1540,6 +1540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc988ad0d532d7b46944513e64be94ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _text: {fileID: 1402385562}
+  _text: {fileID: 1402385563}
   _cameraTrans: {fileID: 963194228}
   _distance: 2
