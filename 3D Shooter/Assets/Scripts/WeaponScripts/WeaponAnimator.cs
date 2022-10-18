@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class WeaponAnimator : MonoBehaviour
 {
-    [SerializeField] private Transform _targetLook, _shootPoint, _cameraTransform;
+    [SerializeField] private Transform _targetLook;
+
     private void FixedUpdate() 
     {
-        Debug.DrawLine(_cameraTransform.position, _targetLook.position, Color.green);   
-        Debug.DrawLine(_shootPoint.position, _targetLook.position, Color.red);   
-
         transform.LookAt(_targetLook);
+    }
+
+    public void SetTarget(Transform target)
+    {
+        _targetLook = target;
     }
 }

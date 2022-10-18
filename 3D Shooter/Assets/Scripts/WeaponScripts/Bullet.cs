@@ -21,15 +21,8 @@ public class Bullet : MonoBehaviour
         if (Physics.Linecast(lastPos, transform.position, out hit))
         {
             Destroy(gameObject);
-            Debug.Log("FixedUpdate");
         }
         lastPos = transform.position;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
-        Debug.Log("OnTriggerEnter");
     }
 
     public void SetValues(float speed)
