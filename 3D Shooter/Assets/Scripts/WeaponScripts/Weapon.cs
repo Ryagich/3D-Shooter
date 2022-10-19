@@ -27,7 +27,7 @@ public class Weapon : MonoBehaviour
         bullet.SetValues(_speed);
         InstantiateShell();
         isReady = false;
-        Camera.main.GetComponent<MonoBehaviour>().StartCoroutine(Cooldown());
+        StartCoroutine(Cooldown());
     }
 
     private IEnumerator Cooldown()
