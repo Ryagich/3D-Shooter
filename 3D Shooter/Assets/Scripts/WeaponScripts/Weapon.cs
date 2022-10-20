@@ -24,7 +24,7 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         var bullet = Instantiate(_bullet, _shootPoint.position, _shootPoint.rotation);
-        bullet.SetValues(_speed);
+        bullet.SetValues(_speed, _damage);
         InstantiateShell();
         isReady = false;
         StartCoroutine(Cooldown());

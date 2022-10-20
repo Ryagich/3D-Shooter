@@ -200,8 +200,7 @@ MonoBehaviour:
   _shellPoint: {fileID: 1803930354940426334}
   _cooldownTime: 0.5
   _shellImpulse: 0.5
-  _monoBehaviour: {fileID: 0}
-  _speed: 1
+  _speed: 5
   _damage: 10
 --- !u!114 &570347616504995394
 MonoBehaviour:

@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
-
+[ExecuteAlways]
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundMask, _heroMask;
@@ -17,12 +18,13 @@ public class EnemyMovement : MonoBehaviour
     private Transform hero;
     private bool alreadyAttacked, walkPointSet = false;
     private bool heroInSightRange, heroInAttackRange;
-
+    private EnemyStateIndicator indicator;
 
     private void Awake()
     {
         hero = GameObject.Find("Hero").transform;
         agent = GetComponent<NavMeshAgent>();
+        indicator = GetComponent<EnemyStateIndicator>();
     }
 
     private void FixedUpdate()
@@ -48,9 +50,13 @@ public class EnemyMovement : MonoBehaviour
         agent.SetDestination(_walkPoint);
         var distance = transform.position - _walkPoint;
 
+        indicator.Patroling();
+        transform.LookAt(_walkPoint);
+
         if (distance.magnitude < 1.0f)
             walkPointSet = false;
     }
+
     private void SearchWalkPoint()
     {
         var rZ = Random.Range(-_walkPointRange, _walkPointRange);
@@ -66,12 +72,14 @@ public class EnemyMovement : MonoBehaviour
     private void ChaseHero()
     {
         agent.SetDestination(hero.position);
+        transform.LookAt(hero);
     }
 
     private void AttackHero()
     {
         agent.SetDestination(transform.position);
         transform.LookAt(hero);
+        indicator.Angry();
 
         if (!alreadyAttacked)
         {
@@ -87,5 +95,11 @@ public class EnemyMovement : MonoBehaviour
     private void ResetAttack()
     {
         alreadyAttacked = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, _sightRange);
+        Gizmos.DrawWireSphere(transform.position, _attackRange);
     }
 }

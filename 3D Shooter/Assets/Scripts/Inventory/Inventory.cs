@@ -17,9 +17,8 @@ public class Inventory : MonoBehaviour
         DestroyCurrHandItem();
         currHandItem = Instantiate(item);
         currHandItem.transform.SetParent(_HandItemTrans);
-        currHandItem.transform.localPosition = _HandItemTrans.localPosition;
+        currHandItem.transform.localPosition = Vector3.zero;
         currHandItem.gameObject?.GetComponent<WeaponAnimator>().SetTarget(_targetLook);
-
     }
 
     public void DestroyCurrHandItem()
