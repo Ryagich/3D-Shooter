@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0117cfd16184b47b72d1444e5e0fd4, type: 3}
   m_Name: Gun
   m_EditorClassIdentifier: 
+  Name: Gun
   HandItem: {fileID: -7096881105810347796, guid: f8d4c4da59d25324882e509cd33a09c0, type: 3}
   DropItem: {fileID: 4773331271317250815, guid: c77718853c5466f489afee9c182f5954, type: 3}
-  InventoryItem: {fileID: 5043635005046233185, guid: 061fbb3b4d3da5c4187207c9f6392a3b, type: 3}
+  InventoryItem: {fileID: 9146810625141938427, guid: 061fbb3b4d3da5c4187207c9f6392a3b, type: 3}
+  Type: 1

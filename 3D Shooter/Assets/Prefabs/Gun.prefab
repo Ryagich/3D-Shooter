@@ -201,7 +201,7 @@ MonoBehaviour:
   _cooldownTime: 0.5
   _shellImpulse: 0.5
   _speed: 5
-  _damage: 10
+  _damage: 50
 --- !u!114 &570347616504995394
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor;
 
 [ExecuteAlways]
 public class EnemyMovement : MonoBehaviour
@@ -73,13 +70,13 @@ public class EnemyMovement : MonoBehaviour
     {
         agent.SetDestination(hero.position);
         transform.LookAt(hero);
+        indicator.Angry();
     }
 
     private void AttackHero()
     {
         agent.SetDestination(transform.position);
         transform.LookAt(hero);
-        indicator.Angry();
 
         if (!alreadyAttacked)
         {
