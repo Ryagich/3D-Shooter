@@ -225,6 +225,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -15, y: 0, z: 0}
+--- !u!1 &480911591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 480911592}
+  m_Layer: 0
+  m_Name: CenterOfMass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &480911592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480911591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1020973821}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &651604624 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3794951908810334882, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
@@ -413,9 +444,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd55a751c2c0314c84203307812b037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _motorForce: 1000
-  _brakeForce: 1000
-  _maxSteerAngle: 30
+  _motorForce: 8000
+  _brakeForce: 15000
+  _maxSteerAngle: 15
+  _centerOfMass: {fileID: 480911592}
   _frontLeftWheelCollider: {fileID: 1645673086}
   _frontRightWheelCollider: {fileID: 1053960937}
   _rearLeftWheelCollider: {fileID: 763606804}
@@ -514,7 +546,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196807711}
-  m_LocalRotation: {x: 0.1501925, y: -0.00045351402, z: 0.000068895904, w: 0.9886567}
+  m_LocalRotation: {x: 0.1501925, y: -0.00045351402, z: 0.00006889591, w: 0.9886567}
   m_LocalPosition: {x: -8.3, y: 6.6, z: -7.5999994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -694,7 +726,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290908782}
-  m_LocalRotation: {x: 0.1501925, y: -0.00045351402, z: 0.000068895904, w: 0.9886567}
+  m_LocalRotation: {x: 0.1501925, y: -0.00045351402, z: 0.00006889591, w: 0.9886567}
   m_LocalPosition: {x: -8.3, y: 6.6, z: -7.5999994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -736,34 +768,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &1439001627 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3018720586628133803, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
-  m_PrefabInstance: {fileID: 1483842835}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1439001632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439001627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bd55a751c2c0314c84203307812b037, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _motorForce: 1500
-  _brakeForce: 3000
-  _maxSteerAngle: 30
-  _frontLeftWheelCollider: {fileID: 1645673086}
-  _frontRightWheelCollider: {fileID: 1053960937}
-  _rearLeftWheelCollider: {fileID: 763606804}
-  _rearRightWheelCollider: {fileID: 2134608171}
-  _frontLeftWheelTransform: {fileID: 651604624}
-  _frontRightWheelTransform: {fileID: 92735949}
-  _rearLeftWheelTransform: {fileID: 1872780225}
-  _rearRightWheelTransform: {fileID: 975976620}
 --- !u!1001 &1483842835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -891,6 +895,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 6c74b5de2a60ea2418cf13670a05bf34, type: 2}
+    - target: {fileID: 7495443279060062592, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+      propertyPath: m_Drag
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495443279060062592, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+      propertyPath: m_Mass
+      value: 1500
+      objectReference: {fileID: 0}
     - target: {fileID: 8083670537106556971, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

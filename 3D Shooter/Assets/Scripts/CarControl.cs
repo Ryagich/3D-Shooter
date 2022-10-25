@@ -8,6 +8,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float _motorForce;
     [SerializeField] private float _brakeForce;
     [SerializeField] private float _maxSteerAngle;
+
+    [SerializeField] private Transform _centerOfMass;
     
     [SerializeField] private WheelCollider _frontLeftWheelCollider;
     [SerializeField] private WheelCollider _frontRightWheelCollider;
@@ -25,6 +27,12 @@ public class CarControl : MonoBehaviour
     private float _curBrakeForce;
     private float _steerAngle;
 
+    private void Awake()
+    {
+        var rb = GetComponent<Rigidbody>();
+        rb.centerOfMass = _centerOfMass.localPosition;
+    }
+
     private void FixedUpdate()
     {
         GetInput();
@@ -37,20 +45,14 @@ public class CarControl : MonoBehaviour
     {
         _verticalInput = Input.GetAxisRaw("Vertical");
         _horizontalInput = Input.GetAxis("Horizontal");
-        _isBraking = Input.GetKey(KeyCode.Space);
+        //_isBraking = Input.GetKey(KeyCode.Space);
     }
 
     private void HandleMotor()
     {
-        //Debug.Log(_frontLeftWheelCollider.rpm);
-        _frontLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
-        _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
-        _curBrakeForce = _isBraking ? _brakeForce : 0;
-        
-        _frontLeftWheelCollider.brakeTorque = _curBrakeForce;
-        _frontRightWheelCollider.brakeTorque = _curBrakeForce;
-        _rearLeftWheelCollider.brakeTorque = _curBrakeForce;
-        _rearRightWheelCollider.brakeTorque = _curBrakeForce;
+        Debug.Log(_frontLeftWheelCollider.rpm);
+        GetTorque(_frontLeftWheelCollider);
+        GetTorque(_frontRightWheelCollider);
     }
 
     private void HandleSteering()
@@ -58,6 +60,21 @@ public class CarControl : MonoBehaviour
         _steerAngle = _maxSteerAngle * _horizontalInput;
         _frontLeftWheelCollider.steerAngle = _steerAngle;
         _frontRightWheelCollider.steerAngle = _steerAngle;
+    }
+
+    private void GetTorque(WheelCollider wheel)
+    {
+        if (_verticalInput * wheel.rpm >= 0)
+        {
+            wheel.motorTorque = _verticalInput * _motorForce;
+            wheel.brakeTorque = 0;
+        }
+
+        if (_verticalInput * wheel.rpm < 0)
+        {
+            wheel.motorTorque = 0;
+            wheel.brakeTorque = _brakeForce;
+        }
     }
 
     private void UpdateWheels()
