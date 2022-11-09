@@ -10,30 +10,46 @@ public class Weapon : MonoBehaviour
     [SerializeField, Min(0.0f)] private float _cooldownTime = 0.5f, _shellImpulse = 5.0f;
 
     private bool isReady = true;
+    private bool isMouse = false;
 
     [Header("Bullet Stats")]
     [SerializeField, Min(1.0f)] private float _speed = 5.0f;
     [SerializeField, Min(1.0f)] private float _damage = 10.0f;
 
-    private void Update()
+    private void Awake()
     {
-        if (Input.GetKey(KeyCode.Mouse0) && isReady)
-            Shoot();
+        InputHandler.OnMouseDown += StartShooting;
+        InputHandler.OnMouseUp += StopShooting;
+    }
+
+    private void StartShooting()
+    {
+        isMouse = true;
+        Shoot();
+    }
+
+    private void StopShooting()
+    {
+        isMouse = false;
     }
 
     public void Shoot()
     {
-        var bullet = Instantiate(_bullet, _shootPoint.position, _shootPoint.rotation);
-        bullet.SetValues(_speed, _damage);
-        InstantiateShell();
-        isReady = false;
-        StartCoroutine(Cooldown());
+        if (isMouse && isReady)
+        {
+            var bullet = Instantiate(_bullet, _shootPoint.position, _shootPoint.rotation);
+            bullet.SetValues(_speed, _damage);
+            InstantiateShell();
+            isReady = false;
+            StartCoroutine(Cooldown());
+        }
     }
 
     private IEnumerator Cooldown()
     {
         yield return new WaitForSeconds(_cooldownTime);
         isReady = true;
+        Shoot();
     }
 
     private void InstantiateShell()

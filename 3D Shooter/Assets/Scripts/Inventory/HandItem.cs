@@ -4,5 +4,15 @@ using UnityEngine;
 
 public class HandItem : MonoBehaviour
 {
-    public Item ItemInfo;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }

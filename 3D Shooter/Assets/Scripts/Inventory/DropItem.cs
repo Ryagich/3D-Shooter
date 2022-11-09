@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class DropItem : MonoBehaviour
 {
-    public Item ItemInfo;
+    [SerializeField] private ItemData _data;
 
-    public void OnPickedUp(GameObject hero, GameObject _)
+    public void AddInInventory(GameObject hero, GameObject _)
     {
-        var inventory = hero.GetComponent<Inventory>();
+        var model = hero.GetComponent<InventoryController>().Model;
 
-        if (!inventory.CanAdded(ItemInfo.InventoryItem._weight))
-            return;
-
-        inventory.AddItem(ItemInfo.InventoryItem);
-        Destroy(gameObject);
+        if (model.CanBeAdd(_data))
+        {
+            model.AddItem(_data);
+            Destroy(gameObject);
+        }
     }
 }

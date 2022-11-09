@@ -15,21 +15,30 @@ public class HeroMovement : MonoBehaviour
     private void Awake()
     {
         characterC = GetComponent<CharacterController>();
+        InputHandler.OnMove += Move;
+        InputHandler.OnPressSpace += Jump;
     }
 
     private void Update()
     {
-        velocity += transform.rotation
-                 * new Vector3(Input.GetAxis("Horizontal"), 0,
-                               Input.GetAxis("Vertical")) * _acceleration
-                               * Time.deltaTime;
+        characterC.Move(velocity * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        velocity.y -= _gravity * Time.deltaTime;
+    }
+
+    private void Move(Vector3 move)
+    {
+        velocity += transform.rotation * move * _acceleration * Time.deltaTime;
         velocity *= 1 - _linearDrag;
         velocity = Vector3.ClampMagnitude(velocity, _maxSpeed);
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) && characterC.isGrounded)
+    private void Jump()
+    {
+        if (characterC.isGrounded)
             velocity.y = _jumpPower;
-
-        velocity.y -= _gravity * Time.deltaTime;
-        characterC.Move(velocity * Time.deltaTime);
     }
 }

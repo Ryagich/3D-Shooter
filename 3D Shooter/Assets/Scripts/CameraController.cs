@@ -8,20 +8,26 @@ public class CameraController : MonoBehaviour
 
     private float mouseX, mouseY, yRotation;
 
-    private void Start()
+    private void Awake()
     {
+        InputHandler.OnMouseX += RotateHero;   
+        InputHandler.OnMouseY += RotateCamera;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
+    private void RotateHero(float x)
     {
-        mouseX = Input.GetAxis("Mouse X") * _sensitivity * Time.deltaTime;
-        mouseY = Input.GetAxis("Mouse Y") * _sensitivity * Time.deltaTime;
+        mouseX = x * _sensitivity * Time.deltaTime;
+        _player.Rotate(mouseX * Vector3.up);
 
+        UpdateTargetLook();
+    }
+
+    private void RotateCamera(float y)
+    {
+        mouseY = y * _sensitivity * Time.deltaTime;
         yRotation -= mouseY;
         yRotation = Mathf.Clamp(yRotation, -45, 45);
-
-        _player.Rotate(mouseX * Vector3.up);
         _cameraTrans.localRotation = Quaternion.Euler(yRotation, 0f, 0f);
 
         UpdateTargetLook();
