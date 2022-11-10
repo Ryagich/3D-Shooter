@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CarControl : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float _maxSteerAngle;
 
     [SerializeField] private Transform _centerOfMass;
+    [SerializeField] public Transform _enterPos;
     
     [SerializeField] private WheelCollider _frontLeftWheelCollider;
     [SerializeField] private WheelCollider _frontRightWheelCollider;
@@ -21,6 +23,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] private Transform _rearLeftWheelTransform;
     [SerializeField] private Transform _rearRightWheelTransform;
 
+    [SerializeField] private UnityEvent<GameObject, GameObject> _objEvent;
+    
     private float _verticalInput;
     private float _horizontalInput;
     private float _brakeInput;
@@ -28,25 +32,34 @@ public class CarControl : MonoBehaviour
     private bool _isHandBraking;
     private float _curBrakeForce;
     private float _steerAngle;
-    private Rigidbody rb;
+    private Rigidbody _rb;
+    private GameObject _player;
+
+    public void InitPlayer(GameObject hero, GameObject _)
+    {
+        _player = hero;
+    }
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = _centerOfMass.localPosition;
+        _rb = GetComponent<Rigidbody>();
+        _rb.centerOfMass = _centerOfMass.localPosition;
+    }
+
+    private void Update()
+    {
+        GetInput();
     }
 
     private void FixedUpdate()
     {
-        _speedVector = rb.velocity;
-        //Debug.Log(_speedVector.magnitude);
-        GetInput();
+        _speedVector = _rb.velocity;
         HandleMotor();
         HandleBraking();
         HandleSteering();
         UpdateWheels();
     }
-
+    
     private void GetInput()
     {
         _verticalInput = Input.GetAxisRaw("Vertical");
@@ -54,31 +67,6 @@ public class CarControl : MonoBehaviour
         _isHandBraking = Input.GetKey(KeyCode.Space);
         
         var angle = Vector3.Angle(transform.forward, _speedVector);
-       //Debug.Log(angle);
-       //if (angle < 90f)
-       //{
-       //    if (_verticalInput < 0)
-       //    {
-       //        _brakeInput = Mathf.Abs(_verticalInput);
-       //        _verticalInput = 0;
-       //    }
-       //    else
-       //    {
-       //        _brakeInput = 0;
-       //    }
-       //}
-       //else
-       //{
-       //    if (_verticalInput > 0)
-       //    {
-       //        _brakeInput = Mathf.Abs(_verticalInput);
-       //        _verticalInput = 0;
-       //    }
-       //    else
-       //    {
-       //        _brakeInput = 0;
-       //    }
-       //}
 
         if ((angle - 90) * _verticalInput > 0)
         {
@@ -89,11 +77,24 @@ public class CarControl : MonoBehaviour
         {
             _brakeInput = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("wa");
+            _objEvent?.Invoke(_player, gameObject);
+            _frontLeftWheelCollider.motorTorque = 0;
+            _frontRightWheelCollider.motorTorque = 0;
+            _rearLeftWheelCollider.motorTorque = 0;
+            _rearRightWheelCollider.motorTorque = 0;
+            _frontLeftWheelCollider.brakeTorque = 0.7f * _brakeForce;
+            _frontRightWheelCollider.brakeTorque = 0.7f * _brakeForce;
+            _rearLeftWheelCollider.brakeTorque = 0.3f * _brakeForce;
+            _rearRightWheelCollider.brakeTorque = 0.3f * _brakeForce;
+        }
     }
 
     private void HandleMotor()
     {
-        //Debug.Log(_frontLeftWheelCollider.rpm);
         _frontLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
         _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
         _rearLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
@@ -116,22 +117,6 @@ public class CarControl : MonoBehaviour
         _steerAngle = _horizontalInput * _maxSteerAngle;
         _frontLeftWheelCollider.steerAngle = Mathf.Lerp(_frontLeftWheelCollider.steerAngle, _steerAngle, 0.5f);
         _frontRightWheelCollider.steerAngle = Mathf.Lerp(_frontLeftWheelCollider.steerAngle, _steerAngle, 0.5f);
-    }
-
-    private void GetTorque(WheelCollider wheel)
-    {
-        //if (_verticalInput * wheel.rpm >= 0)
-        //{
-        //    var moveCoefficient = _verticalInput > 0 ? 1f : 0.1f;
-        //    wheel.motorTorque = _verticalInput * moveCoefficient * _motorForce;
-        //    wheel.brakeTorque = 0;
-        //}
-
-        //if (_verticalInput * wheel.rpm < 0)
-        //{
-        //    wheel.motorTorque = 0;
-        //    wheel.brakeTorque = _brakeForce;
-        //}
     }
 
     private void UpdateWheels()
