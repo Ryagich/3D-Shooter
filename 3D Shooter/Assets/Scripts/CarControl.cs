@@ -11,7 +11,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float _maxSteerAngle;
 
     [SerializeField] private Transform _centerOfMass;
-    [SerializeField] public Transform _enterPos;
+    [SerializeField] public Transform enterPos;
+    [SerializeField] public Transform seatPos;
     
     [SerializeField] private WheelCollider _frontLeftWheelCollider;
     [SerializeField] private WheelCollider _frontRightWheelCollider;
@@ -80,7 +81,6 @@ public class CarControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("wa");
             _objEvent?.Invoke(_player, gameObject);
             _frontLeftWheelCollider.motorTorque = 0;
             _frontRightWheelCollider.motorTorque = 0;
@@ -99,9 +99,6 @@ public class CarControl : MonoBehaviour
         _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
         _rearLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
         _rearRightWheelCollider.motorTorque = _verticalInput * _motorForce;
-        
-        _rearLeftWheelCollider.brakeTorque = _isHandBraking ? _brakeForce * 10 : 0;
-        _rearRightWheelCollider.brakeTorque = _isHandBraking ? _brakeForce * 10 : 0;
     }
 
     private void HandleBraking()
@@ -110,6 +107,9 @@ public class CarControl : MonoBehaviour
         _frontRightWheelCollider.brakeTorque = 0.7f * _brakeInput * _brakeForce;
         _rearLeftWheelCollider.brakeTorque = 0.3f * _brakeInput * _brakeForce;
         _rearRightWheelCollider.brakeTorque = 0.3f * _brakeInput * _brakeForce;
+        
+        _rearLeftWheelCollider.brakeTorque = _isHandBraking ? _brakeForce * 10 : 0;
+        _rearRightWheelCollider.brakeTorque = _isHandBraking ? _brakeForce * 10 : 0;
     }
 
     private void HandleSteering()
