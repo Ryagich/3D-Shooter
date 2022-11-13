@@ -794,7 +794,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2933,6 +2933,9 @@ MonoBehaviour:
   _rearLeftWheelTransform: {fileID: 9188640841400903837}
   _rearRightWheelTransform: {fileID: 28636838678923198}
   _steeringWheel: {fileID: 0}
+  _onCameraChange:
+    m_PersistentCalls:
+      m_Calls: []
   _objEvent:
     m_PersistentCalls:
       m_Calls:
@@ -4057,7 +4060,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4099,7 +4102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9eacf2e5549894a9d37554bd6a9487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _car: {fileID: 1451392009}
   _offset: {x: 0, y: 4, z: -8}
   _speed: 5
 --- !u!1 &1311203681
@@ -4428,6 +4430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionDelay: 0.5
+  carCamera: {fileID: 1290908782}
 --- !u!4 &1387687172
 Transform:
   m_ObjectHideFlags: 0
@@ -4591,7 +4594,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436273843}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.399, y: 0.797, z: 0.13}
+  m_LocalPosition: {x: -0.399, y: 0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4681,6 +4684,9 @@ MonoBehaviour:
   _rearLeftWheelTransform: {fileID: 359347631}
   _rearRightWheelTransform: {fileID: 886072473}
   _steeringWheel: {fileID: 0}
+  _onCameraChange:
+    m_PersistentCalls:
+      m_Calls: []
   _objEvent:
     m_PersistentCalls:
       m_Calls:
@@ -17315,6 +17321,21 @@ MonoBehaviour:
   _rearLeftWheelTransform: {fileID: 910980856158607379}
   _rearRightWheelTransform: {fileID: 7139817963091628532}
   _steeringWheel: {fileID: 7920312285456484230}
+  _onCameraChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1290908786}
+        m_TargetAssemblyTypeName: CarCameraController, Assembly-CSharp
+        m_MethodName: ChangeCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _objEvent:
     m_PersistentCalls:
       m_Calls:
