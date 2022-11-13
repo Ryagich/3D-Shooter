@@ -4,12 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum WheelDriveType
+{
+    ForwardWheelDrive,
+    RearWheelDrive,
+    FullWheelDrive
+}
 public class CarControl : MonoBehaviour
 {
     [SerializeField] private float _motorForce;
     [SerializeField] private float _brakeForce;
     [SerializeField] private float _maxSteerAngle;
-
+    [SerializeField] private WheelDriveType _wheelDriveType;
+    
     [SerializeField] private Transform _centerOfMass;
     [SerializeField] public Transform enterPos;
     [SerializeField] public Transform seatPos;
@@ -23,6 +30,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] private Transform _frontRightWheelTransform;
     [SerializeField] private Transform _rearLeftWheelTransform;
     [SerializeField] private Transform _rearRightWheelTransform;
+
+    [SerializeField] private Transform _steeringWheel;
 
     [SerializeField] private UnityEvent<GameObject, GameObject> _objEvent;
     
@@ -95,10 +104,23 @@ public class CarControl : MonoBehaviour
 
     private void HandleMotor()
     {
-        _frontLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
-        _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
-        _rearLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
-        _rearRightWheelCollider.motorTorque = _verticalInput * _motorForce;
+        switch (_wheelDriveType)
+        {
+            case WheelDriveType.ForwardWheelDrive:
+                _frontLeftWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                _frontRightWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                break;
+            case WheelDriveType.RearWheelDrive:
+                _rearLeftWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                _rearRightWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                break;
+            case WheelDriveType.FullWheelDrive:
+                _frontLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
+                _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
+                _rearLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
+                _rearRightWheelCollider.motorTorque = _verticalInput * _motorForce;
+                break;
+        }
     }
 
     private void HandleBraking()
@@ -117,6 +139,12 @@ public class CarControl : MonoBehaviour
         _steerAngle = _horizontalInput * _maxSteerAngle;
         _frontLeftWheelCollider.steerAngle = Mathf.Lerp(_frontLeftWheelCollider.steerAngle, _steerAngle, 0.5f);
         _frontRightWheelCollider.steerAngle = Mathf.Lerp(_frontLeftWheelCollider.steerAngle, _steerAngle, 0.5f);
+        
+        var curRot = _steeringWheel.localRotation.eulerAngles;
+        var rotAngle = curRot.z;
+        Debug.Log(rotAngle);
+        rotAngle = Mathf.LerpAngle(rotAngle, -10 * _steerAngle, 0.5f);
+        _steeringWheel.localRotation = Quaternion.Euler(new Vector3(curRot.x, curRot.y, rotAngle)); 
     }
 
     private void UpdateWheels()
