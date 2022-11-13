@@ -33,6 +33,7 @@ public class CarControl : MonoBehaviour
 
     [SerializeField] private Transform _steeringWheel;
 
+    [SerializeField] private UnityEvent _onCameraChange;
     [SerializeField] private UnityEvent<GameObject, GameObject> _objEvent;
     
     private float _verticalInput;
@@ -90,15 +91,13 @@ public class CarControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            _objEvent?.Invoke(_player, gameObject);
-            _frontLeftWheelCollider.motorTorque = 0;
-            _frontRightWheelCollider.motorTorque = 0;
-            _rearLeftWheelCollider.motorTorque = 0;
-            _rearRightWheelCollider.motorTorque = 0;
-            _frontLeftWheelCollider.brakeTorque = 0.7f * _brakeForce;
-            _frontRightWheelCollider.brakeTorque = 0.7f * _brakeForce;
-            _rearLeftWheelCollider.brakeTorque = 0.3f * _brakeForce;
-            _rearRightWheelCollider.brakeTorque = 0.3f * _brakeForce;
+            GetOut();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("aa");
+            _onCameraChange?.Invoke();
         }
     }
 
@@ -142,9 +141,21 @@ public class CarControl : MonoBehaviour
         
         var curRot = _steeringWheel.localRotation.eulerAngles;
         var rotAngle = curRot.z;
-        Debug.Log(rotAngle);
         rotAngle = Mathf.LerpAngle(rotAngle, -10 * _steerAngle, 0.5f);
         _steeringWheel.localRotation = Quaternion.Euler(new Vector3(curRot.x, curRot.y, rotAngle)); 
+    }
+    
+    private void GetOut()
+    {
+        _objEvent?.Invoke(_player, gameObject);
+        _frontLeftWheelCollider.motorTorque = 0;
+        _frontRightWheelCollider.motorTorque = 0;
+        _rearLeftWheelCollider.motorTorque = 0;
+        _rearRightWheelCollider.motorTorque = 0;
+        _frontLeftWheelCollider.brakeTorque = 0.7f * _brakeForce;
+        _frontRightWheelCollider.brakeTorque = 0.7f * _brakeForce;
+        _rearLeftWheelCollider.brakeTorque = 0.3f * _brakeForce;
+        _rearRightWheelCollider.brakeTorque = 0.3f * _brakeForce;
     }
 
     private void UpdateWheels()
