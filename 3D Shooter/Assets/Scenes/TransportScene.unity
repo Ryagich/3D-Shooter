@@ -2920,6 +2920,7 @@ MonoBehaviour:
   _motorForce: 500
   _brakeForce: 50000
   _maxSteerAngle: 10
+  _fuelUsageMultiplier: 10
   _wheelDriveType: 0
   _centerOfMass: {fileID: 480911592}
   enterPos: {fileID: 1823142490}
@@ -2935,7 +2936,19 @@ MonoBehaviour:
   _steeringWheel: {fileID: 0}
   _onCameraChange:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1290908786}
+        m_TargetAssemblyTypeName: CarCameraController, Assembly-CSharp
+        m_MethodName: ChangeCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _objEvent:
     m_PersistentCalls:
       m_Calls:
@@ -4671,6 +4684,7 @@ MonoBehaviour:
   _motorForce: 500
   _brakeForce: 50000
   _maxSteerAngle: 10
+  _fuelUsageMultiplier: 0
   _wheelDriveType: 0
   _centerOfMass: {fileID: 997800844}
   enterPos: {fileID: 576611212}
@@ -10864,8 +10878,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3311311801875369857}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.83, y: 2.21, z: -3.81}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -2.83, y: 2.21, z: -7.97}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1792549861519112426}
@@ -11510,7 +11524,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &3319318365743769247
 GameObject:
   m_ObjectHideFlags: 0
@@ -13000,7 +13014,7 @@ GameObject:
   - component: {fileID: 9064100681528786330}
   - component: {fileID: 9064100681528786333}
   - component: {fileID: 9064100681528786332}
-  - component: {fileID: 9064100681528786331}
+  - component: {fileID: 9064100681528786334}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -17254,45 +17268,6 @@ LODGroup:
     - renderer: {fileID: 8472106227596913294}
     - renderer: {fileID: 4706475864293398267}
   m_Enabled: 1
---- !u!114 &9064100681528786331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891719283357964621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f7d160be87cbb548a27e67a8780e8e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1387687171}
-        m_TargetAssemblyTypeName: CarInteractionHandler, Assembly-CSharp
-        m_MethodName: GetIn
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 9064100681528786332}
-        m_TargetAssemblyTypeName: CarControl, Assembly-CSharp
-        m_MethodName: InitPlayer
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &9064100681528786332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17308,6 +17283,7 @@ MonoBehaviour:
   _motorForce: 500
   _brakeForce: 50000
   _maxSteerAngle: 10
+  _fuelUsageMultiplier: 10
   _wheelDriveType: 0
   _centerOfMass: {fileID: 1283766257}
   enterPos: {fileID: 1053425805}
@@ -17367,6 +17343,45 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9064100681528786334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891719283357964621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f7d160be87cbb548a27e67a8780e8e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1387687171}
+        m_TargetAssemblyTypeName: CarInteractionHandler, Assembly-CSharp
+        m_MethodName: GetIn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9064100681528786332}
+        m_TargetAssemblyTypeName: CarControl, Assembly-CSharp
+        m_MethodName: InitPlayer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!33 &9078415614617633263
 MeshFilter:
   m_ObjectHideFlags: 0

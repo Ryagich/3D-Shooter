@@ -15,6 +15,7 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float _motorForce;
     [SerializeField] private float _brakeForce;
     [SerializeField] private float _maxSteerAngle;
+    [SerializeField] private float _fuelUsageMultiplier;
     [SerializeField] private WheelDriveType _wheelDriveType;
     
     [SerializeField] private Transform _centerOfMass;
@@ -43,6 +44,7 @@ public class CarControl : MonoBehaviour
     private bool _isHandBraking;
     private float _curBrakeForce;
     private float _steerAngle;
+    private float _fuelAmount = 100;
     private Rigidbody _rb;
     private GameObject _player;
 
@@ -103,23 +105,31 @@ public class CarControl : MonoBehaviour
 
     private void HandleMotor()
     {
+        _verticalInput = _fuelAmount > 0 ? _verticalInput : 0;
+        
         switch (_wheelDriveType)
         {
             case WheelDriveType.ForwardWheelDrive:
                 _frontLeftWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
                 _frontRightWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                _fuelAmount -= Mathf.Abs(_frontLeftWheelCollider.motorTorque) * 0.0001f * _fuelUsageMultiplier * Time.deltaTime;
                 break;
             case WheelDriveType.RearWheelDrive:
                 _rearLeftWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
                 _rearRightWheelCollider.motorTorque = 2 * _verticalInput * _motorForce;
+                _fuelAmount -= Mathf.Abs(_rearLeftWheelCollider.motorTorque) * 0.0001f * _fuelUsageMultiplier * Time.deltaTime;
                 break;
             case WheelDriveType.FullWheelDrive:
                 _frontLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
                 _frontRightWheelCollider.motorTorque = _verticalInput * _motorForce;
                 _rearLeftWheelCollider.motorTorque = _verticalInput * _motorForce;
                 _rearRightWheelCollider.motorTorque = _verticalInput * _motorForce;
+                _fuelAmount -= Mathf.Abs(_frontLeftWheelCollider.motorTorque) * 0.0002f * _fuelUsageMultiplier * Time.deltaTime;
                 break;
         }
+
+        _fuelAmount -= Mathf.Abs(_frontLeftWheelCollider.motorTorque) * 0.0001f * _fuelUsageMultiplier * Time.deltaTime;
+        Debug.Log(_fuelAmount);
     }
 
     private void HandleBraking()

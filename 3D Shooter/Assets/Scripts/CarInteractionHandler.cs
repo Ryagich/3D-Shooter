@@ -17,6 +17,7 @@ public class CarInteractionHandler : MonoBehaviour
         player.GetComponent<HeroMovement>().enabled = false;
         player.GetComponent<CapsuleCollider>().enabled = false;
         player.GetComponent<CharacterController>().enabled = false;
+        player.GetComponent<MeshRenderer>().enabled = false;
         player.transform.SetParent(car.transform);
         car.GetComponent<CarControl>().enabled = true;
         curTimer = _interactionDelay;
@@ -34,10 +35,12 @@ public class CarInteractionHandler : MonoBehaviour
         player.GetComponent<HeroMovement>().enabled = true;
         player.GetComponent<CapsuleCollider>().enabled = true;
         player.GetComponent<CharacterController>().enabled = true;
+        player.GetComponent<MeshRenderer>().enabled = true;
         player.transform.SetParent(null);
         car.GetComponent<CarControl>().enabled = false;
         curTimer = _interactionDelay;
         carCamera.GetComponent<CarCameraController>().DeinitCar();
+        carCamera.GetComponent<Camera>().depth = -1;
     }
 
     private void Update()
