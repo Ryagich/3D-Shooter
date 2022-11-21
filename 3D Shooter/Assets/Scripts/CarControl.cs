@@ -15,12 +15,14 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float _motorForce;
     [SerializeField] private float _brakeForce;
     [SerializeField] private float _maxSteerAngle;
+    [SerializeField] private float _maxSpeed;
     [SerializeField] private float _fuelUsageMultiplier;
     [SerializeField] private WheelDriveType _wheelDriveType;
     
     [SerializeField] private Transform _centerOfMass;
     [SerializeField] public Transform enterPos;
     [SerializeField] public Transform seatPos;
+    [SerializeField] public GameObject _ui;
     
     [SerializeField] private WheelCollider _frontLeftWheelCollider;
     [SerializeField] private WheelCollider _frontRightWheelCollider;
@@ -33,7 +35,9 @@ public class CarControl : MonoBehaviour
     [SerializeField] private Transform _rearRightWheelTransform;
 
     [SerializeField] private Transform _steeringWheel;
-
+    [SerializeField] private Transform _fuelScale;
+    [SerializeField] private Transform _speedometerArrow;
+    
     [SerializeField] private UnityEvent _onCameraChange;
     [SerializeField] private UnityEvent<GameObject, GameObject> _objEvent;
     
@@ -62,6 +66,10 @@ public class CarControl : MonoBehaviour
     private void Update()
     {
         GetInput();
+        _fuelScale.localScale = new Vector3(_fuelAmount / 100, 1, 1);
+        var speedRot = _speedometerArrow.localRotation.eulerAngles;
+        speedRot = new Vector3(speedRot.x, speedRot.y, - _rb.velocity.magnitude * 1.5f);
+        _speedometerArrow.localRotation = Quaternion.Euler(speedRot);
     }
 
     private void FixedUpdate()
@@ -98,7 +106,6 @@ public class CarControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Debug.Log("aa");
             _onCameraChange?.Invoke();
         }
     }
@@ -129,7 +136,7 @@ public class CarControl : MonoBehaviour
         }
 
         _fuelAmount -= Mathf.Abs(_frontLeftWheelCollider.motorTorque) * 0.0001f * _fuelUsageMultiplier * Time.deltaTime;
-        Debug.Log(_fuelAmount);
+        Debug.Log(_frontLeftWheelCollider.motorTorque);
     }
 
     private void HandleBraking()
