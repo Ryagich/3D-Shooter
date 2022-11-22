@@ -68,7 +68,7 @@ public class CarControl : MonoBehaviour
         GetInput();
         _fuelScale.localScale = new Vector3(_fuelAmount / 100, 1, 1);
         var speedRot = _speedometerArrow.localRotation.eulerAngles;
-        speedRot = new Vector3(speedRot.x, speedRot.y, - _rb.velocity.magnitude * 1.5f);
+        speedRot = new Vector3(speedRot.x, speedRot.y, Mathf.Clamp(-_rb.velocity.magnitude * 1.5f, -210, 0));
         _speedometerArrow.localRotation = Quaternion.Euler(speedRot);
     }
 
