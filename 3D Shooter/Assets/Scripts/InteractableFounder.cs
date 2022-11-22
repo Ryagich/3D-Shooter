@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-
 
 public class InteractableFounder : MonoBehaviour
 {
@@ -11,20 +7,26 @@ public class InteractableFounder : MonoBehaviour
     [SerializeField] private Transform _cameraTrans;
     [SerializeField, Range(0.0f, 100.0f)] private float _distance = 1.0f;
 
+    private GameObject lastGameObject;
+    private Interactable lastIntractable;
+
     private void FixedUpdate()
     {
         var ray = new Ray(_cameraTrans.position, _cameraTrans.forward);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _distance))
+        if (Physics.Raycast(ray, out var hit, _distance))
         {
-            var interactable = hit.transform.gameObject.GetComponent<Interactable>();
-
-            _text.gameObject.SetActive(interactable != null);
-            if (interactable != null && Input.GetKeyDown(KeyCode.F))
-                interactable.Press(gameObject);
+            var gameObj = hit.transform.gameObject;
+            if (lastGameObject != gameObj)
+            {
+                lastGameObject = gameObj;
+                lastIntractable = gameObj.GetComponent<Interactable>();
+                _text.gameObject.SetActive(lastIntractable);
+            }
+            if (lastIntractable && Input.GetKeyDown(KeyCode.F))
+                lastIntractable.Press(gameObject);
         }
         else
             _text.gameObject.SetActive(false);
-    } 
+    }
 }

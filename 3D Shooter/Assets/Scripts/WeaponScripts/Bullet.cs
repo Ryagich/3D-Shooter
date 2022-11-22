@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private float damage;
     private float speed;
     private Vector3 lastPos;
 
@@ -20,20 +21,17 @@ public class Bullet : MonoBehaviour
 
         if (Physics.Linecast(lastPos, transform.position, out hit))
         {
+            var hp = hit.transform.GetComponent<Hp>();
+            if (hp)
+                hp.TakeDamage(damage);
             Destroy(gameObject);
-            Debug.Log("FixedUpdate");
         }
         lastPos = transform.position;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
-        Debug.Log("OnTriggerEnter");
-    }
-
-    public void SetValues(float speed)
+    public void SetValues(float speed, float damage)
     {
         this.speed = speed;
+        this.damage = damage;
     }
 }
