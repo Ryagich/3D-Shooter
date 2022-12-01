@@ -11,5 +11,6 @@ public interface IItemContainerModel
     public InventoryItem GetItem(Vector2Int pos);
     public bool IsInBounds(RectInt bounds);
     public Vector2Int? GetFreePositon(Vector2Int size, ItemData item);
+    public int GetFreeStackAmount(ItemData data);
     public IItemContainerView GetView();
 }

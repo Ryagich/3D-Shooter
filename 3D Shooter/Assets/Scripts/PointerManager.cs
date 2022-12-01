@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PointerManager : MonoBehaviour
 {
+    public static PointerManager Instance;
+
+    [SerializeField] private float a = 1000;
     [SerializeField] private PointerIcon _pointerPrefab;
-    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Transform _point;
     [SerializeField] private Camera _camera;
 
     private Dictionary<EnemyPointer, PointerIcon> _dictionary = new Dictionary<EnemyPointer, PointerIcon>();
 
-    public static PointerManager Instance;
     private void Awake()
     {
         Instance = this;
@@ -18,7 +20,7 @@ public class PointerManager : MonoBehaviour
 
     public void AddToList(EnemyPointer enemyPointer)
     {
-        PointerIcon newPointer = Instantiate(_pointerPrefab, transform);
+        var newPointer = Instantiate(_pointerPrefab, transform);
         _dictionary.Add(enemyPointer, newPointer);
     }
 
@@ -28,22 +30,22 @@ public class PointerManager : MonoBehaviour
         _dictionary.Remove(enemyPointer);
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         var planes = GeometryUtility.CalculateFrustumPlanes(_camera);
-
+        
         foreach (var i in _dictionary)
         {
             var enemyPointer = i.Key;
             var pointerIcon = i.Value;
 
-            var toEnemy = enemyPointer.transform.position - _playerTransform.position;
-            var ray = new Ray(_playerTransform.position, toEnemy);
-            Debug.DrawRay(_playerTransform.position, toEnemy);
+            var toEnemy = enemyPointer.transform.position - _point.position;
+            var ray = new Ray(_point.position, toEnemy);
+            Debug.DrawRay(_point.position, toEnemy);
 
-            var minDistance = Mathf.Infinity;
             var index = 0;
-
+            //var minDistance = Mathf.Infinity;
+            var minDistance = a;
             for (var p = 0; p < 4; p++)
                 if (planes[p].Raycast(ray, out var distance))
                     if (distance < minDistance)
@@ -74,8 +76,13 @@ public class PointerManager : MonoBehaviour
             return Quaternion.Euler(0f, 0f, -90f);
         else if (planeIndex == 2)
             return Quaternion.Euler(0f, 0f, 180);
-        else
+        else if(planeIndex == 3)
             return Quaternion.Euler(0f, 0f, 0f);
+        return Quaternion.identity;
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, a);
+    }
 }

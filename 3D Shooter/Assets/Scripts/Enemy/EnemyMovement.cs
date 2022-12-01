@@ -5,23 +5,23 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundMask, _heroMask;
-    [SerializeField] private float _timeBetweenAttacks;
     [SerializeField] private float _sightRange, _attackRange;
     [SerializeField] private bool _canPatroling = false;
     [SerializeField] private Vector3 _walkPoint;
     [SerializeField] private float _walkPointRange;
+    [SerializeField] private EnemyAttack _attack;
 
     private NavMeshAgent agent;
     private Transform hero;
-    private bool alreadyAttacked, walkPointSet = false;
+    private bool isAttacling = false, walkPointSet = false;
     private bool heroInSightRange, heroInAttackRange;
-    private EnemyStateIndicator indicator;
+    private Animator animator;
 
     private void Awake()
     {
         hero = GameObject.Find("Hero").transform;
         agent = GetComponent<NavMeshAgent>();
-        indicator = GetComponent<EnemyStateIndicator>();
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -41,17 +41,20 @@ public class EnemyMovement : MonoBehaviour
 
     private void Patroling()
     {
+        if (!gameObject)
+            return;
         if (!walkPointSet)
             SearchWalkPoint();
 
         agent.SetDestination(_walkPoint);
         var distance = transform.position - _walkPoint;
 
-        indicator.Patroling();
         transform.LookAt(_walkPoint);
 
         if (distance.magnitude < 1.0f)
             walkPointSet = false;
+        animator.SetBool("isWalk", true);
+        animator.SetBool("IsIdle", false);
     }
 
     private void SearchWalkPoint()
@@ -70,7 +73,6 @@ public class EnemyMovement : MonoBehaviour
     {
         agent.SetDestination(hero.position);
         transform.LookAt(hero);
-        indicator.Angry();
     }
 
     private void AttackHero()
@@ -78,20 +80,21 @@ public class EnemyMovement : MonoBehaviour
         agent.SetDestination(transform.position);
         transform.LookAt(hero);
 
-        if (!alreadyAttacked)
+        if (!isAttacling)
         {
-            //Attack Code here
-
-            //end attackCode
-
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack),_timeBetweenAttacks);
+            animator.SetTrigger("Attack");
+            isAttacling = true;
         }
     }
 
-    private void ResetAttack()
+    public void Attack()
     {
-        alreadyAttacked = false;
+        _attack.Attack();
+    }
+
+    public void SetAttackState()
+    {
+        isAttacling = false;
     }
 
     private void OnDrawGizmos()

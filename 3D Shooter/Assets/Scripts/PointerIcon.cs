@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PointerIcon : MonoBehaviour
 {
     [SerializeField] private Image _image;
-    private bool isShown = true;
+    private bool isShown;
 
     private void Awake()
     {

@@ -42,4 +42,6 @@ public class SlotModel : MonoBehaviour, IItemContainerModel
 
         OnRemoved?.Invoke();
     }
+
+    public int GetFreeStackAmount(ItemData data) => currItem && currItem.ItemData == data ? currItem.FreeAmount : 0;
 }

@@ -4,8 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Shootable
   - Hero
-  - Enemy
+  - Crosshair
+  - Right Hand IK
+  - Left Hand IK
   layers:
   - Default
   - TransparentFX
@@ -13,17 +16,17 @@ TagManager:
   - 
   - Water
   - UI
-  - Hero
-  - Enemy
+  - 
+  - 
+  - Lighting
   - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Postprocessing
+  - Effects
+  - Hero
+  - Drop Item
+  - Enemy
+  - DeadEnemy
+  - Wall
   - 
   - 
   - 
@@ -40,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fire
+    uniqueID: 3804908061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

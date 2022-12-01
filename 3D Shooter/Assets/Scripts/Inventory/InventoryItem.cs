@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+[RequireComponent(typeof(AdditionalItemData))]
 public class InventoryItem : MonoBehaviour
 {
     public event Action OnPutInGrid;
@@ -21,74 +22,68 @@ public class InventoryItem : MonoBehaviour
     private IItemContainerModel lastModel;
 
     [SerializeField] private TMP_Text _text;
-
-    public bool IsRotated { get; private set; }
     public ItemData ItemData { get; private set; }
+    public bool IsRotated { get; private set; }
     public int Height => IsRotated ? ItemData.Width : ItemData.Height;
     public int Width => IsRotated ? ItemData.Height : ItemData.Width;
+    public bool IsDestroyed { get; private set; }
+
     public bool IsSingle => Stack == 1;
     public bool IsMax => MaxStack == Stack;
-    public int HowMuchCanAdd => MaxStack - Stack;
+    public int FreeAmount => MaxStack - Stack;
     public Vector2Int Size => new Vector2Int(Width, Height);
     public RectInt GridBounds => new RectInt(GridPos, Size);
     public bool IsPlaced => model != null;
     public IItemContainerModel GetLastModel => lastModel;
 
-    public bool CanBeAddedOnStack(InventoryItem item) => item.ItemData.Type == ItemData.Type && !IsMax;
-    public bool CanBeAddedOnStack(ItemData data) => data.Type == ItemData.Type && !IsMax;
-
+    /// <summary>
+    ///    ѕќмещает в себ€ максимум предеметов, возвращает оставшеесе кол-во   
+    /// </summary>
     public int FillStack(int stack)
     {
-        if (stack <= HowMuchCanAdd)
+        if (stack <= FreeAmount)
         {
             AddStack(stack);
             return 0;
         }
-        stack -= HowMuchCanAdd;
+        stack -= FreeAmount;
         SetStack(MaxStack);
         return stack;
+    }
+
+    public void Drop(Transform transform = null)
+    {
+        var dropItem = ItemData.DropItem.InstantiateDropItem(transform, Stack);
+        SetStack(0);
+    }
+
+    public HandItem InstantiateHand(Transform parent)
+    {
+        var handItem = Instantiate(ItemData.HandItem, parent);
+        return handItem;
     }
 
     public void SetStack(int newstack)
     {
         Stack = newstack;
-        UpdateText();
         if (Stack == 0)
-            Delete();
+        {
+            HandleDestroy();
+            Destroy(gameObject);
+        }
+        UpdateText();
     }
 
-    public void AddStack(int value)
+    private void AddStack(int value)
     {
         Stack += value;
         UpdateText();
-    }
-
-    public void SubtractStack(int value)
-    {
-        Stack -= value;
-        UpdateText();
-        if (Stack < 1)
-        {
-            model?.RemoveItem(this);
-            Delete();
-        }
     }
 
     private void UpdateText()
     {
         _text.text = Stack.ToString();
         _text.gameObject.SetActive(Stack != 1);
-    }
-
-    public InventoryItem GetHalf()
-    {
-        var toReturn = Instantiate(ItemData.ItemPref, transform.parent);
-        toReturn.SetData(ItemData);
-        var half = Stack / 2;
-        toReturn.Stack = half;
-        Stack -= half;
-        UpdateText();
-        return toReturn;
     }
 
     public void UpdatePositionOnGrid()
@@ -113,7 +108,8 @@ public class InventoryItem : MonoBehaviour
         LastGridPos = GridPos;
 
         model = newModel;
-        transform.SetParent(parent);
+        if (!IsDestroyed)
+            transform.SetParent(parent);
         GridPos = pos;
 
         if (model == null)
@@ -124,15 +120,22 @@ public class InventoryItem : MonoBehaviour
             OnPutInGrid?.Invoke();
     }
 
-    public void Delete()
+    private void OnDestroy()
     {
-        Destroy(gameObject);
+        if (!IsDestroyed)
+            HandleDestroy();
+    }
+
+    private void HandleDestroy()
+    {
+        IsDestroyed = true;
         OnDelete?.Invoke(this);
+        model?.RemoveItem(this);
     }
 
     public void UpdateSize()
     {
-        var ts = GridView.TileSize;
+        var ts = InventoryController.TileSize;
         if (IsRotated)
             (ts.x, ts.y) = (ts.y, ts.x);
         GetComponent<RectTransform>().sizeDelta = Vector2.Scale(ts, ItemData.Size);
@@ -144,7 +147,7 @@ public class InventoryItem : MonoBehaviour
         MaxStack = itemData.MaxStack;
         Stack = itemData.Stack;
         GetComponent<Image>().sprite = itemData.ItemIcon;
-        GetComponent<RectTransform>().sizeDelta = Vector2.Scale(GridView.TileSize, Size);
+        GetComponent<RectTransform>().sizeDelta = Vector2.Scale(InventoryController.TileSize, Size);
         UpdateText();
     }
 

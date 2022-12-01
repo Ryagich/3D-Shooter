@@ -1,18 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponAnimator : MonoBehaviour
 {
-    [SerializeField] private Transform _targetLook;
+    public bool IsReloading { get; private set; }
 
-    private void FixedUpdate() 
+    private Transform _targetLook;
+
+    private void FixedUpdate()
     {
         transform.LookAt(_targetLook);
     }
 
-    public void SetTarget(Transform target)
+    public void SetTargetLook(Transform targetLook)
     {
-        _targetLook = target;
+        _targetLook = targetLook;
     }
 }

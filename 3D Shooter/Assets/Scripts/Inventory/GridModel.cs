@@ -14,6 +14,7 @@ public class GridModel : MonoBehaviour, IItemContainerModel
 
     private InventoryItem[,] inventorySlots;
     private List<InventoryItem> items = new List<InventoryItem>();
+    public IEnumerable<InventoryItem> Items => items;
 
     private void Awake()
     {
@@ -26,8 +27,6 @@ public class GridModel : MonoBehaviour, IItemContainerModel
         inventorySlots = new InventoryItem[_size.x, _size.y];
         items = new List<InventoryItem>();
     }
-
-    public IEnumerable<InventoryItem> Items => items;
 
     public Vector2Int? GetFreePositon(Vector2Int size, ItemData _)
     {
@@ -115,4 +114,13 @@ public class GridModel : MonoBehaviour, IItemContainerModel
              && IsInBounds(bounds.max - Vector2Int.one);
 
     public IItemContainerView GetView() => _view;
+
+    public int GetFreeStackAmount(ItemData data)
+    {
+        var amount = 0;
+        foreach (var item in items)
+            if (item.ItemData == data && !item.IsMax)
+                amount += item.FreeAmount;
+        return amount;
+    }
 }

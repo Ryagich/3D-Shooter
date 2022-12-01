@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
+  m_Name: M4
+  m_EditorClassIdentifier: 
+  _width: 15
+  _height: 6
+  _maxStack: 1
+  _stack: 1
+  _itemIcon: {fileID: 21300000, guid: 72f84edd0cf5c9d46bdcb80de884ecfb, type: 3}
+  _type: 1
+  _itemPref: {fileID: 8092383892852998202, guid: e35a3b76ef424b1419473eabbf9b9072,
+    type: 3}
+  _dropItem: {fileID: 4241491069070048156, guid: dab2ca26ce51c54449c14c5d1f8351f0,
+    type: 3}
+  _handItem: {fileID: 8136293608381892616, guid: df1e2d35bb77aff488a927749c7071e6,
+    type: 3}

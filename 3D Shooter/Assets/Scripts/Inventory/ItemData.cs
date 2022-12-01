@@ -10,7 +10,9 @@ public class ItemData : ScriptableObject
     [SerializeField] private ItemType _type = ItemType.None;
     [SerializeField] private InventoryItem _itemPref;
     [SerializeField] private DropItem _dropItem;
+    [SerializeField] private HandItem _handItem;
 
+    public HandItem HandItem => _handItem;
     public DropItem DropItem => _dropItem;
     public int Width => _width;
     public int Height => _height;
@@ -34,5 +36,6 @@ public enum ItemType
     Body,
     Legs,
     Feets,
+    Ammo,
 }
 

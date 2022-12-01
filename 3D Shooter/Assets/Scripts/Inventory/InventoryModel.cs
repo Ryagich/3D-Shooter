@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InventoryModel : MonoBehaviour
 {
+    public static event Action OnUpdateInventory;
+
     [SerializeField] private List<SlotModel> _slots;
     [SerializeField] private List<GridModel> _grids;
     [SerializeField] private Transform _parent;
@@ -19,59 +22,38 @@ public class InventoryModel : MonoBehaviour
             yield return item;
     }
 
-    private void RemoveItem(InventoryItem item)
+    public void AddItem(ItemData data)
     {
-        items.Remove(item);
-    }
-
-    private int CanFillOldItem(ItemData data)
-    {
-        var newData = data;
-        var stack = newData.Stack;
-        foreach (var item in items)
-            if (item.CanBeAddedOnStack(newData))
-            {
-                var newStack = item.FillStack(stack);
-                if (newStack == 0)
-                    return 0;
-                stack = newStack;
-            }
-        return stack;
-    }
-
-    public void AddItem(ItemData newData)
-    {
-        var data = newData;
-        var stack = CanFillOldItem(data);
-        if (stack == 0)
-            return;
-        var pos = GetFreePositon(data);
-        if (pos == null)
-            return;
         var item = InstantiateItem(data);
-        item.SetStack((int)stack);
-        WriteItem(item);
-        PlaceItem(item, pos.Value.Item1, pos.Value.Item2, pos.Value.Item3);
+        AddItem(item);
+        OnUpdateInventory?.Invoke();
+    }
 
-        item.OnDelete += RemoveItem;
+    public InventoryItem InstantiateAddItem(ItemData data, int stack)
+    {
+        var item = InstantiateItem(data);
+        item.SetStack(stack);
+        AddItem(item);
+        return item;
     }
 
     public void AddItem(InventoryItem item)
     {
-        var stack = CanFillOldItem(item.ItemData);
-        item.SetStack(stack);
-        if (stack == 0)
+        FillFreeStacks(item);
+        OnUpdateInventory?.Invoke();
+        if (!item || item.Stack == 0 || item.IsDestroyed)
             return;
         var pos = GetFreePositon(item.ItemData);
         if (pos == null)
         {
+            item.Drop();
             Destroy(item.gameObject);
+            OnUpdateInventory?.Invoke();
             return;
         }
-        WriteItem(item);
+        RegisterItem(item);
         PlaceItem(item, pos.Value.Item1, pos.Value.Item2, pos.Value.Item3);
-
-        item.OnDelete += RemoveItem;
+        OnUpdateInventory?.Invoke();
     }
 
     public void PlaceItem(InventoryItem item, Vector2Int pos, IItemContainerModel model, bool rotation)
@@ -83,13 +65,14 @@ public class InventoryModel : MonoBehaviour
 
     public InventoryItem InstantiateItem(ItemData data)
     {
-        var item = Instantiate(data.ItemPref, _parent);
+        var item = Instantiate(data.ItemPref, null);
         item.SetData(data);
-        WriteItem(item);
+        RegisterItem(item); 
         return item;
     }
 
-    public void WriteItem(InventoryItem item)
+
+    public void RegisterItem(InventoryItem item)
     {
         if (!items.Contains(item))
         {
@@ -98,7 +81,11 @@ public class InventoryModel : MonoBehaviour
         }
     }
 
-    public bool CanBeAdd(ItemData data) => (GetFreePositon(data) != null) || CanFillOldItem(data) == 0;
+    private void RemoveItem(InventoryItem item)
+    {
+        items.Remove(item);
+        OnUpdateInventory.Invoke();
+    }
 
     public (Vector2Int, IItemContainerModel, bool)? GetFreePositon(ItemData data)
     {
@@ -112,5 +99,24 @@ public class InventoryModel : MonoBehaviour
                 return (freePos.Value, model, true);
         }
         return null;
+    }
+
+    public int GetFreeStackAmount(ItemData data)
+    {
+        //return GetContainerModels().Select(i => i.GetFreeStackAmount(data)).Sum();
+        return items.Select(i => i.ItemData == data ? i.FreeAmount : 0).Sum();
+    }
+
+    public void FillFreeStacks(InventoryItem item)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].ItemData == item)
+            {
+                item.SetStack(items[i].FillStack(item.Stack));
+                if (!item || item.Stack == 0)
+                    return;
+            }
+        }
     }
 }

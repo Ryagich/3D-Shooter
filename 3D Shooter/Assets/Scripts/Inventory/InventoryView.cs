@@ -6,8 +6,7 @@ public class InventoryView : MonoBehaviour
 {
     public bool IsMouseOverGrid => ViewObj != null;
     public IItemContainerView ViewObj;
-
-    [SerializeField] private GameObject itemPref;
+    
     [SerializeField] private Transform canvasTransform;
     [SerializeField] private InventoryController controller;
     [SerializeField] private InventoryHighlighter inventoryHighlighter;
@@ -65,8 +64,8 @@ public class InventoryView : MonoBehaviour
     public Vector2Int GetHandGridPos()
     {
         var pos = (Vector2)Input.mousePosition;
-        pos.x -= (controller.HandItem.Width * 0.5f - 0.5f) * GridView.TileSize.x;
-        pos.y += (controller.HandItem.Height * 0.5f - 0.5f) * GridView.TileSize.y;
+        pos.x -= (controller.HandItem.Width * 0.5f - 0.5f) * InventoryController.TileSize.x;
+        pos.y += (controller.HandItem.Height * 0.5f - 0.5f) * InventoryController.TileSize.y;
         return ViewObj.GetGridPosition(pos);
     }
 }

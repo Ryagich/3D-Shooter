@@ -7,8 +7,14 @@ public class Interactable : MonoBehaviour
 {
     [SerializeField] private UnityEvent<GameObject, GameObject> _objEvent;
 
+    private bool isPressed = false;
+
     public void Press(GameObject hero)
     {
-        _objEvent?.Invoke(hero, gameObject);
+        if (!isPressed)
+        {
+            isPressed = true;
+            _objEvent?.Invoke(hero, gameObject);
+        }
     }
 }

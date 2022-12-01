@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class HeroMovement : MonoBehaviour
 {
-    [SerializeField, Range(0.0f, 50.0f)] private float _maxSpeed, _acceleration;
+    [SerializeField, Range(0.0f, 50.0f)] private float _maxStepSpeed, _stepAcceleration;
+
     [SerializeField, Range(0.0f, 1.0f)] private float _linearDrag;
     [SerializeField, Range(0.0f, 50.0f)] private float _gravity;
     [SerializeField, Range(0.0f, 10.0f)] private float _jumpPower = 5.0f;
@@ -19,6 +20,12 @@ public class HeroMovement : MonoBehaviour
         InputHandler.OnPressSpace += Jump;
     }
 
+    private void OnDestroy()
+    {
+        InputHandler.OnMove -= Move;
+        InputHandler.OnPressSpace -= Jump;
+    }
+
     private void Update()
     {
         characterC.Move(velocity * Time.deltaTime);
@@ -27,13 +34,13 @@ public class HeroMovement : MonoBehaviour
     private void FixedUpdate()
     {
         velocity.y -= _gravity * Time.deltaTime;
+        velocity *= 1 - _linearDrag;
     }
 
     private void Move(Vector3 move)
     {
-        velocity += transform.rotation * move * _acceleration * Time.deltaTime;
-        velocity *= 1 - _linearDrag;
-        velocity = Vector3.ClampMagnitude(velocity, _maxSpeed);
+        velocity += transform.rotation * move * Time.deltaTime * (_stepAcceleration);
+        velocity = Vector3.ClampMagnitude(velocity, _maxStepSpeed);
     }
 
     private void Jump()

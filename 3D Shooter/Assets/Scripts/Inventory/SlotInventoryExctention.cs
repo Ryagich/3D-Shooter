@@ -17,10 +17,11 @@ public class SlotInventoryExctention : MonoBehaviour
 
     private void RemoveGrid()
     {
-        var items = (List<InventoryItem>)GridM.Items;
-        GridM.Init(Vector2Int.zero);
+        var items = GridM.Items;
         foreach (var item in items)
             inventoryM.AddItem(item);
+        GridM.Init(Vector2Int.zero);
+        GridM.GridView.Init();
     }
 
     private void SetGrid(InventoryItem item)

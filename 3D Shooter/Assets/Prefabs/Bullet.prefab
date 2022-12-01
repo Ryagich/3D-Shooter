@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3135123689993170238}
   - component: {fileID: 1553596496742323519}
   - component: {fileID: 7653071988007055753}
-  - component: {fileID: 835496681688501359}
   - component: {fileID: 7501469958152244445}
   m_Layer: 0
   m_Name: Bullet
@@ -63,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6c74b5de2a60ea2418cf13670a05bf34, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &835496681688501359
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5012376273441769598}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7501469958152244445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,3 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b9acc1221c5e64e805720ed6f99441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: 5b19a045171d2b048ab54e2a44dc1012, type: 2}
+  _effectPrefabs:
+  - {fileID: 363918979369291548, guid: 27db9dcf9dacde648ae89f56e1001473, type: 3}
+  _defHitEffect: {fileID: 6951347464883340117, guid: 654c57e401345764b91ed2ef45a1485b,
+    type: 3}
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 16897
