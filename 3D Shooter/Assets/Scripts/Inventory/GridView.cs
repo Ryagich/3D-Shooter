@@ -1,53 +1,78 @@
-using System.Collections;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridView : MonoBehaviour, IItemContainerView
 {
-    public GridModel GridModel => gridModel;
-    
-    [SerializeField] private GridModel gridModel;
+    [SerializeField] private InventoryView _inventoryV;
+    [SerializeField] private Vector2Int _size;
 
-    private RectTransform rectTrans;
-    private Vector2 tileSize;
+    private Dictionary<ItemModel, ItemView> itemVs = new Dictionary<ItemModel, ItemView>();
+    private GridModel gridM;
+    public Vector2Int Size => _size;
+    public RectTransform Rect { get; private set; }
 
     private void Awake()
     {
-        Init();
-    }
-
-    private void OnEnable()
-    {
-        foreach (var item in gridModel.Items)
-        {
-            if (!item.IsDestroyed)
-            item.UpdatePositionOnGrid();
-        }
-    }
-
-    public void Init()
-    {
-        tileSize = InventoryController.TileSize;
-        rectTrans = GetComponent<RectTransform>();
-        rectTrans.sizeDelta = Vector2.Scale(gridModel.Size, tileSize);
+        Rect = GetComponent<RectTransform>();
+        itemVs = new Dictionary<ItemModel, ItemView>();
     }
 
     public Vector2Int GetGridPosition(Vector2 mousePos)
     {
-        var localPos = rectTrans.InverseTransformPoint(mousePos);
-        var gridPos = new Vector2Int((int)(localPos.x / tileSize.x),
-                                    -(int)(localPos.y / tileSize.y));
+        var localPos = Rect.InverseTransformPoint(mousePos);
+        var gridPos = new Vector2Int((int)(localPos.x / _inventoryV.TileSize.x),
+                                    -(int)(localPos.y / _inventoryV.TileSize.y));
         return gridPos;
     }
 
-    public Vector2 CalculatePositionOnGrid(InventoryItem item, Vector2Int pos)
-    => new Vector2((pos.x + item.Width / 2f) * tileSize.x,
-                 -(pos.y + item.Height / 2f) * tileSize.y);
+    public Vector2 CalculatePositionOnGrid(ItemView itemV, Vector2Int pos)
+    => new Vector2((pos.x + itemV.Model.Width / 2f) * _inventoryV.TileSize.x,
+                 -(pos.y + itemV.Model.Height / 2f) * _inventoryV.TileSize.y);
 
-    public IItemContainerModel GetModel() => gridModel;
+    public IItemContainerModel GetModel() => gridM;
 
-    public Transform GetTransform()
+    public void UpdateItem(ItemView itemV)
     {
-        return transform;
+        if (!itemV)
+            return;
+        SetItemPosition(itemV);
+        itemV.UpdateRotation();
+    }
+
+    public void SetItemPosition(ItemView itemV)
+    {
+        itemV.Rect.SetParent(transform);
+        itemV.Rect.localPosition = CalculatePositionOnGrid(itemV, itemV.Model.Position);
+    }
+
+    public void UpdateView()
+    {
+        var itemMs = gridM.GetItems();
+        foreach (var itemM in itemMs)
+        {
+            if (!itemVs.ContainsKey(itemM))
+            {
+                var item = _inventoryV.InstantiateItemView(itemM);
+                itemVs.Add(itemM, item);
+            }
+            var itemV = itemVs[itemM];
+            itemV.SetModel(itemM);
+            itemV.UpdateView();
+            UpdateItem(itemV);
+        }
+        var toDelete = itemVs.Keys.Except(itemMs).ToList();
+        foreach (var itemM in toDelete)
+        {
+            Destroy(itemVs[itemM]);
+            itemVs.Remove(itemM);
+        }
+    }
+
+    public void SetModel(IItemContainerModel containerM)
+    {
+        gridM = (GridModel)containerM;
+        UpdateView();
     }
 }

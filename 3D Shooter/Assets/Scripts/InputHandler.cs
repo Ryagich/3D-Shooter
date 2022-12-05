@@ -34,6 +34,8 @@ public class InputHandler : MonoBehaviour
     public static bool IsAim = false;
     public static bool IsDead = false;
 
+    public static Vector2 MousePos => Input.mousePosition;
+
     private void Awake()
     {
         IsDead = false;

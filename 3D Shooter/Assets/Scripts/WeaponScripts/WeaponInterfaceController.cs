@@ -9,15 +9,14 @@ public class WeaponInterfaceController : MonoBehaviour
     [SerializeField] private GameObject _panel;
     [SerializeField] private TMP_Text _ammoText, _stateText;
 
-    private HandItemController handItemController;
+    private WorldHandItemController handItemController;
     private WeaponController weaponC;
     private AmmoController ammoC;
 
     private void Awake()
     {
-        handItemController = GetComponent<HandItemController>();
+        handItemController = GetComponent<WorldHandItemController>();
         handItemController.OnChangeHandItem += ChangeWeapon;
-        InventoryModel.OnUpdateInventory += UpdateAmmoText;
     }
 
     private void ChangeWeapon(HandItem item)

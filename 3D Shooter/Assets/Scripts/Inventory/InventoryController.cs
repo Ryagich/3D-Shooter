@@ -4,133 +4,84 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController
 {
-    [HideInInspector] public InventoryItem HandItem;
+    private readonly InventoryModel inventoryM;
 
-    [SerializeField] private List<ItemData> _items;
-    [SerializeField] private InventoryView _view;
-    [SerializeField] private InventoryModel _model;
-    [SerializeField] private GameObject _inventory;
-    [SerializeField] private Vector2 _tileSize = new Vector2(32.0f, 32.0f);
+    public InventoryModel Model => inventoryM;
 
-    public static Vector2 TileSize { get; private set; }
-
-    public InventoryModel Model => _model;
-
-    private bool IsOpen = false;
-
-    private void Awake()
+    public InventoryController(InventoryModel inventoryM)
     {
-        TileSize = _tileSize;
-        IsOpen = _inventory.activeSelf;
-
-        InputHandler.OnIDown += ChangeInventoryState;
-        InputHandler.OnRDown += RotateItem;
-        InputHandler.OnLeftMouseDown += LeftMouseButtonDown;
-        InputHandler.OnLeftMouseUp += LeftMouseButtonUp;
+        this.inventoryM = inventoryM;
     }
 
-    private void ChangeInventoryState()
+    public void Drop(ItemModel itemM, Transform transform = null)
     {
-        if (IsOpen && HandItem)
-            LeftMouseButtonUp();
-        IsOpen = !_inventory.activeSelf;
-        _inventory.SetActive(IsOpen);
-        Cursor.lockState = IsOpen ? CursorLockMode.Confined : CursorLockMode.Locked;
-        InputHandler.IsInventory = IsOpen;
+        itemM.ItemData.DropItem.InstantiateDropItem(itemM, transform);
+        inventoryM.RemoveItem(itemM);
     }
 
-    private void RotateItem()
+    public void RotateItem(ItemModel itemM)
     {
-        if (!IsOpen || !HandItem)
-            return;
-        HandItem.Rotate();
+        itemM.Rotate();
     }
 
-    public InventoryItem PickUpItem(IItemContainerModel model, Vector2Int pos)
+    public void SetHandItem(ItemModel itemM)
+    {
+        Model.HandItemM.PlaceItem(itemM, Vector2Int.zero);
+    }
+
+    public ItemModel PickUpItem(IItemContainerModel model, Vector2Int pos)
     {
         var item = model.GetItem(pos);
-        if (!item)
+        if (item == null)
             return null;
         model.RemoveItem(item);
         return item;
     }
 
-    private void LeftMouseButtonDown()
+    public bool TryPlaceHandItem(IItemContainerModel model, Vector2Int pos)
     {
-        if (IsOpen)
-        {
-            if (_view.ViewObj == null)
-                return;
-            var tilePosition = _view.ViewObj.GetGridPosition(Input.mousePosition);
-
-            if (!HandItem)
-                HandItem = PickUpItem(_view.ViewObj.GetModel(), tilePosition);
-        }
-    }
-
-    private void LeftMouseButtonUp()
-    {
-        if (HandItem && IsOpen)
-        {
-            if (_view.ViewObj == null)
-                DeleteHand();
-            else
-                TryPlaceHandItem(_view.ViewObj.GetModel(), _view.GetHandGridPos());
-        }
-    }
-
-    private void TryPlaceHandItem(IItemContainerModel model, Vector2Int pos)
-    {
-        var bounds = new RectInt(pos, HandItem.Size);
+        var handItemM = Model.HandItemM.GetItem(Vector2Int.zero);
+        var bounds = new RectInt(pos, handItemM.Size);
 
         if (!model.IsInBounds(bounds))
+            return false;
+        if (model.CanBePlaced(handItemM, pos))
         {
-            CancelDrag();
-            return;
+            model.PlaceItem(handItemM, pos);
+            model.RemoveItem(handItemM);
+            return true;
         }
 
-        if (model.CanBePlaced(bounds, HandItem))
+        var swapItemM = model.GetSwapItem(handItemM, pos);
+        if ((swapItemM == null) || swapItemM.ItemData != handItemM.ItemData)
+            return false;
+        if (swapItemM.ItemData == handItemM.ItemData)
         {
-            model.PlaceItem(HandItem, pos);
-            HandItem = null;
-            return;
+            ItemModel.MoveMaxPossibleAmount(swapItemM, handItemM);
+            return false;
+        }
+        Model.FillUnderfilledItems(swapItemM);
+        if (swapItemM.Amount != 0 && inventoryM.CanBeAdded(swapItemM))
+        {
+            inventoryM.RemoveItem(swapItemM);
+            model.PlaceItem(handItemM, pos);
+            Model.TryAddItem(swapItemM);
+            return true;
         }
 
-        var swapItem = model.GetSwapItem(bounds, HandItem);
-        if (!swapItem || swapItem.ItemData != HandItem.ItemData)
-        {
-            CancelDrag();
-            return;
-        }
-        if (swapItem.ItemData == HandItem.ItemData)
-        {
-            var stack = swapItem.FillStack(HandItem.Stack);
-            HandItem.SetStack(stack);
-            CancelDrag();
-            return;
-        }
-        if ((model as SlotModel) && HandItem.ItemData.Type == swapItem.ItemData.Type
-                                 && _model.GetFreePositon(swapItem.ItemData) != null)
-        {
-            model.RemoveItem(swapItem);
-            model.PlaceItem(HandItem, Vector2Int.zero);
-            HandItem = null;
-            _model.AddItem(swapItem);
-        }
+        return false;
     }
-    private void CancelDrag()
+    public bool MovePossible(ItemModel itemM)
     {
-        //HandItem.GetLastModel.PlaceItem(HandItem, HandItem.LastGridPos);
-        _model.AddItem(HandItem);
-        HandItem = null;
+        Model.FillUnderfilledItems(itemM);
+
+        return itemM.Amount == 0 || Model.TryAddItem(itemM);
     }
 
-    private void DeleteHand()
+    public void DropHand()
     {
-        HandItem.Drop(); //hero transform
-        Destroy(HandItem.gameObject);
-        HandItem = null;
+        Drop(Model.HandItemM.GetItem(Vector2Int.zero));
     }
 }

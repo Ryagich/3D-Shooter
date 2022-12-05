@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
   m_Name: 9mm
   m_EditorClassIdentifier: 
-  _width: 3
-  _height: 3
-  _maxStack: 30
-  _stack: 1
+  _maxAmount: 30
+  _defaultAmount: 30
+  _size: {x: 3, y: 3}
   _itemIcon: {fileID: 21300000, guid: 0fd0f88d3c773d04fb5c4218073249aa, type: 3}
   _type: 9
-  _itemPref: {fileID: 8092383892852998202, guid: e35a3b76ef424b1419473eabbf9b9072,
-    type: 3}
   _dropItem: {fileID: 2337120110702142785, guid: 6c7d33e987f78c844a3a2b1d855a6353,
     type: 3}
   _handItem: {fileID: 0}

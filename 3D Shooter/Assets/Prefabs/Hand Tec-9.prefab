@@ -186,7 +186,6 @@ GameObject:
   - component: {fileID: 747567100777195538}
   - component: {fileID: 4364568007774122566}
   - component: {fileID: 8133839400262341280}
-  - component: {fileID: 6661872864851155161}
   m_Layer: 0
   m_Name: Hand Tec-9
   m_TagString: Untagged
@@ -390,18 +389,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6661872864851155161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5847214654726054765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1fe9589f382813429a411762b3235b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6422659582366505152

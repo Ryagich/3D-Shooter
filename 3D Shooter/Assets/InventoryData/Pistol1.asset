@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
   m_Name: Pistol1
   m_EditorClassIdentifier: 
-  _width: 5
-  _height: 2
-  _maxStack: 1
-  _stack: 1
+  _maxAmount: 4
+  _defaultAmount: 1
+  _size: {x: 3, y: 3}
   _itemIcon: {fileID: 21300000, guid: d7dd4b74af99fb942adc2e5f623a27cb, type: 3}
   _type: 2
-  _itemPref: {fileID: 8092383892852998202, guid: e35a3b76ef424b1419473eabbf9b9072,
-    type: 3}
   _dropItem: {fileID: 9088787360950215508, guid: 27fce31aca23e734ab6252f90d21b1ac,
     type: 3}
   _handItem: {fileID: 7595830007946373621, guid: 698cd5aecdad17f4bbd012aa2501d231,

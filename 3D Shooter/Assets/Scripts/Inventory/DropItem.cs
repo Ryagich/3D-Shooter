@@ -2,32 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AdditionalItemData))]
 public class DropItem : MonoBehaviour
 {
     [SerializeField] private ItemData _data;
 
-    public int Stack;
+    private ItemModel itemM;
 
     public void AddInInventory(GameObject hero, GameObject _)
     {
-        var model = hero.GetComponent<InventoryController>().Model;
-        var item = model.InstantiateAddItem(_data, Stack);       
-        Destroy(gameObject);
+        if (itemM == null)
+            itemM = new ItemModel(_data);
+
+        var inventoryCreator = hero.GetComponent<InventoryCreator>();
+
+        if (inventoryCreator.GetController().MovePossible(itemM))
+            Destroy(gameObject);
     }
 
-    public DropItem InstantiateDropItem(int stack)
+    public DropItem InstantiateDropItem(ItemModel itemM, Transform pos = null)
     {
-        Stack = stack;
-        var hero = GameObject.FindGameObjectWithTag("Hero").transform;
-        return Instantiate(this, hero.position, hero.rotation);
-    }
-
-    public DropItem InstantiateDropItem(Transform transform, int stack)
-    {
-        if (!transform)
-            return InstantiateDropItem(stack);
-        Stack = stack;
-        return Instantiate(this, transform.position, transform.rotation);
+        if (!pos)
+            pos = GameObject.FindGameObjectWithTag("Hero").transform;
+        this.itemM = itemM;
+        return Instantiate(this, pos.position, pos.rotation);
     }
 }

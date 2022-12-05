@@ -1,71 +1,143 @@
-using System.Collections;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryView : MonoBehaviour
 {
-    public bool IsMouseOverGrid => ViewObj != null;
-    public IItemContainerView ViewObj;
-    
-    [SerializeField] private Transform canvasTransform;
-    [SerializeField] private InventoryController controller;
-    [SerializeField] private InventoryHighlighter inventoryHighlighter;
-    [SerializeField] private string _selectedViewName;
+    [SerializeField] private InventoryHighlighter _inventoryHighlighter;
+    [SerializeField] private ItemView _itemVPref;
+    [SerializeField] private HandItemView _handItemV;
+    [SerializeField] private InventoryCreator _inventoryCreator;
+    [SerializeField] private List<SlotView> _slotVs;
+    [SerializeField] private List<GridView> _gridVs;
+    [SerializeField] private Vector2 _tileSize = new Vector2(32, 32);
 
-    private void Awake()
-    {
-        InputHandler.OnMouse += MoveHandItem;
-    }   
+    private Dictionary<IItemContainerModel, IItemContainerView> containerVs
+      = new Dictionary<IItemContainerModel, IItemContainerView>();
+    private bool isOpen = false;
 
-    private void Update()
+    public InventoryController InventoryC { get => _inventoryCreator.GetController(); }
+    private InventoryModel inventoryM {get => _inventoryCreator.GetModel();}
+    public Vector2 TileSize => _tileSize;
+    public List<SlotView> SlotVs => _slotVs;
+    public List<GridView> GridVs => _gridVs;
+
+    public void ChangeInventoryState()
     {
-        if (ViewObj != null)
-            _selectedViewName = ViewObj.GetTransform().gameObject.name;
-        else
-            _selectedViewName = "null";
-        HandleHighlight();
+        isOpen = !isOpen;
+        gameObject.SetActive(isOpen);
+        Cursor.lockState = isOpen ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
-    private void MoveHandItem(Vector3 mouse)
+    private void OnEnable()
     {
-        if (controller.HandItem)
-            controller.HandItem.transform.position = mouse;
+        UpdateModel();
+
+        InputHandler.OnLeftMouseUp += LeftMouseButtonUp;
+        InputHandler.OnLeftMouseDown += LeftMouseButtonDown;
     }
 
-    private void HandleHighlight()
+    private void OnDisable()
     {
-        var hand = controller.HandItem;
-        if (ViewObj == null)
-        {
-            inventoryHighlighter.Disable();
-            return;
-        }
-
-        var slotV = (ViewObj as SlotView);
-        if (slotV)
-        {
-            inventoryHighlighter.SetSlotPos(slotV.GetComponent<RectTransform>());
-            return;
-        }
-
-        if (hand)
-        {
-            inventoryHighlighter.SetGridPosition(hand, GetHandGridPos(), ViewObj);
-            return;
-        }
-
-        var item = ViewObj.GetModel().GetItem(ViewObj.GetGridPosition(Input.mousePosition));
-        if (item)
-            inventoryHighlighter.SetItem(item);
-        else
-            inventoryHighlighter.Disable();
+        InputHandler.OnLeftMouseUp -= LeftMouseButtonUp;
+        InputHandler.OnLeftMouseDown -= LeftMouseButtonDown;
     }
 
-    public Vector2Int GetHandGridPos()
+    public ItemView InstantiateItemView(ItemModel itemM)
     {
-        var pos = (Vector2)Input.mousePosition;
-        pos.x -= (controller.HandItem.Width * 0.5f - 0.5f) * InventoryController.TileSize.x;
-        pos.y += (controller.HandItem.Height * 0.5f - 0.5f) * InventoryController.TileSize.y;
-        return ViewObj.GetGridPosition(pos);
+        var itemV = Instantiate(_itemVPref);
+        itemV.SetView(this);
+        itemV.SetModel(itemM);
+
+        itemM.OnAmountChanged += UpdateView;
+        itemM.OnPositionChanged += UpdateView;
+
+        return itemV;
+    }
+
+    public void UpdateView()
+    {
+        var containerMs = inventoryM.GetContainerModels();
+
+        foreach (var model in containerMs)
+            containerVs[model].SetModel(model);
+        //TODO: Delete unused containers?
+    }
+
+    private void UpdateModel()
+    {
+        var slotMs = inventoryM.SlotMs.ToList();
+        var gridMs = inventoryM.GridMs.ToList();
+
+        containerVs.Clear();
+
+        for (int i = 0; i < slotMs.Count; i++)
+            containerVs.Add(slotMs[i], _slotVs[i]);
+        for (int i = 0; i < gridMs.Count; i++)
+            containerVs.Add(gridMs[i], _gridVs[i]);
+        containerVs.Add(inventoryM.HandItemM, _handItemV);
+        SetModels();
+    }
+
+    private void SetModels()
+    {
+        foreach (var i in containerVs)
+        {
+            i.Value.SetModel(i.Key);
+            i.Key.OnChanged += UpdateView;
+        }
+    }
+
+    public IEnumerable<IItemContainerView> GetContainerViews() => containerVs.Values;
+
+    public IItemContainerView FindContainerView(Vector2 mousePos)
+    {
+        foreach (var view in GetContainerViews())
+            if (IsInside(mousePos, view.Rect))
+                return view;
+        return null;
+    }
+
+    private bool IsInside(Vector2 mousePos, RectTransform rect)
+    {
+        var hit = RectTransformUtility
+            .ScreenPointToLocalPointInRectangle(rect, mousePos,
+            null, out Vector2 local);
+        return hit && rect.rect.Contains(local);
+    }
+
+    private void LeftMouseButtonDown()
+    {
+        if (isOpen)
+        {
+            var activeContainerV = FindContainerView(InputHandler.MousePos);
+            if (activeContainerV == null)
+                return;
+            var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
+
+            if (!_handItemV.ItemV)
+            {
+                var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
+                InventoryC.SetHandItem(handItem);
+            }
+        }
+    }
+
+    private void LeftMouseButtonUp()
+    {
+        if (_handItemV.ItemV && isOpen)
+        {
+            var activeContainerV = FindContainerView(InputHandler.MousePos);
+            if (activeContainerV == null)
+            {
+                InventoryC.DropHand();
+                return;
+            }
+            var isPlaced = InventoryC.TryPlaceHandItem(activeContainerV.GetModel(),
+                                  activeContainerV.GetGridPosition(InputHandler.MousePos));
+            if (!isPlaced)
+                InventoryC.MovePossible(_handItemV.ItemV.Model);
+        }
     }
 }

@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
   m_Name: BackPack
   m_EditorClassIdentifier: 
-  _width: 4
-  _height: 4
-  _maxStack: 1
-  _stack: 1
+  _maxAmount: 4
+  _defaultAmount: 1
+  _size: {x: 4, y: 4}
   _itemIcon: {fileID: 21300000, guid: fa9196a2067c5064baded94541ee8cb3, type: 3}
   _type: 6
-  _itemPref: {fileID: 8092383892852998202, guid: 2a967a314f97ff0419985a5fe8fd7398,
-    type: 3}
   _dropItem: {fileID: 1474775400210335973, guid: 39d16fb3409eb4c42b257c441086484c,
     type: 3}
   _handItem: {fileID: 0}

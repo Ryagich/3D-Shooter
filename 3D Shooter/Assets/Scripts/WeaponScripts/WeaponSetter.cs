@@ -22,7 +22,7 @@ public class WeaponSetter : MonoBehaviour
         weaponAudioPlayer.SetAdioSource(hero.GetComponent<AudioSource>());
         recoil.SetCameraController(cameraC);
         animator.SetTargetLook(cameraC.GetTargetLook());
-        ammoController.Init(hero.GetComponent<InventoryController>().Model);
+        ammoController.Init(hero.GetComponent<InventoryCreator>().GetModel());
     }
 
     private void OnEnable()

@@ -7,10 +7,10 @@ public class InventoryHighlighter : MonoBehaviour
 {
     [SerializeField] private RectTransform hightlighter;
 
-    public InventoryItem item;
+    public ItemView item;
     public IItemContainerView grid;
 
-    public void SetItem(InventoryItem item)
+    public void SetItem(ItemView item)
     {
         if (this.item == item)
             return;
@@ -20,9 +20,9 @@ public class InventoryHighlighter : MonoBehaviour
         hightlighter.gameObject.SetActive(true);
     }
 
-    public void SetGridPosition(InventoryItem item, Vector2Int pos, IItemContainerView grid)
+    public void SetGridPosition(ItemView item, Vector2Int pos, GridView grid)
     {
-        hightlighter.SetParent(grid.GetTransform());
+        hightlighter.SetParent(grid.Rect);
         SetRectSize(item.GetComponent<RectTransform>());
         hightlighter.localPosition = grid.CalculatePositionOnGrid(item, pos);
         hightlighter.localRotation = item.transform.localRotation;
