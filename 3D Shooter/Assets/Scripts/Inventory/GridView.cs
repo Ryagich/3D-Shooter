@@ -19,6 +19,13 @@ public class GridView : MonoBehaviour, IItemContainerView
         itemVs = new Dictionary<ItemModel, ItemView>();
     }
 
+    public ItemView GetItemView(ItemModel model)
+    {
+        if (!itemVs.ContainsKey(model))
+            return null;
+        return itemVs[model];
+    }
+
     public Vector2Int GetGridPosition(Vector2 mousePos)
     {
         var localPos = Rect.InverseTransformPoint(mousePos);
@@ -27,9 +34,9 @@ public class GridView : MonoBehaviour, IItemContainerView
         return gridPos;
     }
 
-    public Vector2 CalculatePositionOnGrid(ItemView itemV, Vector2Int pos)
-    => new Vector2((pos.x + itemV.Model.Width / 2f) * _inventoryV.TileSize.x,
-                 -(pos.y + itemV.Model.Height / 2f) * _inventoryV.TileSize.y);
+    public Vector2 CalculatePositionOnGrid(ItemModel itemM, Vector2Int pos)
+    => new Vector2((pos.x + itemM.Width / 2f) * _inventoryV.TileSize.x,
+                 -(pos.y + itemM.Height / 2f) * _inventoryV.TileSize.y);
 
     public IItemContainerModel GetModel() => gridM;
 
@@ -44,7 +51,7 @@ public class GridView : MonoBehaviour, IItemContainerView
     public void SetItemPosition(ItemView itemV)
     {
         itemV.Rect.SetParent(transform);
-        itemV.Rect.localPosition = CalculatePositionOnGrid(itemV, itemV.Model.Position);
+        itemV.Rect.localPosition = CalculatePositionOnGrid(itemV.Model, itemV.Model.Position);
     }
 
     public void UpdateView()
@@ -65,7 +72,7 @@ public class GridView : MonoBehaviour, IItemContainerView
         var toDelete = itemVs.Keys.Except(itemMs).ToList();
         foreach (var itemM in toDelete)
         {
-            Destroy(itemVs[itemM]);
+            Destroy(itemVs[itemM].gameObject);
             itemVs.Remove(itemM);
         }
     }

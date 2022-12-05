@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 8136293608381892616}
   - component: {fileID: 8136293608381892619}
   - component: {fileID: 8136293608381892618}
+  - component: {fileID: 8301443505682231350}
   m_Layer: 0
   m_Name: Hand M4
   m_TagString: Untagged
@@ -267,7 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63284c0db1abee64c8a58f5017502726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAmmo: 0
   _magazine: 20
   _itemData: {fileID: 11400000, guid: 9153a2079c19db34d9d13c82125b6867, type: 2}
 --- !u!114 &8136293608381892613
@@ -422,6 +422,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rightT: {fileID: 9121096980050297132}
   _leftT: {fileID: 9121096980288611700}
+--- !u!114 &8301443505682231350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136293608381892623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd02a1f828f39c409968995a6fdf2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8136293608404686102
 GameObject:
   m_ObjectHideFlags: 0

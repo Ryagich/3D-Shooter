@@ -47,14 +47,24 @@ public class WorldHandItemController : MonoBehaviour
 
     private void CreateHandItem(ItemModel item, int index)
     {
-        if (index == handIndex)
-            DeleteHandItem(index);
-        var newHand = InstantiateHand(item);
-        items[index] = newHand;
+        if (items[index] && index == handIndex)
+            return;
+        if (!items[index])
+        {
+            var newHand = InstantiateHand(item);
+            items[index] = newHand;
+        }
         SetHandIndex(handIndex);
     }
 
-    private HandItem InstantiateHand(ItemModel item) => Instantiate(item.ItemData.HandItem, _parentTrans);
+    private HandItem InstantiateHand(ItemModel itemM)
+    {
+        var itemHand = Instantiate(itemM.ItemData.HandItem, _parentTrans);
+        var modelHolder = itemHand.GetComponent<WorldHandItemModelHolder>();
+        if (modelHolder)
+            modelHolder.ItemM = itemM;
+        return itemHand;
+    }
 
     private void DeleteHandItem(int index)
     {

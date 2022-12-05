@@ -43,14 +43,15 @@ public class InventoryController
     public bool TryPlaceHandItem(IItemContainerModel model, Vector2Int pos)
     {
         var handItemM = Model.HandItemM.GetItem(Vector2Int.zero);
+        pos -= handItemM.Size / 2;
         var bounds = new RectInt(pos, handItemM.Size);
 
         if (!model.IsInBounds(bounds))
             return false;
         if (model.CanBePlaced(handItemM, pos))
         {
-            model.PlaceItem(handItemM, pos);
-            model.RemoveItem(handItemM);
+            Model.HandItemM.RemoveItem(handItemM);
+            model.PlaceItem(handItemM, pos);            
             return true;
         }
 
@@ -70,14 +71,25 @@ public class InventoryController
             Model.TryAddItem(swapItemM);
             return true;
         }
-
         return false;
     }
+
     public bool MovePossible(ItemModel itemM)
     {
         Model.FillUnderfilledItems(itemM);
-
-        return itemM.Amount == 0 || Model.TryAddItem(itemM);
+        if (itemM.Amount == 0)
+            return true;
+        var lastM = itemM.ContainerM;
+        if (Model.TryAddItem(itemM))
+        {
+            if (lastM!=null)
+                lastM.RemoveItem(itemM);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void DropHand()

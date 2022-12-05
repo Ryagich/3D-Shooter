@@ -18,7 +18,7 @@ public class InventoryView : MonoBehaviour
     private bool isOpen = false;
 
     public InventoryController InventoryC { get => _inventoryCreator.GetController(); }
-    private InventoryModel inventoryM {get => _inventoryCreator.GetModel();}
+    private InventoryModel inventoryM { get => _inventoryCreator.GetModel(); }
     public Vector2 TileSize => _tileSize;
     public List<SlotView> SlotVs => _slotVs;
     public List<GridView> GridVs => _gridVs;
@@ -27,7 +27,7 @@ public class InventoryView : MonoBehaviour
     {
         isOpen = !isOpen;
         gameObject.SetActive(isOpen);
-        Cursor.lockState = isOpen ? CursorLockMode.Confined : CursorLockMode.Locked;
+        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     private void OnEnable()
@@ -42,6 +42,51 @@ public class InventoryView : MonoBehaviour
     {
         InputHandler.OnLeftMouseUp -= LeftMouseButtonUp;
         InputHandler.OnLeftMouseDown -= LeftMouseButtonDown;
+    }
+
+    private void Update()
+    {
+        if (!isOpen)
+            return;
+        var updated = false;
+        var container = FindContainerView(InputHandler.MousePos);
+        if (container is GridView gridV)
+        {           
+            if (_handItemV.ItemV != null && _handItemV.ItemV.Exists)
+            {
+                var handItemM = _handItemV.ItemV.Model;
+                _inventoryHighlighter.SetGridPosition(handItemM,
+                    container.GetGridPosition(InputHandler.MousePos), gridV, _tileSize);
+                updated = true;
+            }
+            else
+            {
+                var tilePosition = container.GetGridPosition(InputHandler.MousePos);
+                var itemM = gridV.GetModel().GetItem(tilePosition);
+                if (itemM != null)
+                {
+                    var itemV = gridV.GetItemView(itemM);
+                    if (itemV)
+                    {
+                        _inventoryHighlighter.SetItem(itemV);
+                        updated = true;
+                    }
+                }
+                else
+                {
+                    _inventoryHighlighter.SetGridCell(gridV.GetGridPosition(InputHandler.MousePos),
+                        gridV, _tileSize);
+                    updated = true;
+                }
+            }
+        }
+        if (container is SlotView slotV)
+        {
+            _inventoryHighlighter.SetSlotPos(slotV.Rect);
+            updated = true;
+        }
+        if (!updated)
+            _inventoryHighlighter.Disable();
     }
 
     public ItemView InstantiateItemView(ItemModel itemM)
@@ -116,10 +161,11 @@ public class InventoryView : MonoBehaviour
                 return;
             var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
 
-            if (!_handItemV.ItemV)
+            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists))
             {
                 var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
-                InventoryC.SetHandItem(handItem);
+                if (handItem != null)
+                    InventoryC.SetHandItem(handItem);
             }
         }
     }
@@ -137,7 +183,14 @@ public class InventoryView : MonoBehaviour
             var isPlaced = InventoryC.TryPlaceHandItem(activeContainerV.GetModel(),
                                   activeContainerV.GetGridPosition(InputHandler.MousePos));
             if (!isPlaced)
-                InventoryC.MovePossible(_handItemV.ItemV.Model);
+            {
+                if (!InventoryC.MovePossible(_handItemV.ItemV.Model))
+                    InventoryC.Drop(_handItemV.ItemV.Model);
+            }
+            else
+            {
+
+            }
         }
     }
 }

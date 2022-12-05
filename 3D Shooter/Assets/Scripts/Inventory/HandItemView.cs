@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HandItemView : MonoBehaviour, IItemContainerView
 {
-    private InventoryController inventoryC;
     private HandItemModel handItemM;
 
     [SerializeField] private InventoryView _inventoryV;
@@ -27,16 +26,24 @@ public class HandItemView : MonoBehaviour, IItemContainerView
         InputHandler.OnRDown -= RotateItem;
     }
 
+    private void FixedUpdate()
+    {
+        if (ItemV)
+            UpdateItem(ItemV);
+    }
+
     public IItemContainerModel GetModel() => handItemM;
 
     private void RotateItem()
     {
         if (handItemM.ItemM != null)
-            inventoryC.RotateItem(handItemM.ItemM);
+            _inventoryV.InventoryC.RotateItem(handItemM.ItemM);
     }
 
     public void UpdateItem(ItemView item)
     {
+        item.Rect.SetParent(transform);
+        item.UpdateView();
         item.Rect.position = new Vector3(InputHandler.MousePos.x,
                                          InputHandler.MousePos.y, item.Rect.position.z);
     }
@@ -44,11 +51,10 @@ public class HandItemView : MonoBehaviour, IItemContainerView
     public void UpdateView()
     {
         var itemM = handItemM.GetItem(Vector2Int.zero);
-        if (ItemV == null && itemM != null)
-        {
+
+        if (!ItemV && itemM != null)
             ItemV = _inventoryV.InstantiateItemView(itemM);
-        }
-        if (ItemV)
+        if (ItemV != null)
         {
             UpdateItem(ItemV);
             ItemV.SetModel(itemM);
@@ -66,8 +72,5 @@ public class HandItemView : MonoBehaviour, IItemContainerView
         //TODO: sub 
     }
 
-    public Vector2Int GetGridPosition(Vector2 mousePos)
-    {
-        return Vector2Int.zero;
-    }
+    public Vector2Int GetGridPosition(Vector2 mousePos) => Vector2Int.zero;
 }

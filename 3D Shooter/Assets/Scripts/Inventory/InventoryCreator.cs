@@ -1,7 +1,5 @@
 using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class InventoryCreator : MonoBehaviour
 {

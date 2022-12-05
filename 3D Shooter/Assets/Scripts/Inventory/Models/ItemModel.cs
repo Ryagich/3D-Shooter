@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemModel
@@ -22,13 +23,16 @@ public class ItemModel
     public int MaxAmount => ItemData.MaxAmount;
     public int FreeAmount => MaxAmount - Amount;
     public bool IsMaxAmount => Amount == MaxAmount;
-
+    public readonly Dictionary<string, string> AdditionalData;
     public ItemModel(ItemData data)
     {
         ItemData = data;
         Amount = ItemData.DefaultAmount;
         IsRotated = false;
         Position = Vector2Int.zero;
+
+        Debug.Log(data.name);
+        AdditionalData = new Dictionary<string, string>();
     }
 
     public static int MoveMaxPossibleAmount(ItemModel from, ItemModel to)
@@ -52,9 +56,17 @@ public class ItemModel
             throw new ArgumentException();
         this.amount = amount;
         if (amount == 0 && IsPlaced)
-            ContainerM.RemoveItem(this);
+            Remove();
 
         OnAmountChanged?.Invoke();
+    }
+
+    public void Remove()
+    {
+        if (IsPlaced)
+            ContainerM.RemoveItem(this);
+        else
+            throw new InvalidOperationException("Remove from null");
     }
 
     public void Rotate()

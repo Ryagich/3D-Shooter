@@ -23,7 +23,8 @@ public class DropItem : MonoBehaviour
     {
         if (!pos)
             pos = GameObject.FindGameObjectWithTag("Hero").transform;
-        this.itemM = itemM;
-        return Instantiate(this, pos.position, pos.rotation);
+        var instance = Instantiate(this, pos.position, pos.rotation);
+        instance.itemM = itemM;
+        return instance;
     }
 }

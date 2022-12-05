@@ -218,6 +218,7 @@ GameObject:
   - component: {fileID: 6817273591236380671}
   - component: {fileID: 5886590985319586019}
   - component: {fileID: 682279438769695590}
+  - component: {fileID: 2169819005354606996}
   - component: {fileID: 7595830007946373621}
   - component: {fileID: 3955028600835219060}
   m_Layer: 0
@@ -288,7 +289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63284c0db1abee64c8a58f5017502726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAmmo: 0
   _magazine: 7
   _itemData: {fileID: 11400000, guid: 0e2e300031872c64387711f26cb02fdb, type: 2}
 --- !u!114 &4046768875547594654
@@ -418,6 +418,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rightT: {fileID: 9215903561708405894}
   _leftT: {fileID: 9215903561472794846}
+--- !u!114 &2169819005354606996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6548908861761472533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd02a1f828f39c409968995a6fdf2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7595830007946373621
 MonoBehaviour:
   m_ObjectHideFlags: 0

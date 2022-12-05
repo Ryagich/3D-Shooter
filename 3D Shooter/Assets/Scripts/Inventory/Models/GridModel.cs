@@ -127,7 +127,7 @@ public class GridModel : IItemContainerModel
 
     public bool IsInBounds(RectInt bounds) =>
                 IsInBounds(bounds.min)
-             && IsInBounds(bounds.max); //  - Vector2Int.one
+             && IsInBounds(bounds.max - Vector2Int.one);
 
     public IEnumerable<ItemModel> GetUnderfilledItems(ItemData data)
     {

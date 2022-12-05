@@ -6,19 +6,35 @@ using System.Linq;
 
 public class AmmoController : MonoBehaviour
 {
+    private const string CurrentAmmoKey = nameof(CurrentAmmoKey);
     public event Action OnReload;
     public bool HasAmmo => CurrentAmmo > 0;
-    public int CurrentAmmo;
-    public int Magazine => _magazine;
+    public int CurrentAmmo
+    {
+        get
+        {
+            var addData = modelHolder.ItemM.AdditionalData;
+            if (addData.ContainsKey(CurrentAmmoKey))
+                return int.Parse(addData[CurrentAmmoKey]);
+            return 0;
+        }
+        set
+        {
+            modelHolder.ItemM.AdditionalData[CurrentAmmoKey] = value.ToString();
+        }
+    }
+    public int Magaine => _magazine;
 
     [SerializeField] private int _magazine = 30;
     [SerializeField] private ItemData _itemData;
 
     private InventoryModel inventoryM;
+    private WorldHandItemModelHolder modelHolder;
 
     public void Init(InventoryModel model)
     {
         inventoryM = model;
+        modelHolder = GetComponent<WorldHandItemModelHolder>();
     }
 
     public int GetAmmo()

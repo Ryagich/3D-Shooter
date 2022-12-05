@@ -10,7 +10,9 @@ public class ItemView : MonoBehaviour
     public RectTransform Rect { get; private set; }
     public RectTransform TmpRect { get; private set; }
 
-    public static implicit operator bool(ItemView exists) => (exists as UnityEngine.Object) && exists.Model != null;
+    public static implicit operator bool(ItemView exists) => (exists as UnityEngine.Object) && exists.Model != null && exists.Model.Amount != 0;
+
+    public bool Exists => this && Model != null && Model.Amount != 0;
 
     [SerializeField] private TMP_Text _text;
 
