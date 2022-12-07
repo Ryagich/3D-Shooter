@@ -24,6 +24,7 @@ public class ItemModel
     public int FreeAmount => MaxAmount - Amount;
     public bool IsMaxAmount => Amount == MaxAmount;
     public readonly Dictionary<string, string> AdditionalData;
+
     public ItemModel(ItemData data)
     {
         ItemData = data;
@@ -31,8 +32,14 @@ public class ItemModel
         IsRotated = false;
         Position = Vector2Int.zero;
 
-        Debug.Log(data.name);
         AdditionalData = new Dictionary<string, string>();
+        foreach (var field in data.AdditionalData)
+        {
+            var splited = field.Split(':');
+            var key = splited[0];
+            var value = splited[1];
+            AdditionalData.Add(key, value);
+        }
     }
 
     public static int MoveMaxPossibleAmount(ItemModel from, ItemModel to)

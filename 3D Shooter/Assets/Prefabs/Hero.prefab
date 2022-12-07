@@ -2879,7 +2879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryV: {fileID: 6961425923565734173}
-  _size: {x: 10, y: 10}
+  _size: {x: 0, y: 0}
 --- !u!1 &6961425924111452727
 GameObject:
   m_ObjectHideFlags: 0
@@ -3573,6 +3573,9 @@ MonoBehaviour:
   _text: {fileID: 6961425923891557957}
   _cameraTrans: {fileID: 6961425925325975466}
   _distance: 2
+  _targetLayers:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!114 &6961425924403275987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3873,7 +3876,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryV: {fileID: 6961425923565734173}
-  _handItem: {fileID: 1900260506760651582}
 --- !u!114 &6961425924403276094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4110,6 +4112,7 @@ GameObject:
   - component: {fileID: 6961425924449554980}
   - component: {fileID: 6961425924449554983}
   - component: {fileID: 6961425924449554982}
+  - component: {fileID: 2021805545}
   m_Layer: 12
   m_Name: 'Backpack Slot View '
   m_TagString: Untagged
@@ -4189,6 +4192,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 6
   _inventoryV: {fileID: 6961425923565734173}
+--- !u!114 &2021805545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6961425924449554984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb98891f7c26614e998270322c7fcf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gridV: {fileID: 6961425923995750600}
 --- !u!1 &6961425924454834072
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,7 +4258,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6961425924454834072}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

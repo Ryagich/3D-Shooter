@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6966406232495416542}
   - component: {fileID: 9202492267893787169}
   - component: {fileID: 8762536963740733704}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Drop 7.62mm
   m_TagString: Untagged
   m_Icon: {fileID: 0}

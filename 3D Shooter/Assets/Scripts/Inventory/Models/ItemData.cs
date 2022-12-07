@@ -11,7 +11,8 @@ public class ItemData : ScriptableObject
     [SerializeField] private ItemType _type = ItemType.None;
     [SerializeField] private DropItem _dropItem;
     [SerializeField] private HandItem _handItem;
-
+    [Header("key:value")]
+    [SerializeField] private List<string> _additionalData = new();
     public HandItem HandItem => _handItem;
     public DropItem DropItem => _dropItem;
     public int Width => _size.x;
@@ -22,6 +23,8 @@ public class ItemData : ScriptableObject
     public Vector2Int Size => _size;
     public Vector2Int RotatedSize => new Vector2Int(Height, Width);
     public ItemType Type => _type;
+
+    public IEnumerable<string> AdditionalData => _additionalData;
 }
 
 public enum ItemType

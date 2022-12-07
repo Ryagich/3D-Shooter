@@ -56,6 +56,9 @@ public class GridView : MonoBehaviour, IItemContainerView
 
     public void UpdateView()
     {
+        if (!Rect)
+            Rect = GetComponent<RectTransform>();
+        Rect.sizeDelta = gridM.Size * _inventoryV.TileSize;
         var itemMs = gridM.GetItems();
         foreach (var itemM in itemMs)
         {

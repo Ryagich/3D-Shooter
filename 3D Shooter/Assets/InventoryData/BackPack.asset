@@ -20,3 +20,6 @@ MonoBehaviour:
   _dropItem: {fileID: 1474775400210335973, guid: 39d16fb3409eb4c42b257c441086484c,
     type: 3}
   _handItem: {fileID: 0}
+  _additionalData:
+  - ExctentionXKey:5
+  - ExctentionYKey:5

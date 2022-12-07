@@ -8,6 +8,7 @@ public class SlotModel : IItemContainerModel
     public event Action OnRemoved;
     public event Action OnChanged;
 
+    public bool DisableEvents = false;
     public readonly ItemType Type;
     private ItemModel itemM;
 
@@ -29,9 +30,12 @@ public class SlotModel : IItemContainerModel
             throw new InvalidOperationException();
         item.Put(this, Vector2Int.zero);
         itemM = item;
-        OnPlaced?.Invoke(item);
 
-        OnChanged?.Invoke();
+        if (!DisableEvents)
+        {
+            OnPlaced?.Invoke(item);
+            OnChanged?.Invoke();
+        }
     }
 
     public void RemoveItem(ItemModel item)
@@ -41,8 +45,11 @@ public class SlotModel : IItemContainerModel
         itemM.Put(null, Vector2Int.zero);
         itemM = null;
 
-        OnRemoved?.Invoke();
-        OnChanged?.Invoke();
+        if (!DisableEvents)
+        {
+            OnRemoved?.Invoke();
+            OnChanged?.Invoke();
+        }
     }
 
     public ItemModel GetSwapItem(ItemModel item, Vector2Int pos) =>

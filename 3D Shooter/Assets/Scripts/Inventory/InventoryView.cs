@@ -51,7 +51,7 @@ public class InventoryView : MonoBehaviour
         var updated = false;
         var container = FindContainerView(InputHandler.MousePos);
         if (container is GridView gridV)
-        {           
+        {
             if (_handItemV.ItemV != null && _handItemV.ItemV.Exists)
             {
                 var handItemM = _handItemV.ItemV.Model;
@@ -110,7 +110,7 @@ public class InventoryView : MonoBehaviour
         //TODO: Delete unused containers?
     }
 
-    private void UpdateModel()
+    public void UpdateModel()
     {
         var slotMs = inventoryM.SlotMs.ToList();
         var gridMs = inventoryM.GridMs.ToList();
@@ -130,7 +130,19 @@ public class InventoryView : MonoBehaviour
         foreach (var i in containerVs)
         {
             i.Value.SetModel(i.Key);
-            i.Key.OnChanged += UpdateView;
+            if (i.Key is SlotExtentionModel slotExtentionM)
+                slotExtentionM.OnGridResize += ResizeGrid;
+                i.Key.OnChanged += UpdateView;
+        }
+    }
+
+    private void ResizeGrid(GridModel gridM, Vector2Int size)
+    {
+        var toDrop = gridM.Resize(size).ToList();
+        foreach (var item in toDrop)
+        {
+            if (InventoryC.MovePossible(item))
+                InventoryC.Drop(item);
         }
     }
 

@@ -51,7 +51,7 @@ public class InventoryController
         if (model.CanBePlaced(handItemM, pos))
         {
             Model.HandItemM.RemoveItem(handItemM);
-            model.PlaceItem(handItemM, pos);            
+            model.PlaceItem(handItemM, pos);
             return true;
         }
 
@@ -63,33 +63,47 @@ public class InventoryController
             ItemModel.MoveMaxPossibleAmount(swapItemM, handItemM);
             return false;
         }
-        Model.FillUnderfilledItems(swapItemM);
-        if (swapItemM.Amount != 0 && inventoryM.CanBeAdded(swapItemM))
+        if (model is SlotModel slotM)
         {
-            inventoryM.RemoveItem(swapItemM);
-            model.PlaceItem(handItemM, pos);
-            Model.TryAddItem(swapItemM);
+            slotM.DisableEvents = true;
+            var isMoved = MovePossible(swapItemM);
+            if (!isMoved)
+                Drop(swapItemM);
+            slotM.DisableEvents = false;
+            Model.HandItemM.RemoveItem(handItemM);
+            slotM.PlaceItem(handItemM, Vector2Int.zero);
             return true;
         }
+        else
+        {
+            Model.FillUnderfilledItems(swapItemM);
+            if (swapItemM.Amount != 0 && inventoryM.CanBeAdded(swapItemM))
+            {
+                inventoryM.RemoveItem(swapItemM);
+                model.PlaceItem(handItemM, pos);
+                Model.TryAddItem(swapItemM);
+                return true;
+            }
+        }
+
         return false;
     }
 
     public bool MovePossible(ItemModel itemM)
     {
         Model.FillUnderfilledItems(itemM);
+        var containerM = itemM.ContainerM;
+
         if (itemM.Amount == 0)
             return true;
-        var lastM = itemM.ContainerM;
         if (Model.TryAddItem(itemM))
         {
-            if (lastM!=null)
-                lastM.RemoveItem(itemM);
+            if (containerM != null)
+                containerM.RemoveItem(itemM);
             return true;
         }
         else
-        {
             return false;
-        }
     }
 
     public void DropHand()

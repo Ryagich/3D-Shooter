@@ -7,18 +7,43 @@ public class GridModel : IItemContainerModel
 {
     public event Action OnChanged;
 
+    private ItemModel[,] inventorySlots;
     private Vector2Int size;
-    private readonly ItemModel[,] inventorySlots;
     private readonly HashSet<ItemModel> items;
 
     public Vector2Int Size => size;
-    public IEnumerable<ItemModel> Items => items;
+    public IEnumerable<ItemModel> GetItems() => items;
 
     public GridModel(Vector2Int size)
     {
         this.size = size;
         inventorySlots = new ItemModel[this.size.x, this.size.y];
         items = new HashSet<ItemModel>();
+    }
+
+    public IEnumerable<ItemModel> Resize(Vector2Int size)
+    {
+        var newHashSet = new HashSet<ItemModel>();
+        this.size = size;
+
+        var toRemove = new List<ItemModel>();
+        foreach (var item in GetItems())
+            if (IsInBounds(item.GridBounds))
+                newHashSet.Add(item);
+            else
+            {
+                toRemove.Add(item);            
+                yield return item;
+            }
+        foreach (var item in toRemove)
+            item.Remove();
+        items.Clear();
+        inventorySlots = new ItemModel[this.size.x, this.size.y];
+
+        foreach (var item in newHashSet)
+            PlaceItem(item,item.Position);
+
+        OnChanged?.Invoke();
     }
 
     public Vector2Int? GetFreePositon(Vector2Int size, ItemData _)
@@ -133,8 +158,7 @@ public class GridModel : IItemContainerModel
     {
         foreach (var item in items)
             if (item.ItemData == data && !item.IsMaxAmount)
-                yield return item;        
+                yield return item;
     }
 
-    public IEnumerable<ItemModel> GetItems() => items;
 }
