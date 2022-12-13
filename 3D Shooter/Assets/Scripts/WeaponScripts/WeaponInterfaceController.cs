@@ -12,11 +12,15 @@ public class WeaponInterfaceController : MonoBehaviour
     private WorldHandItemController handItemController;
     private WeaponController weaponC;
     private AmmoController ammoC;
+    private InventoryModel InventoryM;
 
     private void Awake()
     {
         handItemController = GetComponent<WorldHandItemController>();
+        InventoryM = GetComponent<InventoryCreator>().GetModel();
+
         handItemController.OnChangeHandItem += ChangeWeapon;
+        InventoryM.OnInventoryChange += UpdateAmmoText;
     }
 
     private void ChangeWeapon(HandItem item)

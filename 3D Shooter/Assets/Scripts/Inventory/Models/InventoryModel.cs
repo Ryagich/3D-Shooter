@@ -6,6 +6,8 @@ using System.Linq;
 
 public class InventoryModel
 {
+    public event Action OnInventoryChange;
+
     public readonly HandItemModel HandItemM;
 
     private readonly List<SlotModel> slotMs;
@@ -34,6 +36,7 @@ public class InventoryModel
             if (model.GetItems().Contains(itemM))
             {
                 model.RemoveItem(itemM);
+                OnInventoryChange?.Invoke();
                 return;
             }
         throw new ArgumentException();
@@ -63,6 +66,7 @@ public class InventoryModel
         if (pos == null)
             return false;
         PlaceItem(item, pos);
+        OnInventoryChange?.Invoke();
         return true;
     }
 
@@ -96,8 +100,10 @@ public class InventoryModel
                 continue;
             moveAmount += ItemModel.MoveMaxPossibleAmount(from, item);
             if (from.Amount == 0)
-                return moveAmount;
+                break;
+                //return moveAmount;
         }
+        OnInventoryChange?.Invoke();
         return moveAmount;
     }
 }

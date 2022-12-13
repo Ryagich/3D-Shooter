@@ -19,6 +19,9 @@ public class Crosshair : MonoBehaviour
     {
         Instance = this;
         crosshairTrans = GetComponent<RectTransform>();
+
+        InputHandler.OnRightMouseDown += () => { gameObject.SetActive(false); };
+        InputHandler.OnRightMouseUp += () => { gameObject.SetActive(true); };
     }
 
     public void SetRecoil(Recoil recoil)

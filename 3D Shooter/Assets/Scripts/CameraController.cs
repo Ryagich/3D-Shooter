@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
 
     private float mouseX, mouseY, yRotation;
 
+    public Camera GetCamera => _cameraTrans.GetComponent<Camera>();
+
     private void Awake()
     {
         InputHandler.OnMouseX += RotateX;

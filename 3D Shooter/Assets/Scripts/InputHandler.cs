@@ -13,7 +13,7 @@ public class InputHandler : MonoBehaviour
     public static event Action OnLeftMouseDown;
     public static event Action OnLeftMouseUp;
     public static event Action OnLeftMouse;
-    //public static event Action OnRightMouseDown;
+    public static event Action OnRightMouseDown;
     public static event Action OnRightMouseUp;
     public static event Action OnPressSpace;
     public static event Action OnIDown;
@@ -25,25 +25,14 @@ public class InputHandler : MonoBehaviour
     public static event Action OnSecondWeapon;
     public static event Action OnTrirdWeapon;
     public static event Action OnVDown;
-
-    public static bool IsLeftMouse = false;
-    //public static bool IsRightMouse = false;
-    public static bool IsShift = false;
-    public static bool IsReload = false;
-    public static bool IsInventory = false;
-    public static bool IsAim = false;
-    public static bool IsDead = false;
-
+    public static bool IsLeftMouse { get; private set; } = false;
+    public static bool IsRightMouse { get; private set; } = false;
+    public static bool IsShift { get; private set; } = false;
     public static Vector2 MousePos => Input.mousePosition;
-
-    private void Awake()
-    {
-        IsDead = false;
-    }
 
     private void Update()
     {
-        if (IsDead)
+        if (HeroState.IsDead)
             return;
         OnMove?.Invoke(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
         OnMouse?.Invoke(Input.mousePosition);
@@ -63,18 +52,16 @@ public class InputHandler : MonoBehaviour
             OnLeftMouseUp?.Invoke();
         }
 
-        //if (Input.GetKeyDown(KeyCode.Mouse1))
-        //{
-        //    IsRightMouse = true;
-        //    OnRightMouseDown?.Invoke();
-        //    Debug.Log(IsRightMouse);
-        //}
-        //if (Input.GetKeyUp(KeyCode.Mouse1))
-        //{
-        //    IsRightMouse = false;
-        //    OnRightMouseUp?.Invoke();
-        //    Debug.Log(IsRightMouse);
-        //}
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            IsRightMouse = true;
+            OnRightMouseDown?.Invoke();
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            IsRightMouse = false;
+            OnRightMouseUp?.Invoke();
+        }
 
         if (Input.GetKey(KeyCode.Space))
             OnPressSpace?.Invoke();
@@ -84,9 +71,7 @@ public class InputHandler : MonoBehaviour
             OnRDown?.Invoke();
 
         if (Input.GetKey(KeyCode.LeftShift))
-        {
             OnPressShift?.Invoke();
-        }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             IsShift = true;
@@ -94,13 +79,11 @@ public class InputHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            IsShift = true;
+            IsShift = false;
             OnShiftUp?.Invoke();
         }
         if (Input.GetKeyDown(KeyCode.V))
-        {
             OnVDown?.Invoke();
-        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
             OnFirstWeapon?.Invoke();

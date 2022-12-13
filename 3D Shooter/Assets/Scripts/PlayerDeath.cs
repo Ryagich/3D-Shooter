@@ -11,7 +11,7 @@ public class PlayerDeath : MonoBehaviour
 
     private void Awake()
     {
-        InputHandler.IsDead = false;
+        HeroState.IsDead = false;
         hp = GetComponent<Hp>();
         hp.OnDead += Die;
     }
@@ -22,6 +22,6 @@ public class PlayerDeath : MonoBehaviour
         foreach (var i in _interfaces)
             i.SetActive(false);
         _deathScreen.SetActive(true);
-        InputHandler.IsDead = true;
+        HeroState.IsDead = true;
     }
 }

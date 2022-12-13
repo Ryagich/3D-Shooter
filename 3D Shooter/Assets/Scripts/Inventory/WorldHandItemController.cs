@@ -15,6 +15,8 @@ public class WorldHandItemController : MonoBehaviour
 
     private List<SlotModel> slots = new List<SlotModel>();
 
+    public HandItem Hand => items[handIndex];
+
     private void Awake()
     {
         slots = inventoryMCreator.GetModel().SlotMs

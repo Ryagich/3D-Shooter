@@ -11,7 +11,7 @@ public class InteractableFounder : MonoBehaviour
     private Transform lastGameObject;
     private Interactable lastIntractable;
 
-    private void FixedUpdate()
+    private void Update()
     {
         var ray = new Ray(_cameraTrans.position, _cameraTrans.forward);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,23 +10,22 @@ public class WeaponController : MonoBehaviour
     public event Action<ShootState> OnChangeState;
 
     public ShootState GetCurrState => shootState;
+    public bool IsShooting { get; private set; } = false;
 
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private bool _single = true;
     [SerializeField] private bool _burst = true;
     [SerializeField] private bool _automate = true;
+    [SerializeField] private int _burstCount = 3;
     [SerializeField, Min(0.0f)] private float _cooldownTime = 0.5f;
 
     private bool isReady = true;
     private ShootState shootState = ShootState.Single;
-    private WeaponAnimator weaponAnimator;
     private AmmoController ammoController;
     private HandItem handItem;
-    private int burstCount = 0;
 
     private void Awake()
     {
-        weaponAnimator = GetComponent<WeaponAnimator>();
         ammoController = GetComponent<AmmoController>();
         handItem = GetComponent<HandItem>();
     }
@@ -53,109 +53,76 @@ public class WeaponController : MonoBehaviour
         InputHandler.OnVDown -= ChangeShootState;
     }
 
-    private void ChangeShootState()
+
+    private void Shoot()
     {
-        if (shootState == ShootState.Single)
-        {
-            if (_burst)
-                shootState = ShootState.Burst;
-            else if (_automate)
-                shootState = ShootState.Automate;
-        }
-        else if (shootState == ShootState.Burst)
-        {
-            if (_automate)
-                shootState = ShootState.Automate;
-            else if (_single)
-                shootState = ShootState.Single;
-        }
-        else if (shootState == ShootState.Automate)
-        {
-            if (_single)
-                shootState = ShootState.Single;
-            else if (_burst)
-                shootState = ShootState.Burst;
-        }
-        OnChangeState?.Invoke(shootState);
+        CorutineHolder.Instance.StartCoroutine(ShootCoroutine());
     }
 
-    public void Shoot()
+    private IEnumerator ShootCoroutine()
     {
-        if (!weaponAnimator.IsReloading && isReady && !InputHandler.IsInventory
-         && ammoController.HasAmmo)
+        var toShoot = 0;
+        switch (shootState)
         {
-            ammoController.SubtractAmmo();
-            _muzzleFlash.Play();
-
-            if (shootState == ShootState.Single)
-            {
-                isReady = false;
-                CorutineHolder.Instance.StartCoroutine(SingleShootCooldown());
-            }
-            if (shootState == ShootState.Automate && InputHandler.IsLeftMouse)
-            {
-                isReady = false;
-                CorutineHolder.Instance.StartCoroutine(Cooldown());
-            }
-            if (shootState == ShootState.Burst)
-            {
-                handItem.CanBeChanged = false;
-                CorutineHolder.Instance.StartCoroutine(BurstShootCooldown());
-                burstCount++;
-            }
-
-            OnShoot?.Invoke();
+            case ShootState.Single:
+                toShoot = 1;
+                break;
+            case ShootState.Burst:
+                toShoot = _burstCount;
+                break;
+            case ShootState.Automate:
+                toShoot = int.MaxValue;
+                break;
         }
+        IsShooting = true;
+        handItem.CanBeChanged = false;
+        for (; toShoot > 0; toShoot--)
+        {
+            if (!CanShoot())
+                break;
+            if (shootState == ShootState.Automate && !InputHandler.IsLeftMouse)
+                break;
+
+            MakeShoot();
+            yield return new WaitForSeconds(_cooldownTime);
+            isReady = true;
+        }
+        handItem.CanBeChanged = true;
+        IsShooting = false; 
     }
 
-    private void BurstShoot()
-    {
-        if (weaponAnimator.IsReloading || !isReady || InputHandler.IsInventory
-         || !ammoController.HasAmmo)
-        {
-            handItem.CanBeChanged = true;
-            burstCount = 0;
-            return;
-        }
+    private bool CanShoot() => isReady
+                                && !HeroState.IsInventory
+                                && ammoController.HasAmmo;
 
-        isReady = false;
+    private void MakeShoot()
+    {
         ammoController.SubtractAmmo();
         _muzzleFlash.Play();
-        CorutineHolder.Instance.StartCoroutine(BurstShootCooldown());
-
         OnShoot?.Invoke();
+        isReady = false;
+    }
+
+
+    private void ChangeShootState()
+    {
+        while (true)
+        {
+            shootState = EnumExtentions.Cycle(shootState);
+            if (shootState == ShootState.Automate && _automate)
+                break;
+            if (shootState == ShootState.Single && _single)
+                break;
+            if (shootState == ShootState.Burst && _burst)
+                break;
+        }
+
+        OnChangeState?.Invoke(shootState);
     }
 
     private void Reload()
     {
         ammoController.Reload();
-    }
-
-    private IEnumerator BurstShootCooldown()
-    {
-        yield return new WaitForSeconds(_cooldownTime);
-        burstCount++;
-        isReady = true;
-        if (burstCount < 4)
-            BurstShoot();
-        else
-        {
-            handItem.CanBeChanged = true;
-            burstCount = 0;
-        }
-    }
-
-    private IEnumerator SingleShootCooldown()
-    {
-        yield return new WaitForSeconds(_cooldownTime);
-        isReady = true;
-    }
-
-    private IEnumerator Cooldown()
-    {
-        yield return new WaitForSeconds(_cooldownTime);
-        isReady = true;
-        Shoot();
     }
 }
 
@@ -165,4 +132,3 @@ public enum ShootState
     Burst = 1,
     Automate = 2
 }
-
