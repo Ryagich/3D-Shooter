@@ -9,11 +9,13 @@ public class WeaponAnimator : MonoBehaviour
 {
     private Animator animator;
     private WeaponController weaponC;
+    private AmmoController ammoC;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         weaponC = GetComponent<WeaponController>();
+        ammoC = GetComponent<AmmoController>();
     }
 
     private void FixedUpdate()
@@ -23,6 +25,24 @@ public class WeaponAnimator : MonoBehaviour
         animator.SetBool("IsShooting", weaponC.IsShooting);
     }
 
-    private void OnEnable() { }
-    private void OnDisable() { }
+    private void SetReload()
+    {
+        if (!ammoC.HasFullMagazine && ammoC.GetTotalCount() > 0)
+            animator.SetTrigger("Reload");
+    }
+
+    private void OnEnable()
+    {
+        InputHandler.OnRDown += SetReload;
+    }
+
+    private void OnDisable()
+    {
+        InputHandler.OnRDown -= SetReload;
+    }
+
+    private void OnDestroy()
+    {
+        InputHandler.OnRDown -= SetReload;
+    }
 }

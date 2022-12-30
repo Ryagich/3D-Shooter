@@ -24,6 +24,10 @@ public class FieldOfViewController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, FOVTarget - addFOVShift, Time.fixedDeltaTime * _changeSpeed);
+        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView,
+                                         HeroState.IsWeaponOnHand ?
+                                         FOVTarget - addFOVShift :
+                                         _defauitFOV,
+                                         Time.fixedDeltaTime * _changeSpeed);
     }
 }

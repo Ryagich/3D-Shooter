@@ -9,20 +9,15 @@ public class CameraController : MonoBehaviour
     [SerializeField, Range(0.0f, 100.0f)] private float _targetSpeed = 5.0f;
 
     private float mouseX, mouseY, yRotation;
-
-    public Camera GetCamera => _cameraTrans.GetComponent<Camera>();
+    private new Camera camera;
+    public Camera GetCamera => camera;
 
     private void Awake()
     {
         InputHandler.OnMouseX += RotateX;
         InputHandler.OnMouseY += RotateY;
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void OnDestroy()
-    {
-        InputHandler.OnMouseX -= RotateX;
-        InputHandler.OnMouseY -= RotateY;
+        camera = _cameraTrans.GetComponent<Camera>();
     }
 
     public void RotateX(float x)
@@ -62,4 +57,10 @@ public class CameraController : MonoBehaviour
     }
 
     public Transform GetTargetLook() => _target;
+
+    private void OnDestroy()
+    {
+        InputHandler.OnMouseX -= RotateX;
+        InputHandler.OnMouseY -= RotateY;
+    }
 }

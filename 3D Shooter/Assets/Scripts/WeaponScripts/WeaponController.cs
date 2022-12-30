@@ -21,42 +21,22 @@ public class WeaponController : MonoBehaviour
 
     private bool isReady = true;
     private ShootState shootState = ShootState.Single;
+
     private AmmoController ammoController;
     private HandItem handItem;
+    private WeaponTargetLooker weaponTargetLooker;
 
     private void Awake()
     {
         ammoController = GetComponent<AmmoController>();
         handItem = GetComponent<HandItem>();
+        weaponTargetLooker = GetComponent<WeaponTargetLooker>();
     }
-
-    private void OnEnable()
-    {
-        InputHandler.OnLeftMouseDown += Shoot;
-        InputHandler.OnRDown += Reload;
-        InputHandler.OnVDown += ChangeShootState;
-
-        OnChangeState?.Invoke(shootState);
-    }
-
-    private void OnDisable()
-    {
-        InputHandler.OnLeftMouseDown -= Shoot;
-        InputHandler.OnRDown -= Reload;
-        InputHandler.OnVDown -= ChangeShootState;
-    }
-
-    private void OnDestroy()
-    {
-        InputHandler.OnLeftMouseDown -= Shoot;
-        InputHandler.OnRDown -= Reload;
-        InputHandler.OnVDown -= ChangeShootState;
-    }
-
 
     private void Shoot()
     {
-        CorutineHolder.Instance.StartCoroutine(ShootCoroutine());
+        if (!HeroState.IsInventory && !HeroState.IsDead && !ammoController.IsReload)
+            CorutineHolder.Instance.StartCoroutine(ShootCoroutine());
     }
 
     private IEnumerator ShootCoroutine()
@@ -88,7 +68,7 @@ public class WeaponController : MonoBehaviour
             isReady = true;
         }
         handItem.CanBeChanged = true;
-        IsShooting = false; 
+        IsShooting = false;
     }
 
     private bool CanShoot() => isReady
@@ -120,9 +100,40 @@ public class WeaponController : MonoBehaviour
         OnChangeState?.Invoke(shootState);
     }
 
-    private void Reload()
+    public void StartReload()
+    {
+        CorutineHolder.Instance.StopCoroutine(ShootCoroutine());
+        ammoController.IsReload = true;
+        IsShooting = false;
+        handItem.CanBeChanged = false;
+        isReady = false;
+    }
+
+    public void ReloadComplete()
     {
         ammoController.Reload();
+        handItem.CanBeChanged = true;
+        isReady = true;
+    }
+
+    private void OnEnable()
+    {
+        InputHandler.OnLeftMouseDown += Shoot;
+        InputHandler.OnVDown += ChangeShootState;
+
+        OnChangeState?.Invoke(shootState);
+    }
+
+    private void OnDisable()
+    {
+        InputHandler.OnLeftMouseDown -= Shoot;
+        InputHandler.OnVDown -= ChangeShootState;
+    }
+
+    private void OnDestroy()
+    {
+        InputHandler.OnLeftMouseDown -= Shoot;
+        InputHandler.OnVDown -= ChangeShootState;
     }
 }
 

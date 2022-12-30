@@ -41,8 +41,12 @@ public class BlurController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        blurAmount = Mathf.Lerp(blurAmount, blurTarget + addBlurShift, Time.fixedDeltaTime * _changeSpeed);
-        circleValue = Mathf.Lerp(circleValue, circleTarget + addCircleShift, Time.fixedDeltaTime * _changeSpeed);
+        blurAmount = Mathf.Lerp(blurAmount, HeroState.IsWeaponOnHand ?
+                                            blurTarget + addBlurShift : _defauitBlur,
+                                            Time.fixedDeltaTime * _changeSpeed);
+        circleValue = Mathf.Lerp(circleValue, HeroState.IsWeaponOnHand ?
+                                              circleTarget + addCircleShift :_defauitCircle,
+                                              Time.fixedDeltaTime * _changeSpeed);
         _blurMaterial.SetFloat(blurId, blurAmount);
         _blurMaterial.SetFloat(circleRadiusId, circleValue);
     }

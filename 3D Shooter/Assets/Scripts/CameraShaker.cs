@@ -4,61 +4,45 @@ using UnityEngine;
 
 public class CameraShaker : MonoBehaviour
 {
-    [SerializeField] private float _time, _angleDeg;
-    [SerializeField] private float _power;
-    [SerializeField] private Vector3 _baseRecoil;
+    [SerializeField] private Camera _camera;
 
-    private new Camera camera;
-    private WeaponController weaponC;
-    private Recoil recoil;
+    public static CameraShaker Instance;
 
     private void Awake()
     {
-        weaponC = GetComponent<WeaponController>();
-        recoil = GetComponent<Recoil>();
+        Instance = this;
     }
-
-    private void OnEnable()
+    
+    public void ShakeCamera(float time, float angleDeg, bool isRight)
     {
-        weaponC.OnShoot += ShakeRotateCamera;
+        if (!isRight)
+            angleDeg *= -1;
+
+        CorutineHolder.Instance.StartCoroutine(ShakeCameraCor(time, new Vector3(0, 0, angleDeg)));
     }
 
-    private void OnDisable()
-    {
-        weaponC.OnShoot -= ShakeRotateCamera;
-    }
-
-    public void SetCamera(Camera camera)
-    {
-        this.camera = camera;
-    }
-
-    public void ShakeRotateCamera()
-    {
-        StartCoroutine(ShakeRotateCor());
-    }
-
-    private IEnumerator ShakeRotateCor()
+    public void RandomShakeCamera(float time, float angleDeg, Recoil recoil)
     {
         if (Random.Range(0, 100) > 50)
-            _angleDeg *= -1;
-        var randomRotation = new Vector3(0, 0, _angleDeg * recoil.RecoilPower) +
-                             new Vector3(0, 0, Random.Range(-_angleDeg, _angleDeg) * recoil.RecoilRandomOffset);
-        var randomTranslation = _baseRecoil * recoil.RecoilPower +
-            new Vector3(Random.Range(-_power, _power), Random.Range(-_power, 0), Random.Range(-_power, 0)) * recoil.RecoilRandomOffset;
+            angleDeg *= -1;
+        var randomRotation = new Vector3(0, 0, angleDeg * recoil.RecoilPower + Random.Range(-angleDeg, angleDeg) * recoil.RecoilRandomOffset); //+ new Vector3(0, 0, Random.Range(-angleDeg, angleDeg) * recoil.RecoilRandomOffset);
+        
+        CorutineHolder.Instance.StartCoroutine(ShakeCameraCor(time, randomRotation));
+    }
+
+    private IEnumerator ShakeCameraCor(float time, Vector3 rotation)
+    {
         var elapsed = 0f;
-        var halfDuration = _time / 2;
-        var startPos = Vector3.zero;
-        randomTranslation += startPos;
-        while (elapsed < _time)
+        var halfDuration = time / 2;
+
+        while (elapsed < time)
         {
-            var t = elapsed < halfDuration ? elapsed / halfDuration : (_time - elapsed) / halfDuration;
+            var t = elapsed < halfDuration ? elapsed / halfDuration : (time - elapsed) / halfDuration;
             var sign = Mathf.Sign(halfDuration - elapsed);
-            camera.transform.Rotate(randomRotation * sign * t);
-            transform.parent.localPosition = Vector3.Lerp(startPos, randomTranslation, t * t);
+
+            _camera.transform.Rotate(rotation * sign * t);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.parent.localPosition = startPos;
     }
 }

@@ -8,7 +8,10 @@ public class AmmoController : MonoBehaviour
 {
     private const string CurrentAmmoKey = nameof(CurrentAmmoKey);
     public event Action OnReload;
+
+    public bool IsReload = false;
     public bool HasAmmo => CurrentAmmo > 0;
+    public bool HasFullMagazine => CurrentAmmo == _magazine;
     public int CurrentAmmo
     {
         get
@@ -61,6 +64,7 @@ public class AmmoController : MonoBehaviour
             if (CurrentAmmo == _magazine)
                 break;
         }
+        IsReload = false;
         OnReload?.Invoke();
     }
 

@@ -6,7 +6,7 @@ public class WeaponTargetLooker : MonoBehaviour
 {
     private Transform _targetLook;
 
-    private void FixedUpdate()
+    private void Update()
     {
         transform.LookAt(_targetLook);
     }

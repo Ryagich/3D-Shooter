@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Recoil))]
 [RequireComponent(typeof(AmmoController))]
 [RequireComponent(typeof(WeaponSoundsPlayer))]
-[RequireComponent(typeof(CameraShaker))]
+[RequireComponent(typeof(WeaponShaker))]
 
 public class WeaponSetter : MonoBehaviour
 {
@@ -15,7 +15,6 @@ public class WeaponSetter : MonoBehaviour
     private GameObject hero;
     private AmmoController ammoController;
     private WeaponSoundsPlayer weaponAudioPlayer;
-    private CameraShaker cameraShaker;
 
     private void Awake()
     {
@@ -23,7 +22,6 @@ public class WeaponSetter : MonoBehaviour
         targetLooker = GetComponent<WeaponTargetLooker>();
         ammoController = GetComponent<AmmoController>();
         weaponAudioPlayer = GetComponent<WeaponSoundsPlayer>();
-        cameraShaker = GetComponent<CameraShaker>();
         hero = GameObject.FindGameObjectWithTag("Hero");
         var cameraC = hero.GetComponent<CameraController>();
 
@@ -31,7 +29,6 @@ public class WeaponSetter : MonoBehaviour
         recoil.SetCameraController(cameraC);
         targetLooker.SetTargetLook(cameraC.GetTargetLook());
         ammoController.Init(hero.GetComponent<InventoryCreator>().GetModel());
-        cameraShaker.SetCamera(cameraC.GetCamera);
     }
 
     private void OnEnable()

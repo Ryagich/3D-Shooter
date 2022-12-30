@@ -20,7 +20,7 @@ public class Crosshair : MonoBehaviour
         Instance = this;
         crosshairTrans = GetComponent<RectTransform>();
 
-        InputHandler.OnRightMouseDown += () => { gameObject.SetActive(false); };
+        InputHandler.OnRightMouseDown += () => { gameObject.SetActive(!HeroState.IsWeaponOnHand); };
         InputHandler.OnRightMouseUp += () => { gameObject.SetActive(true); };
     }
 

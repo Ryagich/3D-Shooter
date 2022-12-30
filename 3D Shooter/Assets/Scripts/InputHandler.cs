@@ -18,6 +18,7 @@ public class InputHandler : MonoBehaviour
     public static event Action OnPressSpace;
     public static event Action OnIDown;
     public static event Action OnRDown;
+    public static event Action OnFDown;
     public static event Action OnShiftDown;
     public static event Action OnShiftUp;
     public static event Action OnPressShift;
@@ -69,7 +70,8 @@ public class InputHandler : MonoBehaviour
             OnIDown?.Invoke();
         if (Input.GetKeyDown(KeyCode.R))
             OnRDown?.Invoke();
-
+        if (Input.GetKeyDown(KeyCode.F))
+            OnFDown?.Invoke();
         if (Input.GetKey(KeyCode.LeftShift))
             OnPressShift?.Invoke();
         if (Input.GetKeyDown(KeyCode.LeftShift))
