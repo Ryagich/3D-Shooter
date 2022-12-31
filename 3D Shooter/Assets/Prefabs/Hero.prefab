@@ -3478,6 +3478,7 @@ GameObject:
   - component: {fileID: 2184694009539695462}
   - component: {fileID: 2184694009539695461}
   - component: {fileID: 7247822880050246026}
+  - component: {fileID: 1953161005}
   m_Layer: 12
   m_Name: Hero
   m_TagString: Hero
@@ -3981,6 +3982,19 @@ MonoBehaviour:
   _defauitCircle: 500
   _aimCircle: 400
   _addShiftCircle: -100
+--- !u!114 &1953161005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247822880050246032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adff2335bac333b49a0ab2cad4e4ccb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 7247822879157958374}
 --- !u!1 &7247822880091407952
 GameObject:
   m_ObjectHideFlags: 0

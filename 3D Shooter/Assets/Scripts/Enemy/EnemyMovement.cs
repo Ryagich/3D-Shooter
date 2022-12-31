@@ -33,9 +33,9 @@ public class EnemyMovement : MonoBehaviour
 
         if (!heroInSightRange && !heroInAttackRange && _canPatroling)
             Patroling();
-        if (heroInSightRange && !heroInAttackRange)
+        else if (heroInSightRange && !heroInAttackRange)
             ChaseHero();
-        if (heroInAttackRange)
+        else if (heroInAttackRange)
             AttackHero();
     }
 

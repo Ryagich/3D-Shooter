@@ -98,7 +98,7 @@ MonoBehaviour:
   _heroMask:
     serializedVersion: 2
     m_Bits: 4160
-  _sightRange: 100
+  _sightRange: 350
   _attackRange: 1
   _canPatroling: 1
   _walkPoint: {x: 0, y: 0, z: 0}

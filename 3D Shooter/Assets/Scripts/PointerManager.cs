@@ -32,6 +32,7 @@ public class PointerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        return;
         var planes = GeometryUtility.CalculateFrustumPlanes(_camera);
         
         foreach (var i in _dictionary)
@@ -44,8 +45,7 @@ public class PointerManager : MonoBehaviour
             Debug.DrawRay(_point.position, toEnemy);
 
             var index = 0;
-            //var minDistance = Mathf.Infinity;
-            var minDistance = a;
+            var minDistance = Mathf.Infinity;
             for (var p = 0; p < 4; p++)
                 if (planes[p].Raycast(ray, out var distance))
                     if (distance < minDistance)
@@ -53,13 +53,12 @@ public class PointerManager : MonoBehaviour
                         minDistance = distance;
                         index = p;
                     }
-
             minDistance = Mathf.Clamp(minDistance, 0, toEnemy.magnitude);
             var worldPosition = ray.GetPoint(minDistance);
             var position = _camera.WorldToScreenPoint(worldPosition);
             var rotation = GetIconRotation(index);
 
-            if (toEnemy.magnitude > minDistance)
+            if (toEnemy.magnitude < minDistance)
                 pointerIcon.Show();
             else
                 pointerIcon.Hide();
@@ -83,6 +82,6 @@ public class PointerManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, a);
+        Gizmos.DrawWireSphere(_camera.transform.position, a);
     }
 }
