@@ -91,12 +91,14 @@ public class GridModel : IItemContainerModel
 
     public void PlaceItem(ItemModel item, Vector2Int pos)
     {
+        if (items.Contains(item))
+            throw new InvalidOperationException();
         var rect = new RectInt(pos, item.Size);
         if (!IsInBounds(rect) || !IsFree(rect))
             throw new InvalidOperationException();
-        item.Put(this, pos);
         FillBounds(item, item.GridBounds);
         items.Add(item);
+        item.Put(this, pos);
 
         OnChanged?.Invoke();
     }
@@ -106,9 +108,9 @@ public class GridModel : IItemContainerModel
         if (!items.Contains(item))
             throw new InvalidOperationException();
         ClearItemBounds(item);
-        item.Put(null, Vector2Int.zero);
         items.Remove(item);
-
+        item.Put(null, Vector2Int.zero);
+        
         OnChanged?.Invoke();
     }
 

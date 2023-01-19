@@ -92,6 +92,7 @@ public class InventoryView : MonoBehaviour
     public ItemView InstantiateItemView(ItemModel itemM)
     {
         var itemV = Instantiate(_itemVPref);
+        Debug.Log($"Instantiate {itemM.ItemData.name}");
         itemV.SetView(this);
         itemV.SetModel(itemM);
 

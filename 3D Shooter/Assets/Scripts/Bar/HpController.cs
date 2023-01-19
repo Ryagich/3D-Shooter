@@ -17,7 +17,6 @@ public class HpController : MonoBehaviour
         }
     }
 
-
     [SerializeField, Min(0.0f)] private float _hp = 100.0f, _maxHp = 100.0f;
     [SerializeField] private BarView hpV;
 
@@ -41,10 +40,6 @@ public class HpController : MonoBehaviour
             OnDead?.Invoke();
             return;
         }
-
-        if (HpM.IsMax)
-            hpV.ChangeState(false);
-        else
-            hpV.ChangeState(true);
+        hpV.ChangeState(!HpM.IsMax);
     }
 }

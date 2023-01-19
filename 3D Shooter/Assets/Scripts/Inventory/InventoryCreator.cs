@@ -9,11 +9,6 @@ public class InventoryCreator : MonoBehaviour
     private InventoryModel inventoryM;
     private InventoryController inventoryC;
 
-    private void Start()
-    {
-        inventoryV.UpdateModel();
-    }
-
     public InventoryModel GetModel()
     {
         if (inventoryM == null)

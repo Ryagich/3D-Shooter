@@ -12,7 +12,7 @@ public class ItemView : MonoBehaviour
 
     public static implicit operator bool(ItemView exists) => (exists as UnityEngine.Object) && exists.Model != null && exists.Model.Amount != 0;
 
-    public bool Exists => this && Model != null && Model.Amount != 0;
+    public bool Exists => this && Model != null && Model.Amount != 0 && Model.IsPlaced;
 
     [SerializeField] private TMP_Text _text;
 
@@ -23,6 +23,12 @@ public class ItemView : MonoBehaviour
     {
         Rect = GetComponent<RectTransform>();
         TmpRect = _text.GetComponent<RectTransform>();
+    }
+
+    private void OnDestroy()
+    {
+        if (Model != null)
+            Model.OnPositionChanged -= UpdateView;
     }
 
     private void UpdateText()
@@ -38,7 +44,11 @@ public class ItemView : MonoBehaviour
 
     public void SetModel(ItemModel itemM)
     {
+        if (Model != null)
+            Model.OnPositionChanged -= UpdateView;
         Model = itemM;
+        if (Model != null)
+            Model.OnPositionChanged += UpdateView;
         UpdateView();
     }
 
@@ -60,7 +70,7 @@ public class ItemView : MonoBehaviour
 
     public void UpdateView()
     {
-        if (Model == null || Model.Amount == 0)
+        if (!Exists)
         {
             if (this as UnityEngine.Object)
                 Destroy(gameObject);

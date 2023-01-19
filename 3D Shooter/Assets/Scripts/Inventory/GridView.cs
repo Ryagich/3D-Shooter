@@ -61,6 +61,7 @@ public class GridView : MonoBehaviour, IItemContainerView
             {
                 var item = _inventoryV.InstantiateItemView(itemM);
                 itemVs.Add(itemM, item);
+                Debug.Log($"Add {itemVs[itemM].gameObject.name}");
             }
             var itemV = itemVs[itemM];
             itemV.SetModel(itemM);
@@ -70,6 +71,7 @@ public class GridView : MonoBehaviour, IItemContainerView
         var toDelete = itemVs.Keys.Except(itemMs).ToList();
         foreach (var itemM in toDelete)
         {
+            Debug.Log($"Remove {itemVs[itemM].gameObject.name}");
             Destroy(itemVs[itemM].gameObject);
             itemVs.Remove(itemM);
         }
