@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class InterfaceController : MonoBehaviour
 {
-    public Fader[] Faders { get; private set; }
-
     [SerializeField, Min(.0f)] private float _startTime = 75.0f, _defHoldTime = 100.0f, _endTime = 75.0f;
+    
+    [SerializeField] private Fader[] _faders;
 
     private void Awake()
     {
-        foreach (var fader in Faders)
+        foreach (var fader in _faders)
             fader.SetDigits(_startTime, _defHoldTime, _endTime);
 
         InputHandler.OnTabDown += Show;
@@ -19,7 +19,7 @@ public class InterfaceController : MonoBehaviour
 
     private void Show()
     {
-        foreach (var fader in Faders)
+        foreach (var fader in _faders)
             fader.Show(false);
     }
 
@@ -27,13 +27,13 @@ public class InterfaceController : MonoBehaviour
     {
         var maxTime = float.MinValue;
 
-        foreach (var fader in Faders)
+        foreach (var fader in _faders)
         {
             var lastStartTime = fader.GetLastStartTime();
             if (maxTime < lastStartTime)
                 maxTime = lastStartTime;
         }
-        foreach (var fader in Faders)
+        foreach (var fader in _faders)
             if (fader.State == FaderState.start)
             {
                 var addTime = maxTime - fader.GetLastStartTime();
