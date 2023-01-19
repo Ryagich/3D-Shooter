@@ -19,12 +19,7 @@ public class GridView : MonoBehaviour, IItemContainerView
         itemVs = new Dictionary<ItemModel, ItemView>();
     }
 
-    public ItemView GetItemView(ItemModel model)
-    {
-        if (!itemVs.ContainsKey(model))
-            return null;
-        return itemVs[model];
-    }
+    public ItemView GetItemView(ItemModel model) => itemVs.ContainsKey(model) ? itemVs[model] : null;
 
     public Vector2Int GetGridPosition(Vector2 mousePos)
     {

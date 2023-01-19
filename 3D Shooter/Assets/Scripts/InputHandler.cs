@@ -26,6 +26,9 @@ public class InputHandler : MonoBehaviour
     public static event Action OnSecondWeapon;
     public static event Action OnTrirdWeapon;
     public static event Action OnVDown;
+    public static event Action OnTabDown;
+    public static event Action OnTabUp;
+
     public static bool IsLeftMouse { get; private set; } = false;
     public static bool IsRightMouse { get; private set; } = false;
     public static bool IsShift { get; private set; } = false;
@@ -93,5 +96,10 @@ public class InputHandler : MonoBehaviour
             OnSecondWeapon?.Invoke();
         if (Input.GetKeyDown(KeyCode.Alpha3))
             OnTrirdWeapon?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+            OnTabDown?.Invoke();
+        if (Input.GetKeyUp(KeyCode.Tab))
+            OnTabUp?.Invoke();
     }
 }

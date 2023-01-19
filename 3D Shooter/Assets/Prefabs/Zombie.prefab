@@ -44,16 +44,16 @@ GameObject:
   m_Component:
   - component: {fileID: 599510940334565975}
   - component: {fileID: 599510940334565983}
-  - component: {fileID: 599510940334565982}
   - component: {fileID: 599510940334565981}
-  - component: {fileID: 599510940334565980}
   - component: {fileID: 599510940334565979}
   - component: {fileID: 599510940334565977}
   - component: {fileID: 599510940334565976}
   - component: {fileID: 599510940334565953}
   - component: {fileID: 599510940334565952}
   - component: {fileID: 599510940334565954}
-  - component: {fileID: 6109880166209910179}
+  - component: {fileID: 2156984649490447610}
+  - component: {fileID: 7340082725456593553}
+  - component: {fileID: 6617241786384565029}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Untagged
@@ -68,7 +68,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223549038525051117}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.055871055, y: 0.3206003, z: 0.01894726, w: 0.94537556}
   m_LocalPosition: {x: -2.7, y: -0.17380667, z: -8.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -104,20 +104,6 @@ MonoBehaviour:
   _walkPoint: {x: 0, y: 0, z: 0}
   _walkPointRange: 15
   _attack: {fileID: 4029203376077816639}
---- !u!114 &599510940334565982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223549038525051117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082ef6bfa53768141a26b1d3830e5798, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHp: 100
-  _hp: 100
 --- !u!114 &599510940334565981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,20 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9056bba12822119409ec96e20abd9ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &599510940334565980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223549038525051117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ecfec42826cf6f43b72d9a6c85d6978, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 4029203374627077824}
-  _bar: {fileID: 4029203374911535563}
 --- !u!114 &599510940334565979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +215,36 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &6109880166209910179
+--- !u!114 &2156984649490447610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223549038525051117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4058ab20bf244d469e2a8623d415736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 100
+  _maxHp: 100
+  hpV: {fileID: 7340082725456593553}
+--- !u!114 &7340082725456593553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223549038525051117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7605c04a2b910b140b973c1b0813f868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _barObj: {fileID: 4029203374627077824}
+  _fillBar: {fileID: 4029203374911535563}
+--- !u!114 &6617241786384565029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -255,8 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf81247a4546624fa75b6956626a69f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _heal: 1
-  _coolDown: 1
+  _hpV: {fileID: 7340082725456593553}
 --- !u!1 &992057459189092346
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95a766e109ab2d4c8b1e17295029126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpList: []
+  _hpList: []
   _damage: 10
 --- !u!135 &4029203376077816608
 SphereCollider:

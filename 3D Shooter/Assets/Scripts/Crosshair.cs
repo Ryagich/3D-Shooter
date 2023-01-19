@@ -10,9 +10,9 @@ public class Crosshair : MonoBehaviour
     [SerializeField] private float _power = 1.0f;
     [SerializeField] private List<Image> _signalImages;
     [SerializeField, Range(.0f, 1.0f)] private float _showSpeed = 0.5f, _hideSpeed = 0.2f, _hideTime = .5f;
+    [SerializeField] private Recoil _recoil;
 
     private RectTransform crosshairTrans;
-    [SerializeField] private Recoil _recoil;
     private float t, targetT;
 
     private void Awake()

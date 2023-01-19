@@ -132,7 +132,7 @@ public class InventoryView : MonoBehaviour
             i.Value.SetModel(i.Key);
             if (i.Key is SlotExtentionModel slotExtentionM)
                 slotExtentionM.OnGridResize += ResizeGrid;
-                i.Key.OnChanged += UpdateView;
+            i.Key.OnChanged += UpdateView;
         }
     }
 
@@ -159,8 +159,7 @@ public class InventoryView : MonoBehaviour
     private bool IsInside(Vector2 mousePos, RectTransform rect)
     {
         var hit = RectTransformUtility
-            .ScreenPointToLocalPointInRectangle(rect, mousePos,
-            null, out Vector2 local);
+            .ScreenPointToLocalPointInRectangle(rect, mousePos, null, out Vector2 local);
         return hit && rect.rect.Contains(local);
     }
 
@@ -173,7 +172,7 @@ public class InventoryView : MonoBehaviour
                 return;
             var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
 
-            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists))
+            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists)) 
             {
                 var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
                 if (handItem != null)

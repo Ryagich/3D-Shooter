@@ -7,12 +7,12 @@ public class PlayerDeath : MonoBehaviour
     [SerializeField] private List<GameObject> _interfaces;
     [SerializeField] private GameObject _deathScreen;
 
-    private Hp hp;
+    private HpController hp;
 
     private void Awake()
     {
         HeroState.IsDead = false;
-        hp = GetComponent<Hp>();
+        hp = GetComponent<HpController>();
         hp.OnDead += Die;
     }
 

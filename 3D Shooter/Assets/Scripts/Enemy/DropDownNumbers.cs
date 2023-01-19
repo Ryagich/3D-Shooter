@@ -4,21 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DamageNumbersDroper : MonoBehaviour
+public class DropDownNumbers : MonoBehaviour
 {
     [SerializeField] private Canvas _canvas;
     [SerializeField] private TMP_Text _textPref;
 
-    private bool isAlive = true;
+    private HpController hpC;
+
     private void Awake()
     {
-        GetComponent<Hp>().OnHpChangedValue += InstantiateDamageNumbers;
-        GetComponent<Hp>().OnDead += () => isAlive = false;
+        hpC = GetComponent<HpController>();
+        hpC.HpM.OnAmountChanged += InstantiateDropDownNumbers;
     }
 
-    private void InstantiateDamageNumbers(float value)
+    private void InstantiateDropDownNumbers(float value, float _)
     {
-        if (!isAlive)
+        if (!hpC.IsAlive || hpC.HpM.IsMax)
             return;
         var damageText = Instantiate(_textPref, _canvas.transform);
         damageText.transform.localPosition = Vector2.zero;

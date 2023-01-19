@@ -6,13 +6,13 @@ using UnityEngine.AI;
 public class EnemyDead : MonoBehaviour
 {
     private Animator animator;
-    private Hp hp;
+    private HpController hp;
     private EnemyMovement movement;
     
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        hp = GetComponent<Hp>();
+        hp = GetComponent<HpController>();
         movement = GetComponent<EnemyMovement>();
 
         hp.OnDead += Die;

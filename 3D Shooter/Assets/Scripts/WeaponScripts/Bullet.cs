@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
 
         if (Physics.Linecast(lastPos, transform.position, out var hit, _targetMask))
         {
-            var hp = hit.transform.GetComponent<Hp>();
+            var hp = hit.transform.GetComponent<HpController>();
             if (hp)
             {
                 hp.ChangeHp(-damage);

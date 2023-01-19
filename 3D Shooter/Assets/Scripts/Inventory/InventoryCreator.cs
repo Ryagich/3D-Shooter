@@ -47,9 +47,7 @@ public class InventoryCreator : MonoBehaviour
                 slotMs.Add(new SlotExtentionModel(slotV.Type, extGridM));
             }
             else
-            {
                 slotMs.Add(new SlotModel(slotV.Type));
-            }
         }
 
         var gridMs = inventoryV.GridVs

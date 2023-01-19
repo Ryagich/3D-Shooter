@@ -26,10 +26,7 @@ public class SpawnObject : MonoBehaviour
     private void SpawnObj2()
     {
         if (!obj)
-        {
             obj = Instantiate(_objPref, transform.position, transform.rotation);
-
-        }
         Invoke(nameof(SpawnObj2), _coolDown);
     }
 }
