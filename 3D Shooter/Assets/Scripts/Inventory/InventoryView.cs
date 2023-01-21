@@ -15,19 +15,19 @@ public class InventoryView : MonoBehaviour
 
     private Dictionary<IItemContainerModel, IItemContainerView> containerVs
       = new Dictionary<IItemContainerModel, IItemContainerView>();
-    private bool isOpen = false;
+    public bool IsOpen = false;
 
-    public InventoryController InventoryC { get => _inventoryCreator.GetController(); }
-    private InventoryModel inventoryM { get => _inventoryCreator.GetModel(); }
+    public InventoryController InventoryC => _inventoryCreator.GetController();
+    private InventoryModel inventoryM => _inventoryCreator.GetModel();
     public Vector2 TileSize => _tileSize;
     public List<SlotView> SlotVs => _slotVs;
     public List<GridView> GridVs => _gridVs;
 
     public void ChangeInventoryState()
     {
-        isOpen = !isOpen;
-        gameObject.SetActive(isOpen);
-        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        IsOpen = !IsOpen;
+        gameObject.SetActive(IsOpen);
+        Cursor.lockState = IsOpen ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     private void OnEnable()
@@ -44,55 +44,9 @@ public class InventoryView : MonoBehaviour
         InputHandler.OnLeftMouseDown -= LeftMouseButtonDown;
     }
 
-    private void Update()
-    {
-        if (!isOpen)
-            return;
-        var updated = false;
-        var container = FindContainerView(InputHandler.MousePos);
-        if (container is GridView gridV)
-        {
-            if (_handItemV.ItemV != null && _handItemV.ItemV.Exists)
-            {
-                var handItemM = _handItemV.ItemV.Model;
-                _inventoryHighlighter.SetGridPosition(handItemM,
-                    container.GetGridPosition(InputHandler.MousePos), gridV, _tileSize);
-                updated = true;
-            }
-            else
-            {
-                var tilePosition = container.GetGridPosition(InputHandler.MousePos);
-                var itemM = gridV.GetModel().GetItem(tilePosition);
-                if (itemM != null)
-                {
-                    var itemV = gridV.GetItemView(itemM);
-                    if (itemV)
-                    {
-                        _inventoryHighlighter.SetItem(itemV);
-                        updated = true;
-                    }
-                }
-                else
-                {
-                    _inventoryHighlighter.SetGridCell(gridV.GetGridPosition(InputHandler.MousePos),
-                        gridV, _tileSize);
-                    updated = true;
-                }
-            }
-        }
-        if (container is SlotView slotV)
-        {
-            _inventoryHighlighter.SetSlotPos(slotV.Rect);
-            updated = true;
-        }
-        if (!updated)
-            _inventoryHighlighter.Disable();
-    }
-
     public ItemView InstantiateItemView(ItemModel itemM)
     {
         var itemV = Instantiate(_itemVPref);
-        Debug.Log($"Instantiate {itemM.ItemData.name}");
         itemV.SetView(this);
         itemV.SetModel(itemM);
 
@@ -142,7 +96,7 @@ public class InventoryView : MonoBehaviour
         var toDrop = gridM.Resize(size).ToList();
         foreach (var item in toDrop)
         {
-            if (InventoryC.MovePossible(item))
+            if (inventoryM.AddMaxPossibleAmount(item))
                 InventoryC.Drop(item);
         }
     }
@@ -166,14 +120,14 @@ public class InventoryView : MonoBehaviour
 
     private void LeftMouseButtonDown()
     {
-        if (isOpen)
+        if (IsOpen)
         {
             var activeContainerV = FindContainerView(InputHandler.MousePos);
             if (activeContainerV == null)
                 return;
             var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
 
-            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists)) 
+            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists))
             {
                 var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
                 if (handItem != null)
@@ -184,7 +138,7 @@ public class InventoryView : MonoBehaviour
 
     private void LeftMouseButtonUp()
     {
-        if (_handItemV.ItemV && isOpen)
+        if (_handItemV.ItemV && IsOpen)
         {
             var activeContainerV = FindContainerView(InputHandler.MousePos);
             if (activeContainerV == null)
@@ -196,12 +150,11 @@ public class InventoryView : MonoBehaviour
                                   activeContainerV.GetGridPosition(InputHandler.MousePos));
             if (!isPlaced)
             {
-                if (!InventoryC.MovePossible(_handItemV.ItemV.Model))
-                    InventoryC.Drop(_handItemV.ItemV.Model);
-            }
-            else
-            {
+                var itemM = inventoryM.HandItemM.GetItem(Vector2Int.zero);
+                inventoryM.HandItemM.RemoveItem(itemM);
 
+                if (!inventoryM.AddMaxPossibleAmount(itemM))
+                    InventoryC.Drop(itemM);
             }
         }
     }

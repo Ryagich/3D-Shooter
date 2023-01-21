@@ -15,7 +15,7 @@ public class DropItem : MonoBehaviour
 
         var inventoryCreator = hero.GetComponent<InventoryCreator>();
 
-        if (inventoryCreator.GetController().MovePossible(itemM))
+        if (inventoryCreator.GetModel().AddMaxPossibleAmount(itemM))
             Destroy(gameObject);
     }
 

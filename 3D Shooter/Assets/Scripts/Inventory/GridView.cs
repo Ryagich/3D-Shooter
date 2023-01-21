@@ -16,7 +16,6 @@ public class GridView : MonoBehaviour, IItemContainerView
     private void Awake()
     {
         Rect = GetComponent<RectTransform>();
-        itemVs = new Dictionary<ItemModel, ItemView>();
     }
 
     public ItemView GetItemView(ItemModel model) => itemVs.ContainsKey(model) ? itemVs[model] : null;
@@ -57,12 +56,12 @@ public class GridView : MonoBehaviour, IItemContainerView
         var itemMs = gridM.GetItems();
         foreach (var itemM in itemMs)
         {
-            if (!itemVs.ContainsKey(itemM))
+            if (!itemVs.ContainsKey(itemM) || !itemVs[itemM])
             {
                 var item = _inventoryV.InstantiateItemView(itemM);
-                itemVs.Add(itemM, item);
-                Debug.Log($"Add {itemVs[itemM].gameObject.name}");
+                itemVs[itemM] = item;
             }
+
             var itemV = itemVs[itemM];
             itemV.SetModel(itemM);
             itemV.UpdateView();
@@ -71,8 +70,8 @@ public class GridView : MonoBehaviour, IItemContainerView
         var toDelete = itemVs.Keys.Except(itemMs).ToList();
         foreach (var itemM in toDelete)
         {
-            Debug.Log($"Remove {itemVs[itemM].gameObject.name}");
-            Destroy(itemVs[itemM].gameObject);
+            if (itemVs[itemM])
+                Destroy(itemVs[itemM].gameObject);
             itemVs.Remove(itemM);
         }
     }

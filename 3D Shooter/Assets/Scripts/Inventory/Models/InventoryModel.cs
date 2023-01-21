@@ -101,9 +101,25 @@ public class InventoryModel
             moveAmount += ItemModel.MoveMaxPossibleAmount(from, item);
             if (from.Amount == 0)
                 break;
-                //return moveAmount;
         }
         OnInventoryChange?.Invoke();
         return moveAmount;
+    }
+
+    public bool AddMaxPossibleAmount(ItemModel itemM)
+    {
+        FillUnderfilledItems(itemM);
+        var containerM = itemM.ContainerM;
+
+        if (itemM.Amount == 0)
+            return true;
+        if (TryAddItem(itemM))
+        {
+            if (containerM != null)
+                containerM.RemoveItem(itemM);
+            return true;
+        }
+        else
+            return false;
     }
 }

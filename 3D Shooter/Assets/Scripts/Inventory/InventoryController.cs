@@ -66,7 +66,7 @@ public class InventoryController
         if (model is SlotModel slotM)
         {
             slotM.DisableEvents = true;
-            var isMoved = MovePossible(swapItemM);
+            var isMoved = Model.AddMaxPossibleAmount(swapItemM);
             if (!isMoved)
                 Drop(swapItemM);
             slotM.DisableEvents = false;
@@ -77,7 +77,7 @@ public class InventoryController
         else
         {
             Model.FillUnderfilledItems(swapItemM);
-            if (swapItemM.Amount != 0 && inventoryM.CanBeAdded(swapItemM))
+            if (swapItemM.Amount > 0 && inventoryM.CanBeAdded(swapItemM))
             {
                 inventoryM.RemoveItem(swapItemM);
                 model.PlaceItem(handItemM, pos);
@@ -87,23 +87,6 @@ public class InventoryController
         }
 
         return false;
-    }
-
-    public bool MovePossible(ItemModel itemM)
-    {
-        Model.FillUnderfilledItems(itemM);
-        var containerM = itemM.ContainerM;
-
-        if (itemM.Amount == 0)
-            return true;
-        if (Model.TryAddItem(itemM))
-        {
-            if (containerM != null)
-                containerM.RemoveItem(itemM);
-            return true;
-        }
-        else
-            return false;
     }
 
     public void DropHand()

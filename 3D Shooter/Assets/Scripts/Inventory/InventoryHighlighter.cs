@@ -6,12 +6,59 @@ using UnityEngine.UI;
 public class InventoryHighlighter : MonoBehaviour
 {
     [SerializeField] private RectTransform hightlighter;
+    [SerializeField] private InventoryView inventoryV;
+    [SerializeField] private HandItemView _handItemV;
 
     private Image img;
 
     private void Awake()
     {
         img = hightlighter.GetComponent<Image>();
+    }
+
+    private void Update()
+    {
+        if (!inventoryV.IsOpen)
+            return;
+        var updated = false;
+        var container = inventoryV.FindContainerView(InputHandler.MousePos);
+        if (container is GridView gridV)
+        {
+            if (_handItemV.ItemV != null && _handItemV.ItemV.Exists)
+            {
+                var handItemM = _handItemV.ItemV.Model;
+                SetGridPosition(handItemM, container.GetGridPosition(InputHandler.MousePos),
+                    gridV, inventoryV.TileSize);
+                updated = true;
+            }
+            else
+            {
+                var tilePosition = container.GetGridPosition(InputHandler.MousePos);
+                var itemM = gridV.GetModel().GetItem(tilePosition);
+                if (itemM != null)
+                {
+                    var itemV = gridV.GetItemView(itemM);
+                    if (itemV)
+                    {
+                        SetItem(itemV);
+                        updated = true;
+                    }
+                }
+                else
+                {
+                    SetGridCell(gridV.GetGridPosition(InputHandler.MousePos),
+                        gridV, inventoryV.TileSize);
+                    updated = true;
+                }
+            }
+        }
+        if (container is SlotView slotV)
+        {
+            SetSlotPos(slotV.Rect);
+            updated = true;
+        }
+        if (!updated)
+            Disable();
     }
 
     public void SetItem(ItemView item)
@@ -26,8 +73,8 @@ public class InventoryHighlighter : MonoBehaviour
         CheckSetParent(grid.Rect);
         hightlighter.sizeDelta = tileSize * item.Size;
         var gridPos = pos - item.Size / 2;
-        SetXYPos(grid.CalculatePositionOnGrid(item, gridPos));        
-        hightlighter.localRotation = Quaternion.Euler(0, 0, item.IsRotated ? 0.0f : 90.0f);
+        SetXYPos(grid.CalculatePositionOnGrid(item, gridPos));
+        hightlighter.localRotation = Quaternion.Euler(0, 0, 0);
         CheckSetActive(grid.GetModel().IsInBounds(new RectInt(gridPos, item.Size)));
     }
 

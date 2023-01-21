@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class GridModel : IItemContainerModel
 {
@@ -32,7 +33,7 @@ public class GridModel : IItemContainerModel
                 newHashSet.Add(item);
             else
             {
-                toRemove.Add(item);            
+                toRemove.Add(item);
                 yield return item;
             }
         foreach (var item in toRemove)
@@ -41,7 +42,7 @@ public class GridModel : IItemContainerModel
         inventorySlots = new ItemModel[this.size.x, this.size.y];
 
         foreach (var item in newHashSet)
-            PlaceItem(item,item.Position);
+            PlaceItem(item, item.Position);
 
         OnChanged?.Invoke();
     }
@@ -96,11 +97,34 @@ public class GridModel : IItemContainerModel
         var rect = new RectInt(pos, item.Size);
         if (!IsInBounds(rect) || !IsFree(rect))
             throw new InvalidOperationException();
-        FillBounds(item, item.GridBounds);
+
         items.Add(item);
         item.Put(this, pos);
+        FillBounds(item, item.GridBounds);
+        Debug.Log(pos);
+        PrintSlots();
 
         OnChanged?.Invoke();
+    }
+
+    //DEBUG
+
+    private void PrintSlots()
+    {
+        var sb = new StringBuilder();
+        for (int y = 0; y < inventorySlots.GetLength(1); y++)
+        {
+            for (int x = 0; x < inventorySlots.GetLength(0); x++)
+            {
+                var item = inventorySlots[x, y];
+
+                var c = item == null ? '-' : item.ItemData.name[0];
+                sb.Append(c);
+                sb.Append(' ');
+            }
+            sb.Append('\n');
+        }
+        Debug.Log(sb.ToString());
     }
 
     public void RemoveItem(ItemModel item)
@@ -110,7 +134,7 @@ public class GridModel : IItemContainerModel
         ClearItemBounds(item);
         items.Remove(item);
         item.Put(null, Vector2Int.zero);
-        
+
         OnChanged?.Invoke();
     }
 
@@ -162,5 +186,4 @@ public class GridModel : IItemContainerModel
             if (item.ItemData == data && !item.IsMaxAmount)
                 yield return item;
     }
-
 }

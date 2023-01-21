@@ -10,8 +10,7 @@ public class HandItemModel : IItemContainerModel
 
     public bool CanBePlaced(ItemModel item, Vector2Int pos) => ItemM == null;
 
-    public Vector2Int? GetFreePositon(Vector2Int size, ItemData item) =>
-        (ItemM == null) ? Vector2Int.zero : null;
+    public Vector2Int? GetFreePositon(Vector2Int size, ItemData item) => null;
 
     public ItemModel GetItem(Vector2Int pos) => ItemM;
 
