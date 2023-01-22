@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    public static event Action<Vector3> OnMove;
     public static event Action<Vector3> OnMouse;
     public static event Action<float> OnMouseX;
     public static event Action<float> OnMouseY;
@@ -29,6 +28,8 @@ public class InputHandler : MonoBehaviour
     public static event Action OnTabDown;
     public static event Action OnTabUp;
 
+    public static Vector3 Movement;
+
     public static bool IsLeftMouse { get; private set; } = false;
     public static bool IsRightMouse { get; private set; } = false;
     public static bool IsShift { get; private set; } = false;
@@ -38,7 +39,7 @@ public class InputHandler : MonoBehaviour
     {
         if (HeroState.IsDead)
             return;
-        OnMove?.Invoke(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+        Movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         OnMouse?.Invoke(Input.mousePosition);
         OnMouseX?.Invoke(Input.GetAxis("Mouse X"));
         OnMouseY?.Invoke(Input.GetAxis("Mouse Y"));

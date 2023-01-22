@@ -2959,9 +2959,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc0bf8820ca7634baf23f56acb20cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxStepSpeed: 30
-  _stepAcceleration: 25
-  _linearDrag: 0.07
+  _maxStepSpeed: 47.8
+  _stepAcceleration: 50
+  _linearDragXZ: 0.04
+  _linearDragY: 0
   _gravity: 10
   _jumpPower: 7
 --- !u!114 &6659417335419396315
@@ -4271,6 +4272,7 @@ MonoBehaviour:
   - {fileID: 6659417335143197316}
   - {fileID: 6659417335330674883}
   _tileSize: {x: 32, y: 32}
+  IsOpen: 0
 --- !u!114 &6659417335722672407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4284,6 +4286,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hightlighter: {fileID: 6659417335538096018}
+  inventoryV: {fileID: 0}
+  _handItemV: {fileID: 0}
 --- !u!1 &6659417335737027727
 GameObject:
   m_ObjectHideFlags: 0

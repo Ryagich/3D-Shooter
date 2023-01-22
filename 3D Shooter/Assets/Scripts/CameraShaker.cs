@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class CameraShaker : MonoBehaviour
 {
+    public static CameraShaker Instance => _instance;
+
     [SerializeField] private Camera _camera;
 
-    public static CameraShaker Instance;
+    private static CameraShaker _instance;
 
     private void Awake()
     {
-        Instance = this;
+        _instance = this;
     }
-    
+
     public void ShakeCamera(float time, float angleDeg, bool isRight)
     {
         if (!isRight)
@@ -26,7 +28,7 @@ public class CameraShaker : MonoBehaviour
         if (Random.Range(0, 100) > 50)
             angleDeg *= -1;
         var randomRotation = new Vector3(0, 0, angleDeg * recoil.RecoilPower + Random.Range(-angleDeg, angleDeg) * recoil.RecoilRandomOffset); //+ new Vector3(0, 0, Random.Range(-angleDeg, angleDeg) * recoil.RecoilRandomOffset);
-        
+
         CorutineHolder.Instance.StartCoroutine(ShakeCameraCor(time, randomRotation));
     }
 

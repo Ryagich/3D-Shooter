@@ -21,6 +21,7 @@ public class WeaponShaker : MonoBehaviour
     {
         CorutineHolder.Instance.StartCoroutine(ShakeRotateCor());
         CameraShaker.Instance.RandomShakeCamera(_time, _angleDeg, recoil);
+       //не забыть вызвать в другом месте
     }
 
     private IEnumerator ShakeRotateCor()

@@ -16,7 +16,6 @@ public class StepShaker : MonoBehaviour
     {
         shaker = GetComponent<CameraShaker>(); 
 
-        InputHandler.OnMove += TurnCamera;
     }
 
     private void TurnCamera(Vector3 move)
