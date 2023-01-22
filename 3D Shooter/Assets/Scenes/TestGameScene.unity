@@ -18781,6 +18781,51 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _expDragXZ
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _jumpPower
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: velocity.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: velocity.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: velocity.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _linearDragY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _linearDragXZ
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _maxStepSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396318, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _stepAcceleration
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6659417335419396319, guid: d652a77f57ffd5a4f884b14f54e97c4a,
         type: 3}
       propertyPath: m_LocalPosition.x

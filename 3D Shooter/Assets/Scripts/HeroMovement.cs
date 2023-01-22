@@ -7,7 +7,7 @@ public class HeroMovement : MonoBehaviour
     [SerializeField, Range(0.0f, 50.0f)] private float _maxStepSpeed = 4.0f;
     [SerializeField, Range(0.0f, 10.0f)] private float _stepAcceleration = 8.0f;
     [SerializeField, Range(0.0f, 0.3f)] private float _expDragXZ = .015f;
-    [SerializeField, Range(0.0f, 0.3f)]] private float _linearDragXZ = .05f;
+    [SerializeField, Range(0.0f, 0.3f)] private float _linearDragXZ = .05f;
     [SerializeField, Range(0.0f, 20.0f)] private float _gravity = 10.0f;
     [SerializeField, Range(0.0f, 10.0f)] private float _jumpPower = 4.5f;
 

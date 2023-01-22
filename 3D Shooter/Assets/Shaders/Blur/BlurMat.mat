@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurSize: 0.00000012527624
+    - _BlurSize: 0
     - _BumpScale: 1
     - _CenterBlur: 0.9
     - _CenterSize: 499.99924

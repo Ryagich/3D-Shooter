@@ -23,7 +23,7 @@ public class WeaponShaker : MonoBehaviour
         CameraShaker.Instance.RandomShakeCamera(_time, _angleDeg, recoil);
        //не забыть вызвать в другом месте
     }
-
+     
     private IEnumerator ShakeRotateCor()
     {
         var randomTranslation = _baseRecoil * recoil.RecoilPower +
