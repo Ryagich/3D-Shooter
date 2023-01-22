@@ -44,8 +44,6 @@ public class HeroMovement : MonoBehaviour
         velocity = Vector3.ClampMagnitude(velocity.WithY(0), _maxStepSpeed).WithY(vy);
 
         characterC.Move(velocity * Time.fixedDeltaTime);
-        a = InputHandler.Movement;
-        b = deltaV;
     }
 
     private void Jump()
