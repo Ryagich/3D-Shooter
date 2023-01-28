@@ -38,7 +38,7 @@ public class Bullet : MonoBehaviour
             var hp = hit.transform.GetComponent<HpController>();
             if (hp)
             {
-                hp.ChangeHp(-damage);
+                hp.ChangeAmount(-damage);
                 Crosshair.Instance.ShowSignalCrosshair();
                 OnEnemyHit?.Invoke();
             }

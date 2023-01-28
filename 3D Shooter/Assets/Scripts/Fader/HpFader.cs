@@ -4,10 +4,4 @@ using UnityEngine;
 
 public class HpFader : MonoBehaviour
 {
-    [SerializeField] private Fader _hpFader;
-
-    private void Awake()
-    {
-        GetComponent<HpController>().HpM.OnAmountChanged += (_, _) => _hpFader.Show(true);
-    }
 }

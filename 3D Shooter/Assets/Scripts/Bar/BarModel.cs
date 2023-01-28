@@ -3,13 +3,13 @@ using System;
 
 public class BarModel
 {
-    public event Action<float, float> OnAmountChanged;
-
-    private float amount, maxAmount;
+    public event Action<float, float> AmountChanged;
 
     public float Amount => amount;
     public float MaxAmount => maxAmount;
     public bool IsMax => amount == maxAmount;
+
+    private float amount, maxAmount;
 
     public BarModel(float amount, float maxAmount)
     {
@@ -19,7 +19,10 @@ public class BarModel
 
     public void ChangeAmount(float value)
     {
+        if (value == .0f)
+            return;
+
         amount = Mathf.Clamp(amount + value, 0, maxAmount);
-        OnAmountChanged?.Invoke(amount, maxAmount);
+        AmountChanged?.Invoke(amount, maxAmount);
     }
 }

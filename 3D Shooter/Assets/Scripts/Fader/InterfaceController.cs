@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InterfaceController : MonoBehaviour
 {
-    [SerializeField, Min(.0f)] private float _startTime = 75.0f, _defHoldTime = 100.0f, _endTime = 75.0f;
+    [SerializeField, Min(.0f)] private float _startTime = 5.0f, _defHoldTime = 10.0f, _endTime = 5f;
     [SerializeField] private Fader[] _faders;
 
     private void Awake()

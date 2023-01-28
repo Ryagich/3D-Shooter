@@ -10,7 +10,7 @@ public class EnemyAttack : MonoBehaviour
     public void Attack()
     {
         foreach (var hp in _hpList)
-            hp.ChangeHp(-_damage);
+            hp.ChangeAmount(-_damage);
     }
     
     private void OnTriggerEnter(Collider other)

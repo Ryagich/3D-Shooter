@@ -14,12 +14,12 @@ public class DropDownNumbers : MonoBehaviour
     private void Awake()
     {
         hpC = GetComponent<HpController>();
-        hpC.HpM.OnAmountChanged += InstantiateDropDownNumbers;
+        hpC.BarM.AmountChanged += InstantiateDropDownNumbers;
     }
 
     private void InstantiateDropDownNumbers(float value, float _)
     {
-        if (!hpC.IsAlive || hpC.HpM.IsMax)
+        if (!hpC.IsAlive || hpC.BarM.IsMax)
             return;
         var damageText = Instantiate(_textPref, _canvas.transform);
         damageText.transform.localPosition = Vector2.zero;

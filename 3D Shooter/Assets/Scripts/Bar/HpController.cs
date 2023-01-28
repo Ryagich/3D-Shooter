@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HpController : MonoBehaviour
 {
-    public event Action OnDead;
+    public event Action Deaded;
 
     public bool IsAlive { get; private set; } = true;
-    public BarModel HpM
+    public BarModel BarM
     {
         get
         {
@@ -17,29 +17,34 @@ public class HpController : MonoBehaviour
         }
     }
 
+    [SerializeField] private Fader _hpFader;
+    [SerializeField] private BarView _hpV;
     [SerializeField, Min(0.0f)] private float _hp = 100.0f, _maxHp = 100.0f;
-    [SerializeField] private BarView hpV;
 
     private BarModel hpM;
 
     private void Awake()
     {
-        HpM.OnAmountChanged += hpV.UpdateBar;
+        BarM.AmountChanged += _hpV.UpdateBar;
+        BarM.AmountChanged += (_, _) => _hpFader.Show(true);
     }
 
-    public void ChangeHp(float value)
+    public void ChangeAmount(float value)
     {
+        Debug.Log(value);
+
         if (!IsAlive)
             return;
-        HpM.ChangeAmount(value);
-
-        if (HpM.Amount == 0)
+        BarM.ChangeAmount(value);
+        Debug.Log(BarM.Amount);
+        if (BarM.Amount == 0)
         {
-            hpV.ChangeState(false);
+            Debug.Log("Умер");
+            _hpV.ChangeState(false);
             IsAlive = false;
-            OnDead?.Invoke();
+            Deaded?.Invoke();
             return;
         }
-        hpV.ChangeState(!HpM.IsMax);
+        _hpV.ChangeState(!BarM.IsMax);
     }
 }

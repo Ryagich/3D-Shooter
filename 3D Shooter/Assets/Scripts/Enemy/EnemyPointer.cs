@@ -8,7 +8,7 @@ public class EnemyPointer : MonoBehaviour
     private void Start()
     {
         PointerManager.Instance.AddToList(this);
-        GetComponent<HpController>().OnDead += Dead; 
+        GetComponent<HpController>().Deaded += Dead; 
     }
 
     private void Dead()

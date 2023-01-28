@@ -15,7 +15,7 @@ public class EnemyDead : MonoBehaviour
         hp = GetComponent<HpController>();
         movement = GetComponent<EnemyMovement>();
 
-        hp.OnDead += Die;
+        hp.Deaded += Die;
     }
 
     private void Die()

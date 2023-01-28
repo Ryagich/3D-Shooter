@@ -12,12 +12,12 @@ public class EnemyHpBarStateChanger : MonoBehaviour
     private void Awake()
     {
         hpC = GetComponent<HpController>();
-        hpC.HpM.OnAmountChanged += ChangeBarState;
+        hpC.BarM.AmountChanged += ChangeBarState;
         ChangeBarState();
     }
 
     private void ChangeBarState(float _ = 0.0f, float __ = 0.0f)
     {
-        _hpV.ChangeState(hpC.IsAlive && !hpC.HpM.IsMax);
+        _hpV.ChangeState(hpC.IsAlive && !hpC.BarM.IsMax);
     }
 }

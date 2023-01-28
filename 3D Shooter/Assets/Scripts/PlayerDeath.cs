@@ -13,7 +13,7 @@ public class PlayerDeath : MonoBehaviour
     {
         HeroState.IsDead = false;
         hp = GetComponent<HpController>();
-        hp.OnDead += Die;
+        hp.Deaded += Die;
     }
 
     private void Die()
@@ -23,5 +23,6 @@ public class PlayerDeath : MonoBehaviour
             i.SetActive(false);
         _deathScreen.SetActive(true);
         HeroState.IsDead = true;
+        Debug.Log("Умер 2");
     }
 }
