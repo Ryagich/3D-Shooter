@@ -12,8 +12,8 @@ public class InterfaceController : MonoBehaviour
         foreach (var fader in _faders)
             fader.SetDigits(_startTime, _defHoldTime, _endTime);
 
-        InputHandler.OnTabDown += Show;
-        InputHandler.OnTabUp += Hide;
+        InputHandler.TabDowned += Show;
+        InputHandler.TabUped += Hide;
     }
 
     private void Show()

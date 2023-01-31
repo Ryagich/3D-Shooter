@@ -33,16 +33,16 @@ public class WeaponAnimator : MonoBehaviour
 
     private void OnEnable()
     {
-        InputHandler.OnRDown += SetReload;
+        InputHandler.RDowned += SetReload;
     }
 
     private void OnDisable()
     {
-        InputHandler.OnRDown -= SetReload;
+        InputHandler.RDowned -= SetReload;
     }
 
     private void OnDestroy()
     {
-        InputHandler.OnRDown -= SetReload;
+        InputHandler.RDowned -= SetReload;
     }
 }

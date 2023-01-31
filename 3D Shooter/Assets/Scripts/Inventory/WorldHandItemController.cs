@@ -23,9 +23,9 @@ public class WorldHandItemController : MonoBehaviour
                                  .Where(x => x.Type == ItemType.SecondWeapon
                                           || x.Type == ItemType.MainWeapon).ToList();
 
-        InputHandler.OnFirstWeapon += () => SetHandIndex(0);
-        InputHandler.OnSecondWeapon += () => SetHandIndex(1);
-        InputHandler.OnTrirdWeapon += () => SetHandIndex(2);
+        InputHandler.FirstWeaponChoosed += () => SetHandIndex(0);
+        InputHandler.SecondWeaponChoosed += () => SetHandIndex(1);
+        InputHandler.TrirdWeaponChoosed += () => SetHandIndex(2);
 
         items = new HandItem[slots.Count];
         for (int i = 0; i < slots.Count; i++)

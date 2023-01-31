@@ -18,12 +18,12 @@ public class HandItemView : MonoBehaviour, IItemContainerView
 
     private void OnEnable()
     {
-        InputHandler.OnRDown += RotateItem;
+        InputHandler.RDowned += RotateItem;
     }
 
     private void OnDisable()
     {
-        InputHandler.OnRDown -= RotateItem;
+        InputHandler.RDowned -= RotateItem;
     }
 
     private void FixedUpdate()

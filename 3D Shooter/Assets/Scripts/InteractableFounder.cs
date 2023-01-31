@@ -10,7 +10,7 @@ public class InteractableFounder : MonoBehaviour
 
     private Interactable lastIntractable;
 
-    private void Awake() { InputHandler.OnFDown += () => lastIntractable?.Press(gameObject); }
+    private void Awake() { InputHandler.FDowned += () => lastIntractable?.Press(gameObject); }
 
     private void FixedUpdate()
     {

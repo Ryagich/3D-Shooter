@@ -118,22 +118,22 @@ public class WeaponController : MonoBehaviour
 
     private void OnEnable()
     {
-        InputHandler.OnLeftMouseDown += Shoot;
-        InputHandler.OnVDown += ChangeShootState;
+        InputHandler.LeftMouseDowned += Shoot;
+        InputHandler.VDowned += ChangeShootState;
 
         OnChangeState?.Invoke(shootState);
     }
 
     private void OnDisable()
     {
-        InputHandler.OnLeftMouseDown -= Shoot;
-        InputHandler.OnVDown -= ChangeShootState;
+        InputHandler.LeftMouseDowned -= Shoot;
+        InputHandler.VDowned -= ChangeShootState;
     }
 
     private void OnDestroy()
     {
-        InputHandler.OnLeftMouseDown -= Shoot;
-        InputHandler.OnVDown -= ChangeShootState;
+        InputHandler.LeftMouseDowned -= Shoot;
+        InputHandler.VDowned -= ChangeShootState;
     }
 }
 

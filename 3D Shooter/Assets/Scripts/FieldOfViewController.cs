@@ -16,10 +16,10 @@ public class FieldOfViewController : MonoBehaviour
         FOVTarget = _defauitFOV;
         addFOVShift = 0;
 
-        InputHandler.OnRightMouseDown += () => { FOVTarget = _aimFOV; };
-        InputHandler.OnRightMouseUp += () => { FOVTarget = _defauitFOV; };
-        InputHandler.OnPressShift += () => { addFOVShift = HeroState.IsIdleAim ? _addShiftFov : 0; };
-        InputHandler.OnShiftUp += () => { addFOVShift = 0; };
+        InputHandler.RightMouseDowned += () => { FOVTarget = _aimFOV; };
+        InputHandler.RightMouseUped += () => { FOVTarget = _defauitFOV; };
+        InputHandler.ShiftPressed += () => { addFOVShift = HeroState.IsIdleAim ? _addShiftFov : 0; };
+        InputHandler.ShiftUped += () => { addFOVShift = 0; };
     }
 
     private void FixedUpdate()

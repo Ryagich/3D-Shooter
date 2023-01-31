@@ -8,11 +8,11 @@ public class InventoryStateChanger : MonoBehaviour
 
     private void OnEnable()
     {
-        InputHandler.OnIDown += _inventoryV.ChangeInventoryState;
+        InputHandler.IDowned += _inventoryV.ChangeInventoryState;
     }
 
     private void OnDisable()
     {
-        InputHandler.OnIDown -= _inventoryV.ChangeInventoryState;
+        InputHandler.IDowned -= _inventoryV.ChangeInventoryState;
     }
 }

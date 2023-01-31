@@ -29,14 +29,14 @@ public class BlurController : MonoBehaviour
         addBlurShift = 0;
         addCircleShift = 0;
 
-        InputHandler.OnRightMouseDown += () => { blurTarget = _aimBlur; circleTarget = _aimCircle; };
-        InputHandler.OnRightMouseUp += () => { blurTarget = _defauitBlur; circleTarget = _defauitCircle; };
-        InputHandler.OnPressShift += () => 
+        InputHandler.RightMouseDowned += () => { blurTarget = _aimBlur; circleTarget = _aimCircle; };
+        InputHandler.RightMouseUped += () => { blurTarget = _defauitBlur; circleTarget = _defauitCircle; };
+        InputHandler.ShiftPressed += () => 
         { 
             addBlurShift = HeroState.IsIdleAim ? _addShiftBlur : 0; 
             addCircleShift = HeroState.IsIdleAim ? _addShiftCircle : 0;
         };
-        InputHandler.OnShiftUp += () => { addBlurShift = 0; addCircleShift = 0; };
+        InputHandler.ShiftUped += () => { addBlurShift = 0; addCircleShift = 0; };
     }
 
     private void FixedUpdate()

@@ -18,12 +18,12 @@ public class HeroMovement : MonoBehaviour
     private void Awake()
     {
         characterC = GetComponent<CharacterController>();
-        InputHandler.OnPressSpace += Jump;
+        InputHandler.SpacePressed += Jump;
     }
 
     private void OnDestroy()
     {
-        InputHandler.OnPressSpace -= Jump;
+        InputHandler.SpacePressed -= Jump;
     }
 
     private void FixedUpdate()

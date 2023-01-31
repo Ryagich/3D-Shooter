@@ -9,24 +9,24 @@ public class InputHandler : MonoBehaviour
     public static event Action<float> OnMouseX;
     public static event Action<float> OnMouseY;
 
-    public static event Action OnLeftMouseDown;
-    public static event Action OnLeftMouseUp;
-    public static event Action OnLeftMouse;
-    public static event Action OnRightMouseDown;
-    public static event Action OnRightMouseUp;
-    public static event Action OnPressSpace;
-    public static event Action OnIDown;
-    public static event Action OnRDown;
-    public static event Action OnFDown;
-    public static event Action OnShiftDown;
-    public static event Action OnShiftUp;
-    public static event Action OnPressShift;
-    public static event Action OnFirstWeapon;
-    public static event Action OnSecondWeapon;
-    public static event Action OnTrirdWeapon;
-    public static event Action OnVDown;
-    public static event Action OnTabDown;
-    public static event Action OnTabUp;
+    public static event Action LeftMouseDowned;
+    public static event Action LeftMouseUped;
+    public static event Action LeftMousePressed;
+    public static event Action RightMouseDowned;
+    public static event Action RightMouseUped;
+    public static event Action SpacePressed;
+    public static event Action IDowned;
+    public static event Action RDowned;
+    public static event Action FDowned;
+    public static event Action ShiftDowned;
+    public static event Action ShiftUped;
+    public static event Action ShiftPressed;
+    public static event Action FirstWeaponChoosed;
+    public static event Action SecondWeaponChoosed;
+    public static event Action TrirdWeaponChoosed;
+    public static event Action VDowned;
+    public static event Action TabDowned;
+    public static event Action TabUped;
 
     public static Vector3 Movement;
 
@@ -47,60 +47,60 @@ public class InputHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             IsLeftMouse = true;
-            OnLeftMouseDown?.Invoke();
+            LeftMouseDowned?.Invoke();
         }
         if (Input.GetKey(KeyCode.Mouse0))
-            OnLeftMouse?.Invoke();
+            LeftMousePressed?.Invoke();
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             IsLeftMouse = false;
-            OnLeftMouseUp?.Invoke();
+            LeftMouseUped?.Invoke();
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             IsRightMouse = true;
-            OnRightMouseDown?.Invoke();
+            RightMouseDowned?.Invoke();
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             IsRightMouse = false;
-            OnRightMouseUp?.Invoke();
+            RightMouseUped?.Invoke();
         }
 
         if (Input.GetKey(KeyCode.Space))
-            OnPressSpace?.Invoke();
+            SpacePressed?.Invoke();
         if (Input.GetKeyDown(KeyCode.I))
-            OnIDown?.Invoke();
+            IDowned?.Invoke();
         if (Input.GetKeyDown(KeyCode.R))
-            OnRDown?.Invoke();
+            RDowned?.Invoke();
         if (Input.GetKeyDown(KeyCode.F))
-            OnFDown?.Invoke();
+            FDowned?.Invoke();
         if (Input.GetKey(KeyCode.LeftShift))
-            OnPressShift?.Invoke();
+            ShiftPressed?.Invoke();
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             IsShift = true;
-            OnShiftDown?.Invoke();
+            ShiftDowned?.Invoke();
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             IsShift = false;
-            OnShiftUp?.Invoke();
+            ShiftUped?.Invoke();
         }
         if (Input.GetKeyDown(KeyCode.V))
-            OnVDown?.Invoke();
+            VDowned?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            OnFirstWeapon?.Invoke();
+            FirstWeaponChoosed?.Invoke();
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            OnSecondWeapon?.Invoke();
+            SecondWeaponChoosed?.Invoke();
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            OnTrirdWeapon?.Invoke();
+            TrirdWeaponChoosed?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            OnTabDown?.Invoke();
+            TabDowned?.Invoke();
         if (Input.GetKeyUp(KeyCode.Tab))
-            OnTabUp?.Invoke();
+            TabUped?.Invoke();
     }
 }

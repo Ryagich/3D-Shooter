@@ -34,14 +34,14 @@ public class InventoryView : MonoBehaviour
     {
         UpdateModel();
 
-        InputHandler.OnLeftMouseUp += LeftMouseButtonUp;
-        InputHandler.OnLeftMouseDown += LeftMouseButtonDown;
+        InputHandler.LeftMouseUped += OnLeftMouseButtonUp;
+        InputHandler.LeftMouseDowned += OnLeftMouseButtonDown;
     }
 
     private void OnDisable()
     {
-        InputHandler.OnLeftMouseUp -= LeftMouseButtonUp;
-        InputHandler.OnLeftMouseDown -= LeftMouseButtonDown;
+        InputHandler.LeftMouseUped -= OnLeftMouseButtonUp;
+        InputHandler.LeftMouseDowned -= OnLeftMouseButtonDown;
     }
 
     public ItemView InstantiateItemView(ItemModel itemM)
@@ -118,7 +118,7 @@ public class InventoryView : MonoBehaviour
         return hit && rect.rect.Contains(local);
     }
 
-    private void LeftMouseButtonDown()
+    private void OnLeftMouseButtonDown()
     {
         if (IsOpen)
         {
@@ -136,7 +136,7 @@ public class InventoryView : MonoBehaviour
         }
     }
 
-    private void LeftMouseButtonUp()
+    private void OnLeftMouseButtonUp()
     {
         if (_handItemV.ItemV && IsOpen)
         {
