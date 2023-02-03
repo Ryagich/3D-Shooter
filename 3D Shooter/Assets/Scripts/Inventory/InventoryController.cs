@@ -18,7 +18,9 @@ public class InventoryController
     public void Drop(ItemModel itemM, Transform transform = null)
     {
         itemM.ItemData.DropItem.InstantiateDropItem(itemM, transform);
-        inventoryM.RemoveItem(itemM);
+        var containerM = itemM.ContainerM;
+        if (containerM != null)
+            containerM.RemoveItem(itemM);
     }
 
     public void RotateItem(ItemModel itemM)

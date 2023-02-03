@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class InventoryView : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class InventoryView : MonoBehaviour
     [SerializeField] private InventoryCreator _inventoryCreator;
     [SerializeField] private List<SlotView> _slotVs;
     [SerializeField] private List<GridView> _gridVs;
+    [SerializeField] private ItemMenuController _itemMenuC;
     [SerializeField] private Vector2 _tileSize = new Vector2(32, 32);
 
     private Dictionary<IItemContainerModel, IItemContainerView> containerVs
@@ -36,12 +38,23 @@ public class InventoryView : MonoBehaviour
 
         InputHandler.LeftMouseUped += OnLeftMouseButtonUp;
         InputHandler.LeftMouseDowned += OnLeftMouseButtonDown;
+        InputHandler.RightMouseDowned += OnRightMouseButtonUp;
     }
 
     private void OnDisable()
     {
         InputHandler.LeftMouseUped -= OnLeftMouseButtonUp;
         InputHandler.LeftMouseDowned -= OnLeftMouseButtonDown;
+        InputHandler.RightMouseDowned -= OnRightMouseButtonUp;
+
+        if (_handItemV.ItemV)
+        {
+            var itemM = inventoryM.HandItemM.GetItem(Vector2Int.zero);
+            inventoryM.HandItemM.RemoveItem(itemM);
+
+            if (!inventoryM.AddMaxPossibleAmount(itemM))
+                InventoryC.Drop(itemM);
+        }
     }
 
     public ItemView InstantiateItemView(ItemModel itemM)
@@ -120,25 +133,23 @@ public class InventoryView : MonoBehaviour
 
     private void OnLeftMouseButtonDown()
     {
-        if (IsOpen)
-        {
-            var activeContainerV = FindContainerView(InputHandler.MousePos);
-            if (activeContainerV == null)
-                return;
-            var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
+        var activeContainerV = FindContainerView(InputHandler.MousePos);
+        if (activeContainerV == null)
+            return;
+        var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
 
-            if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists))
-            {
-                var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
-                if (handItem != null)
-                    InventoryC.SetHandItem(handItem);
-            }
+        if (!(_handItemV.ItemV != null && _handItemV.ItemV.Exists))
+        {
+            var handItem = InventoryC.PickUpItem(activeContainerV.GetModel(), tilePosition);
+            if (handItem != null)
+                InventoryC.SetHandItem(handItem);
         }
+
     }
 
     private void OnLeftMouseButtonUp()
     {
-        if (_handItemV.ItemV && IsOpen)
+        if (_handItemV.ItemV)
         {
             var activeContainerV = FindContainerView(InputHandler.MousePos);
             if (activeContainerV == null)
@@ -151,11 +162,28 @@ public class InventoryView : MonoBehaviour
             if (!isPlaced)
             {
                 var itemM = inventoryM.HandItemM.GetItem(Vector2Int.zero);
-                inventoryM.HandItemM.RemoveItem(itemM);
+                //inventoryM.HandItemM.RemoveItem(itemM);
 
                 if (!inventoryM.AddMaxPossibleAmount(itemM))
                     InventoryC.Drop(itemM);
             }
+        }
+    }
+
+    private void OnRightMouseButtonUp()
+    {
+        if (_handItemV.ItemV)
+            return;
+        var activeContainerV = FindContainerView(InputHandler.MousePos);
+        if (activeContainerV == null)
+            return;
+        var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
+        var itemM = activeContainerV.GetModel().GetItem(tilePosition);
+        if (itemM != null)
+        {
+            Debug.Log("нажал на " + itemM.ItemData.name);
+
+            _itemMenuC.Open(itemM, InputHandler.MousePos);
         }
     }
 }
