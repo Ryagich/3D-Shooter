@@ -1046,10 +1046,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _back: {fileID: 5529279277673714005, guid: 817fb508f6aa9fa469a0245d96d721d6, type: 3}
-  _dropPref: {fileID: 5061489503621604438, guid: 7b8326996cc461d4e9dfb11813092aa6,
-    type: 3}
   _camera: {fileID: 550675204}
-  menu: {fileID: 0}
+  _creator: {fileID: 663306196}
+  _worldHandC: {fileID: 1147645431}
+  _size: {x: 100, y: 30}
+  _textPref: {fileID: 1636393929134034939, guid: 026ca6e9c4fe94748bf40ffee5609d34,
+    type: 3}
 --- !u!1001 &600893580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1200,6 +1202,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 615517461}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &663306196 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6659417335419396407, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2787701689485010999}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e20c3d44139245f4084f105b17ed66ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &671375008
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,6 +2107,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1118408228}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1147645431 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6659417335419396406, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2787701689485010999}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9c9c67535a7ed4fa0ea3c9332b8f3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1240081169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4950,10 +4976,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6659417335419396406, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: inventoryCreator
+      value: 
+      objectReference: {fileID: 663306196}
     - target: {fileID: 6659417335722672406, guid: d652a77f57ffd5a4f884b14f54e97c4a,
         type: 3}
       propertyPath: _itemMenuC
       value: 
       objectReference: {fileID: 600219177}
+    - target: {fileID: 6659417335722672406, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: _itemMenuController
+      value: 
+      objectReference: {fileID: 600219177}
+    - target: {fileID: 6659417335722672490, guid: d652a77f57ffd5a4f884b14f54e97c4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d652a77f57ffd5a4f884b14f54e97c4a, type: 3}

@@ -4,5 +4,4 @@ using UnityEngine;
 
 public class WorldHandItemModelHolder : MonoBehaviour
 {
-    public ItemModel ItemM;
 }

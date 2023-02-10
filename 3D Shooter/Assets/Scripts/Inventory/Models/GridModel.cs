@@ -101,15 +101,11 @@ public class GridModel : IItemContainerModel
         items.Add(item);
         item.Put(this, pos);
         FillBounds(item, item.GridBounds);
-        Debug.Log(pos);
-        PrintSlots();
 
         OnChanged?.Invoke();
     }
 
-    //DEBUG
-
-    private void PrintSlots()
+    private void PrintSlots() //DEBUG
     {
         var sb = new StringBuilder();
         for (int y = 0; y < inventorySlots.GetLength(1); y++)

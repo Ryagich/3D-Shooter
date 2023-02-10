@@ -6,7 +6,7 @@ public class HandsTargetSetter : MonoBehaviour
 {
     [SerializeField] private Transform _rightT;
     [SerializeField] private Transform _leftT;
-
+    //tags
     //Left Hand IK
     //Right Hand IK
 

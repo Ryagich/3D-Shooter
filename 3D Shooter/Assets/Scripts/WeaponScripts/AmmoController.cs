@@ -16,14 +16,14 @@ public class AmmoController : MonoBehaviour
     {
         get
         {
-            var addData = modelHolder.ItemM.AdditionalData;
+            var addData = handItem.ItemM.AdditionalData;
             if (addData.ContainsKey(CurrentAmmoKey))
                 return int.Parse(addData[CurrentAmmoKey]);
             return 0;
         }
         set
         {
-            modelHolder.ItemM.AdditionalData[CurrentAmmoKey] = value.ToString();
+            handItem.ItemM.AdditionalData[CurrentAmmoKey] = value.ToString();
         }
     }
     public int Magaine => _magazine;
@@ -32,12 +32,12 @@ public class AmmoController : MonoBehaviour
     [SerializeField] private ItemData _itemData;
 
     private InventoryModel inventoryM;
-    private WorldHandItemModelHolder modelHolder;
+    private HandItem handItem;
 
     public void Init(InventoryModel model)
     {
         inventoryM = model;
-        modelHolder = GetComponent<WorldHandItemModelHolder>();
+        handItem = GetComponent<HandItem>();
     }
 
     public int GetAmmo()

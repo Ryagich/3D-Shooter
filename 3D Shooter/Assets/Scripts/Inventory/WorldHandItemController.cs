@@ -2,24 +2,25 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.VisualScripting;
+using System.Reflection;
 
 public class WorldHandItemController : MonoBehaviour
 {
     public event Action<HandItem> OnChangeHandItem;
 
-    [SerializeField] private Transform _parentTrans;
-    [SerializeField] private InventoryController controller;
-    [SerializeField] private HandItem[] items;
-    [SerializeField] private int handIndex;
-    [SerializeField] private InventoryCreator inventoryMCreator;
-
-    private List<SlotModel> slots = new List<SlotModel>();
-
     public HandItem Hand => items[handIndex];
+    [SerializeField] private Transform _parentTrans;
+    [SerializeField] private HandItem[] items;
+    [SerializeField] private int handIndex = 0;
+    [SerializeField] private InventoryCreator inventoryCreator;
+
+    private ItemModel addHand;
+    private List<SlotModel> slots = new();
 
     private void Awake()
     {
-        slots = inventoryMCreator.GetModel().SlotMs
+        slots = inventoryCreator.GetModel().SlotMs
                                  .Where(x => x.Type == ItemType.SecondWeapon
                                           || x.Type == ItemType.MainWeapon).ToList();
 
@@ -27,7 +28,7 @@ public class WorldHandItemController : MonoBehaviour
         InputHandler.SecondWeaponChoosed += () => SetHandIndex(1);
         InputHandler.TrirdWeaponChoosed += () => SetHandIndex(2);
 
-        items = new HandItem[slots.Count];
+        items = new HandItem[slots.Count + 1];
         for (int i = 0; i < slots.Count; i++)
         {
             var j = i;
@@ -36,8 +37,26 @@ public class WorldHandItemController : MonoBehaviour
         }
     }
 
+    public void CreateAddHand(ItemModel itemM)
+    {
+        CreateHandItem(itemM, items.Length - 1);
+        itemM.OnPositionChanged += DeleteAddHand;
+    }
+
+    public void DeleteAddHand()
+    {
+        if (items[items.Length - 1])
+          items[items.Length - 1].ItemM.OnPositionChanged -= DeleteAddHand;
+        DeleteHandItem(items.Length - 1);
+    }
+
+    public void SetAddHandIndex() => SetHandIndex(items.Length - 1);
+
     private void SetHandIndex(int index)
     {
+        if (index != items.Length - 1)
+            DeleteAddHand();
+
         for (int i = 0; i < items.Length; i++)
             if (items[i])
                 items[i].gameObject.SetActive(false);
@@ -62,9 +81,7 @@ public class WorldHandItemController : MonoBehaviour
     private HandItem InstantiateHand(ItemModel itemM)
     {
         var itemHand = Instantiate(itemM.ItemData.HandItem, _parentTrans);
-        var modelHolder = itemHand.GetComponent<WorldHandItemModelHolder>();
-        if (modelHolder)
-            modelHolder.ItemM = itemM;
+        itemHand.ItemM = itemM;
         return itemHand;
     }
 

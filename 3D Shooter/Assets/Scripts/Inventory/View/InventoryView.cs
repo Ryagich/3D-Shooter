@@ -12,7 +12,7 @@ public class InventoryView : MonoBehaviour
     [SerializeField] private InventoryCreator _inventoryCreator;
     [SerializeField] private List<SlotView> _slotVs;
     [SerializeField] private List<GridView> _gridVs;
-    [SerializeField] private ItemMenuController _itemMenuC;
+    [SerializeField] private ItemMenuController _itemMenuController;
     [SerializeField] private Vector2 _tileSize = new Vector2(32, 32);
 
     private Dictionary<IItemContainerModel, IItemContainerView> containerVs
@@ -133,6 +133,8 @@ public class InventoryView : MonoBehaviour
 
     private void OnLeftMouseButtonDown()
     {
+        if (_itemMenuController.IsOpen && _itemMenuController.IsInBounds(InputHandler.MousePos))
+            return;
         var activeContainerV = FindContainerView(InputHandler.MousePos);
         if (activeContainerV == null)
             return;
@@ -162,7 +164,7 @@ public class InventoryView : MonoBehaviour
             if (!isPlaced)
             {
                 var itemM = inventoryM.HandItemM.GetItem(Vector2Int.zero);
-                //inventoryM.HandItemM.RemoveItem(itemM);
+                inventoryM.HandItemM.RemoveItem(itemM);
 
                 if (!inventoryM.AddMaxPossibleAmount(itemM))
                     InventoryC.Drop(itemM);
@@ -180,10 +182,6 @@ public class InventoryView : MonoBehaviour
         var tilePosition = activeContainerV.GetGridPosition(InputHandler.MousePos);
         var itemM = activeContainerV.GetModel().GetItem(tilePosition);
         if (itemM != null)
-        {
-            Debug.Log("нажал на " + itemM.ItemData.name);
-
-            _itemMenuC.Open(itemM, InputHandler.MousePos);
-        }
+            _itemMenuController.Open(itemM, InputHandler.MousePos);
     }
 }
