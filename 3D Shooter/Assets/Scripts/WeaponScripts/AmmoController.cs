@@ -12,6 +12,7 @@ public class AmmoController : MonoBehaviour
     public bool IsReload = false;
     public bool HasAmmo => CurrentAmmo > 0;
     public bool HasFullMagazine => CurrentAmmo == _magazine;
+    public int Magaine => _magazine;
     public int CurrentAmmo
     {
         get
@@ -21,12 +22,8 @@ public class AmmoController : MonoBehaviour
                 return int.Parse(addData[CurrentAmmoKey]);
             return 0;
         }
-        set
-        {
-            handItem.ItemM.AdditionalData[CurrentAmmoKey] = value.ToString();
-        }
+        set => handItem.ItemM.AdditionalData[CurrentAmmoKey] = value.ToString();
     }
-    public int Magaine => _magazine;
 
     [SerializeField] private int _magazine = 30;
     [SerializeField] private ItemData _itemData;
@@ -47,10 +44,7 @@ public class AmmoController : MonoBehaviour
         return toReturn;
     }
 
-    public void SubtractAmmo(int value = 1)
-    {
-        CurrentAmmo -= value;
-    }
+    public void SubtractAmmo(int value = 1) => CurrentAmmo -= value;
 
     public void Reload()
     {

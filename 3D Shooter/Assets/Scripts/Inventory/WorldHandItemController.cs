@@ -8,14 +8,13 @@ using System.Reflection;
 public class WorldHandItemController : MonoBehaviour
 {
     public event Action<HandItem> OnChangeHandItem;
-
     public HandItem Hand => items[handIndex];
+
     [SerializeField] private Transform _parentTrans;
     [SerializeField] private HandItem[] items;
     [SerializeField] private int handIndex = 0;
     [SerializeField] private InventoryCreator inventoryCreator;
 
-    private ItemModel addHand;
     private List<SlotModel> slots = new();
 
     private void Awake()

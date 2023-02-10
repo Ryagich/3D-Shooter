@@ -10,11 +10,11 @@ public class InventoryModel
 
     public readonly HandItemModel HandItemM;
 
-    private readonly List<SlotModel> slotMs;
-    private readonly List<GridModel> gridMs;
-
     public IEnumerable<SlotModel> SlotMs => slotMs;
     public IEnumerable<GridModel> GridMs => gridMs;
+
+    private readonly List<SlotModel> slotMs;
+    private readonly List<GridModel> gridMs;
 
     public InventoryModel(IEnumerable<SlotModel> slots, IEnumerable<GridModel> grids)
     {

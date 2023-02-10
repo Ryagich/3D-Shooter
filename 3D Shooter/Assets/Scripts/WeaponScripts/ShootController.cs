@@ -13,20 +13,11 @@ public class ShootController : MonoBehaviour
 
     private WeaponController weaponC;
 
-    private void Awake()
-    {
-        weaponC = GetComponent<WeaponController>();
-    }
+    private void Awake() => weaponC = GetComponent<WeaponController>();
 
-    private void OnEnable()
-    {
-        weaponC.OnShoot += SpawnBullet;
-    }
+    private void OnEnable() => weaponC.OnShoot += SpawnBullet;
 
-    private void OnDisable()
-    {
-        weaponC.OnShoot -= SpawnBullet;
-    }
+    private void OnDisable() => weaponC.OnShoot -= SpawnBullet;
 
     public void SpawnBullet()
     {

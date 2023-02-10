@@ -10,25 +10,13 @@ public class HandsTargetSetter : MonoBehaviour
     //Left Hand IK
     //Right Hand IK
 
-    private void Awake()
-    {
-        SetTargets(_leftT, _rightT);
-    }
+    private void Awake() => SetTargets(_leftT, _rightT);
 
-    private void OnEnable()
-    {
-        SetTargets(_leftT, _rightT);
-    }
+    private void OnEnable() => SetTargets(_leftT, _rightT);
 
-    private void OnDisable()
-    {
-        SetTargets();
-    }
+    private void OnDisable() => SetTargets();
 
-    private void OnDestroy()
-    {
-        SetTargets();
-    }
+    private void OnDestroy() => SetTargets();
 
     private void SetTargets(Transform left = null, Transform right = null)
     {

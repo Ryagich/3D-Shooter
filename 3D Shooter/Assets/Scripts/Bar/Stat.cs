@@ -44,10 +44,7 @@ public class Stat : MonoBehaviour
         StateChanged?.Invoke(power);
     }
 
-    private void ChangePower(float newPower)
-    {
-        power = newPower;
-    }
+    private void ChangePower(float newPower) => power = newPower;
 
     private void DealDamageOverTime()
     {

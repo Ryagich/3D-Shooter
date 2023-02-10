@@ -31,18 +31,9 @@ public class WeaponAnimator : MonoBehaviour
             animator.SetTrigger("Reload");
     }
 
-    private void OnEnable()
-    {
-        InputHandler.RDowned += SetReload;
-    }
+    private void OnEnable() => InputHandler.RDowned += SetReload;
 
-    private void OnDisable()
-    {
-        InputHandler.RDowned -= SetReload;
-    }
+    private void OnDisable() => InputHandler.RDowned -= SetReload;
 
-    private void OnDestroy()
-    {
-        InputHandler.RDowned -= SetReload;
-    }
+    private void OnDestroy() => InputHandler.RDowned -= SetReload;
 }

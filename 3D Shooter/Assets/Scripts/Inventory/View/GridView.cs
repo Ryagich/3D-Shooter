@@ -13,10 +13,7 @@ public class GridView : MonoBehaviour, IItemContainerView
     public Vector2Int Size => _size;
     public RectTransform Rect { get; private set; }
 
-    private void Awake()
-    {
-        Rect = GetComponent<RectTransform>();
-    }
+    private void Awake() => Rect = GetComponent<RectTransform>();
 
     public ItemView GetItemView(ItemModel model) => itemVs.ContainsKey(model) ? itemVs[model] : null;
 
