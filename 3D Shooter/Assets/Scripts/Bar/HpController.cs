@@ -11,22 +11,23 @@ public class HpController : MonoBehaviour
     {
         get
         {
-            if (hpM == null)
-                hpM = new BarModel(_hp, _maxHp);
+            hpM ??= new BarModel(_hp, _maxHp);
             return hpM;
         }
     }
 
     [SerializeField] private Fader _hpFader;
     [SerializeField] private BarView _hpV;
-    [SerializeField, Min(0.0f)] private float _hp = 100.0f, _maxHp = 100.0f;
+    [SerializeField, Min(.0f)] private float _hp = 100.0f, _maxHp = 100.0f;
 
     private BarModel hpM;
 
     private void Awake()
     {
-        BarM.AmountChanged += _hpV.UpdateBar;
-        BarM.AmountChanged += (_, _) => _hpFader.Show(true);
+        if (_hpV)
+            BarM.AmountChanged += _hpV.UpdateBar;
+        if (_hpFader)
+            BarM.AmountChanged += (_, _) => _hpFader.Show(true);
     }
 
     public void ChangeAmount(float value)
@@ -40,11 +41,13 @@ public class HpController : MonoBehaviour
         if (BarM.Amount == 0)
         {
             Debug.Log("Умер");
-            _hpV.ChangeState(false);
+            if (_hpV)
+                _hpV.ChangeState(false);
             IsAlive = false;
             Deaded?.Invoke();
             return;
         }
-        _hpV.ChangeState(!BarM.IsMax);
+        if (_hpV)
+            _hpV.ChangeState(!BarM.IsMax);
     }
 }

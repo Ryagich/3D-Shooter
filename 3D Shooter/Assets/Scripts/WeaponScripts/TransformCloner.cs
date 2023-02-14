@@ -6,7 +6,7 @@ public class TransformCloner : MonoBehaviour
 {
     public Transform TransformToClone;
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (TransformToClone)
         transform.SetPositionAndRotation(TransformToClone.position, TransformToClone.rotation);

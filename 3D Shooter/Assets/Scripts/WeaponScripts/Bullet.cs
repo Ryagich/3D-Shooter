@@ -7,13 +7,12 @@ public class Bullet : MonoBehaviour
 {
     public event Action OnEnemyHit;
 
-    [SerializeField] private List<Material> _materials = new List<Material>();
-    [SerializeField] private List<GameObject> _effectPrefabs = new List<GameObject>();
+    [SerializeField] private List<Material> _materials = new();
+    [SerializeField] private List<GameObject> _effectPrefabs = new();
     [SerializeField] private GameObject _defHitEffect;
     [SerializeField] private LayerMask _targetMask;
 
-    private float damage;
-    private float speed;
+    private float damage, speed;
     private Vector3 lastPos;
 
     public void ResetBullet()
