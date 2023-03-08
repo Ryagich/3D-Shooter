@@ -30,15 +30,12 @@ namespace AI.States
             var distance = zombieLogic.transform.position - zombieLogic.WalkPoint;
             if (distance.magnitude < 1.0f)
                 isWalkPointSet = false;
-
-            zombieLogic.Animator.SetBool("isWalk", true);
-            zombieLogic.Animator.SetBool("IsIdle", false);
         }
 
         private void SearchWalkPoint()
         {
-            var rZ = Random.Range(zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
-            var rX = Random.Range(zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
+            var rZ = Random.Range(-zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
+            var rX = Random.Range(-zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
 
             var position = zombieLogic.transform.position;
             var point = new Vector3(position.x + rX, position.y, position.z + rZ);
