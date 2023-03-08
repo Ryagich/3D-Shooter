@@ -65,7 +65,6 @@ namespace Stealth
                                                     + boundsSize.y * boundsSize.y
                                                     + boundsSize.z * boundsSize.z);
 
-            Debug.Log(target.gameObject.transform.position);
             var distanceToTarget = Vector3.Distance(target.bounds.center, DetectionPoint);
             var maxAngle = Mathf.Atan2(boundingSphereDiameter / 2, distanceToTarget) * Mathf.Rad2Deg;
 

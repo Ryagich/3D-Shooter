@@ -1,17 +1,17 @@
 ﻿namespace AI.States
 {
-    public class HeroChasing : IState
+    public class HeroChasing : State
     {
-        private readonly EnemyMovement enemyMovement;
+        private readonly ZombieLogic zombieLogic;
 
-        public HeroChasing(EnemyMovement enemyMovement)
+        public HeroChasing(ZombieLogic zombieLogic)
         {
-            this.enemyMovement = enemyMovement;
+            this.zombieLogic = zombieLogic;
         }
 
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
-            enemyMovement.Agent.SetDestination(enemyMovement.Hero.position);
+            zombieLogic.Agent.SetDestination(zombieLogic.Hero.position);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.EventSystems;
 
 namespace AI
 {
@@ -12,5 +13,7 @@ namespace AI
             Trigger = trigger;
             NextState = nextState;
         }
+
+        public static explicit operator StateTransition((Func<bool>, IState) tuple) => new(tuple.Item1, tuple.Item2);
     }
 }

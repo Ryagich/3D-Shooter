@@ -1,25 +1,24 @@
 ﻿namespace AI.States
 {
-    public class Attacking : IState
+    public class Attacking : State
     {
-        private readonly EnemyMovement enemyMovement;
-        private bool isAttacking;
+        private readonly ZombieLogic zombieLogic;
 
-        public Attacking(EnemyMovement enemyMovement)
+        public Attacking(ZombieLogic zombieLogic)
         {
-            this.enemyMovement = enemyMovement;
+            this.zombieLogic = zombieLogic;
         }
 
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
-            enemyMovement.Agent.SetDestination(enemyMovement.transform.position);
-            enemyMovement.transform.LookAt(enemyMovement.Hero);
+            zombieLogic.Agent.SetDestination(zombieLogic.transform.position);
+            zombieLogic.transform.LookAt(zombieLogic.Hero);
 
-            if (isAttacking)
+            if (zombieLogic.IsAttacking)
                 return;
 
-            enemyMovement.Animator.SetTrigger("Attack");
-            isAttacking = true;
+            zombieLogic.Animator.SetTrigger("Attack");
+            zombieLogic.IsAttacking = true;
         }
     }
 }

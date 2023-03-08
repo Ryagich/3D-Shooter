@@ -2,45 +2,49 @@
 
 namespace AI.States
 {
-    public class RandomWalking : IState
+    public class RandomWalking : State
     {
-        private readonly EnemyMovement enemyMovement;
+        private readonly ZombieLogic zombieLogic;
         private bool isWalkPointSet;
 
-        public RandomWalking(EnemyMovement enemyMovement)
+        public RandomWalking(ZombieLogic zombieLogic)
         {
-            this.enemyMovement = enemyMovement;
+            this.zombieLogic = zombieLogic;
         }
 
-        public void FixedUpdate()
+        public override void OnEnter()
         {
-            if (!enemyMovement.gameObject)
+            isWalkPointSet = false;
+        }
+
+        public override void FixedUpdate()
+        {
+            if (!zombieLogic.gameObject)
                 return;
 
-            if (isWalkPointSet)
+            if (!isWalkPointSet)
                 SearchWalkPoint();
 
-            enemyMovement.Agent.SetDestination(enemyMovement.WalkPoint);
-            enemyMovement.transform.LookAt(enemyMovement.WalkPoint);
+            zombieLogic.Agent.SetDestination(zombieLogic.WalkPoint);
 
-            var distance = enemyMovement.transform.position - enemyMovement.WalkPoint;
+            var distance = zombieLogic.transform.position - zombieLogic.WalkPoint;
             if (distance.magnitude < 1.0f)
                 isWalkPointSet = false;
 
-            enemyMovement.Animator.SetBool("isWalk", true);
-            enemyMovement.Animator.SetBool("IsIdle", false);
+            zombieLogic.Animator.SetBool("isWalk", true);
+            zombieLogic.Animator.SetBool("IsIdle", false);
         }
 
         private void SearchWalkPoint()
         {
-            var rZ = Random.Range(enemyMovement.WalkPointRange, enemyMovement.WalkPointRange);
-            var rX = Random.Range(enemyMovement.WalkPointRange, enemyMovement.WalkPointRange);
+            var rZ = Random.Range(zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
+            var rX = Random.Range(zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
 
-            var position = enemyMovement.transform.position;
+            var position = zombieLogic.transform.position;
             var point = new Vector3(position.x + rX, position.y, position.z + rZ);
-            enemyMovement.WalkPoint = point;
+            zombieLogic.WalkPoint = point;
 
-            if (Physics.Raycast(point, -enemyMovement.transform.up, 2.0f, enemyMovement.GroundMask))
+            if (Physics.Raycast(point, -zombieLogic.transform.up, 2.0f, zombieLogic.GroundMask))
                 isWalkPointSet = true;
         }
     }

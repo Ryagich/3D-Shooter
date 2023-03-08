@@ -1,29 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using AI.States;
 using UnityEngine.Events;
 
 namespace AI
 {
     public class StateMachine
     {
-        public UnityEvent<IState> OnStateChanged { get; } = new UnityEvent<IState>();
+        public IState Entry { get; }
+        public IState AnyState { get; }
+        public IState Exit { get; }
+
         public IState CurrentState { get; private set; }
-        private List<StateTransition> _fromAny;
+
+        public UnityEvent<IState> OnStateChanged { get; } = new();
+
+        public StateMachine()
+        {
+            Entry = new State();
+            AnyState = new State();
+            Exit = new State();
+
+            CurrentState = Entry;
+        }
+
 
         public void UpdateStates()
         {
-            var transition = _fromAny.FirstOrDefault(x => x.Trigger());
+            var transition = AnyState.Transitions
+                .Concat(CurrentState.Transitions)
+                .FirstOrDefault(x => x.Trigger());
 
             if (transition == null)
                 return;
 
-            CurrentState = transition.NextState;
+            SetState(transition.NextState);
+
+            if (CurrentState == Exit)
+                SetState(Entry);
         }
 
-        public void AddFromAnyTransition(Func<bool> trigger, IState nextState)
+        private void SetState(IState state)
         {
-            _fromAny.Add(new StateTransition(trigger, nextState));
+            CurrentState = state;
+            CurrentState.OnEnter();
         }
     }
 }
