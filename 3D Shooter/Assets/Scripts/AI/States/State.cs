@@ -12,6 +12,10 @@ namespace AI.States
         {
         }
 
+        public virtual void OnExit()
+        {
+        }
+
         public IList<StateTransition> Transitions { get; } = new List<StateTransition>();
     }
 }

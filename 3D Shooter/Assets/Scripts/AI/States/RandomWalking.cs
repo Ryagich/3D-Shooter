@@ -7,6 +7,8 @@ namespace AI.States
         private readonly ZombieLogic zombieLogic;
         private bool isWalkPointSet;
 
+        private float initialSpeed;
+
         public RandomWalking(ZombieLogic zombieLogic)
         {
             this.zombieLogic = zombieLogic;
@@ -15,6 +17,8 @@ namespace AI.States
         public override void OnEnter()
         {
             isWalkPointSet = false;
+            initialSpeed = zombieLogic.Agent.speed;
+            zombieLogic.Agent.speed = zombieLogic.WalkingSpeed;
         }
 
         public override void FixedUpdate()
@@ -30,6 +34,11 @@ namespace AI.States
             var distance = zombieLogic.transform.position - zombieLogic.WalkPoint;
             if (distance.magnitude < 1.0f)
                 isWalkPointSet = false;
+        }
+
+        public override void OnExit()
+        {
+            zombieLogic.Agent.speed = initialSpeed;
         }
 
         private void SearchWalkPoint()

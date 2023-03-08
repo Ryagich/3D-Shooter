@@ -41,6 +41,7 @@ namespace AI
 
         private void SetState(IState state)
         {
+            CurrentState.OnExit();
             CurrentState = state;
             CurrentState.OnEnter();
         }

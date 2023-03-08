@@ -6,6 +6,7 @@ namespace AI
     {
         void OnEnter();
         void FixedUpdate();
+        void OnExit();
         IList<StateTransition> Transitions { get; }
     }
 }

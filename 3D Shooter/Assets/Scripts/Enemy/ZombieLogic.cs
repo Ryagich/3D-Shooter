@@ -6,14 +6,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using Utils;
 
-[ExecuteAlways]
 [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(EntityVisualDetector))]
+[RequireComponent(typeof(HpController))]
 public class ZombieLogic : MonoBehaviour
 {
     [field: Header("Random walking")]
     [field: SerializeField] public Vector3 WalkPoint { get; set; }
     [field: SerializeField] public float WalkPointRange { get; private set; } = 15;
     [field: SerializeField] public LayerMask GroundMask { get; private set; }
+    [field: SerializeField, Min(0)] public float WalkingSpeed { get; private set; } = 0.5f;
 
     [field: Header("Attacking")]
     [field: SerializeField] public float AttackRange { get; private set; }
@@ -21,6 +22,7 @@ public class ZombieLogic : MonoBehaviour
 
     [field: Header("Hero chasing")]
     [field: SerializeField] public float ChasingRange { get; private set; } = 50;
+    [field: SerializeField, Min(0)] public float ChasingSpeed { get; private set; } = 1f;
 
     [Header("Debug")]
     [SerializeField] private bool _logsEnabled;
@@ -31,6 +33,7 @@ public class ZombieLogic : MonoBehaviour
     public bool IsAttacking { get; set; }
 
     private StateMachine stateMachine;
+    private ZombieAnimator animator;
 
     private void Awake()
     {
@@ -63,6 +66,9 @@ public class ZombieLogic : MonoBehaviour
 
         stateMachine.Entry.Transitions.Add(() => true, randomWalking);
         stateMachine.AnyState.Transitions.Add(toAttack);
+
+        var hpController = GetComponent<HpController>();
+        animator = new ZombieAnimator(Animator, Agent, attacking, hpController);
     }
 
     private void FixedUpdate()
@@ -70,9 +76,13 @@ public class ZombieLogic : MonoBehaviour
         stateMachine.UpdateStates();
         stateMachine.CurrentState.FixedUpdate();
 
-
         if (_logsEnabled)
             Debug.Log($"State of {name}: {stateMachine.CurrentState.GetType().Name}");
+    }
+
+    private void Update()
+    {
+        animator.Update();
     }
 
     [UsedImplicitly]

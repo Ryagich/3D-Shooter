@@ -15,12 +15,11 @@ public class EnemyDead : MonoBehaviour
         hp = GetComponent<HpController>();
         movement = GetComponent<ZombieLogic>();
 
-        hp.Deaded += Die;
+        hp.OnDeath.AddListener(Die);
     }
 
     private void Die()
     {
-        animator.SetTrigger("isDead");
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         GetComponent<NavMeshAgent>().speed = 0.0f;
         movement.enabled = false;

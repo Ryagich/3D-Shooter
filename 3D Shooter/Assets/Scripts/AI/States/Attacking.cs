@@ -1,7 +1,10 @@
-﻿namespace AI.States
+﻿using UnityEngine.Events;
+
+namespace AI.States
 {
     public class Attacking : State
     {
+        public UnityEvent OnAttack { get; } = new();
         private readonly ZombieLogic zombieLogic;
 
         public Attacking(ZombieLogic zombieLogic)
@@ -17,8 +20,9 @@
             if (zombieLogic.IsAttacking)
                 return;
 
-            zombieLogic.Animator.SetTrigger("Attack");
+            OnAttack.Invoke();
             zombieLogic.IsAttacking = true;
         }
+        
     }
 }

@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HpController : MonoBehaviour
 {
-    public event Action Deaded;
+    public UnityEvent OnDeath { get; } = new ();
 
     public bool IsAlive { get; private set; } = true;
     public BarModel BarM
@@ -40,11 +39,11 @@ public class HpController : MonoBehaviour
         Debug.Log(BarM.Amount);
         if (BarM.Amount == 0)
         {
-            Debug.Log("Умер");
+            Debug.Log("пїЅпїЅпїЅпїЅ");
             if (_hpV)
                 _hpV.ChangeState(false);
             IsAlive = false;
-            Deaded?.Invoke();
+            OnDeath?.Invoke();
             return;
         }
         if (_hpV)

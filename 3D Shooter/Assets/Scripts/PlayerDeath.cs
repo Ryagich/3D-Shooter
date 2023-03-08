@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ public class PlayerDeath : MonoBehaviour
     {
         HeroState.IsDead = false;
         hp = GetComponent<HpController>();
-        hp.Deaded += Die;
+        hp.OnDeath.AddListener(Die);
     }
 
     private void Die()
@@ -23,6 +22,6 @@ public class PlayerDeath : MonoBehaviour
             i.SetActive(false);
         _deathScreen.SetActive(true);
         HeroState.IsDead = true;
-        Debug.Log("Óìåð 2");
+        Debug.Log("Ð£Ð¼ÐµÑ€ 2");
     }
 }
