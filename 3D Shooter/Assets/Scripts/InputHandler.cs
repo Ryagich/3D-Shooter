@@ -27,6 +27,7 @@ public class InputHandler : MonoBehaviour
     public static event Action VDowned;
     public static event Action TabDowned;
     public static event Action TabUped;
+    public static event Action EscUped;
 
     public static Vector3 Movement;
 
@@ -102,5 +103,8 @@ public class InputHandler : MonoBehaviour
             TabDowned?.Invoke();
         if (Input.GetKeyUp(KeyCode.Tab))
             TabUped?.Invoke();
+        
+        if(Input.GetKeyUp(KeyCode.Escape))
+            EscUped?.Invoke();
     }
 }

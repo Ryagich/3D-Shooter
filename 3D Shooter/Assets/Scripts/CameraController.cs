@@ -1,28 +1,25 @@
+using Settings;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float _sensitivity;
     [SerializeField, Range(0.0f, 500.0f)] private float _targetDistance = 200.0f;
     [SerializeField] private Transform _player, _target, _cameraTrans;
     [SerializeField] private LayerMask _layers;
     [SerializeField, Range(0.0f, 100.0f)] private float _targetSpeed = 5.0f;
 
     private float mouseX, mouseY, yRotation;
-    private new Camera camera;
-    public Camera GetCamera => camera;
 
     private void Awake()
     {
         InputHandler.OnMouseX += RotateX;
         InputHandler.OnMouseY += RotateY;
         Cursor.lockState = CursorLockMode.Locked;
-        camera = _cameraTrans.GetComponent<Camera>();
     }
 
     public void RotateX(float x)
     {
-        mouseX = x * _sensitivity * Time.deltaTime;
+        mouseX = x * UserSettings.CameraSensitivity * Time.deltaTime;
         _player.Rotate(mouseX * Vector3.up);
 
         UpdateTargetLook();
@@ -30,7 +27,7 @@ public class CameraController : MonoBehaviour
 
     public void RotateY(float y)
     {
-        mouseY = y * _sensitivity * Time.deltaTime;
+        mouseY = y * UserSettings.CameraSensitivity * Time.deltaTime;
         yRotation -= mouseY;
         yRotation = Mathf.Clamp(yRotation, -45, 70);
         _cameraTrans.localRotation = Quaternion.Euler(yRotation, 0f, 0f);
@@ -43,8 +40,8 @@ public class CameraController : MonoBehaviour
         var ray = new Ray(_cameraTrans.position, _cameraTrans.forward);
 
         var lerpTarget = Physics.Raycast(ray, out var hit, _targetDistance, _layers)
-                                                    ? hit.point
-                                                    : _cameraTrans.position + _cameraTrans.forward * _targetDistance;
+            ? hit.point
+            : _cameraTrans.position + _cameraTrans.forward * _targetDistance;
         _target.position = Vector3.Lerp(_target.position, lerpTarget, Time.fixedDeltaTime * _targetSpeed);
     }
 
