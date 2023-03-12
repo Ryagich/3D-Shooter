@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace AI.States
 {
     public class RandomWalking : State
     {
         private readonly ZombieLogic zombieLogic;
-        private bool isWalkPointSet;
 
         private float initialSpeed;
 
@@ -16,42 +16,48 @@ namespace AI.States
 
         public override void OnEnter()
         {
-            isWalkPointSet = false;
             initialSpeed = zombieLogic.Agent.speed;
-            zombieLogic.Agent.speed = zombieLogic.WalkingSpeed;
+            zombieLogic.Agent.ResetPath();
         }
 
         public override void FixedUpdate()
         {
-            if (!zombieLogic.gameObject)
-                return;
+            zombieLogic.Speed = zombieLogic.WalkingSpeed;
 
-            if (!isWalkPointSet)
-                SearchWalkPoint();
+            var distance = zombieLogic.transform.position - zombieLogic.Agent.destination;
 
-            zombieLogic.Agent.SetDestination(zombieLogic.WalkPoint);
-
-            var distance = zombieLogic.transform.position - zombieLogic.WalkPoint;
-            if (distance.magnitude < 1.0f)
-                isWalkPointSet = false;
+            if (distance.magnitude < 1.0f || !zombieLogic.Agent.hasPath)
+            {
+                var destinationPoint = FindDestinationPoint();
+                if (destinationPoint.HasValue)
+                {
+                    zombieLogic.Agent.SetDestination(destinationPoint.Value);
+                }
+            }
         }
 
         public override void OnExit()
         {
-            zombieLogic.Agent.speed = initialSpeed;
+            zombieLogic.Speed = initialSpeed;
         }
 
-        private void SearchWalkPoint()
+        private Vector3? FindDestinationPoint()
         {
             var rZ = Random.Range(-zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
             var rX = Random.Range(-zombieLogic.WalkPointRange, zombieLogic.WalkPointRange);
 
             var position = zombieLogic.transform.position;
             var point = new Vector3(position.x + rX, position.y, position.z + rZ);
-            zombieLogic.WalkPoint = point;
 
-            if (Physics.Raycast(point, -zombieLogic.transform.up, 2.0f, zombieLogic.GroundMask))
-                isWalkPointSet = true;
+            var isFoundPoint = NavMesh.SamplePosition(point, out var navMeshHit, zombieLogic.WalkPointRange, 1);
+
+            if (!isFoundPoint)
+                return null;
+
+            var directionToNavMesh = navMeshHit.position - point;
+            var delta = directionToNavMesh.normalized * zombieLogic.Agent.radius;
+
+            return navMeshHit.position + new Vector3(delta.x, 0, delta.z);
         }
     }
 }

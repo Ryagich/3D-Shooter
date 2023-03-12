@@ -14,17 +14,17 @@
         public override void OnEnter()
         {
             initialSpeed = zombieLogic.Agent.speed;
-            zombieLogic.Agent.speed = zombieLogic.ChasingSpeed;
         }
 
         public override void FixedUpdate()
         {
+            zombieLogic.Speed = zombieLogic.ChasingSpeed;
             zombieLogic.Agent.SetDestination(zombieLogic.Hero.position);
         }
 
         public override void OnExit()
         {
-            zombieLogic.Agent.speed = initialSpeed;
+            zombieLogic.Speed = initialSpeed;
         }
     }
 }

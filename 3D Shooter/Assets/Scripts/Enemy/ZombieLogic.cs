@@ -1,3 +1,4 @@
+using System.Linq;
 using AI;
 using AI.States;
 using JetBrains.Annotations;
@@ -10,8 +11,9 @@ using Utils;
 [RequireComponent(typeof(HpController), typeof(EntitySoundDetector))]
 public class ZombieLogic : MonoBehaviour
 {
+    [field: SerializeField] public float Speed { get; set; }
+
     [field: Header("Random walking")]
-    [field: SerializeField] public Vector3 WalkPoint { get; set; }
     [field: SerializeField] public float WalkPointRange { get; private set; } = 15;
     [field: SerializeField] public LayerMask GroundMask { get; private set; }
     [field: SerializeField, Min(0)] public float WalkingSpeed { get; private set; } = 0.5f;
@@ -26,6 +28,7 @@ public class ZombieLogic : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool _logsEnabled;
+    [SerializeField] private bool _drawPath;
 
     public NavMeshAgent Agent { get; private set; }
     public Animator Animator { get; private set; }
@@ -71,7 +74,7 @@ public class ZombieLogic : MonoBehaviour
         stateMachine.AnyState.Transitions.Add(toAttack);
 
         var hpController = GetComponent<HpController>();
-        animator = new ZombieAnimator(Animator, Agent, attacking, hpController);
+        animator = new ZombieAnimator(this, Animator, attacking, hpController);
     }
 
     private void FixedUpdate()
@@ -106,5 +109,22 @@ public class ZombieLogic : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, ChasingRange);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!_drawPath || Agent == null)
+            return;
+
+        Gizmos.color = Color.red;
+
+        var previousCorner = transform.position;
+        foreach (var corner in Agent.path.corners.Append(Agent.destination))
+        {
+            Gizmos.DrawLine(previousCorner, corner);
+            previousCorner = corner;
+        }
+
+        Gizmos.DrawSphere(Agent.destination, 0.1f);
     }
 }
