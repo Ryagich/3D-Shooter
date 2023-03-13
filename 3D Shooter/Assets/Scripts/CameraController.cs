@@ -48,7 +48,8 @@ public class CameraController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(Camera.main.transform.position, _target.position);
+        if (Camera.main)
+            Gizmos.DrawLine(Camera.main.transform.position, _target.position);
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(_cameraTrans.position, _cameraTrans.forward * _targetDistance * 200);
     }
