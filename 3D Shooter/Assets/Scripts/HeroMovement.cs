@@ -1,7 +1,8 @@
 using System.Linq;
+using Bar;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharacterController), typeof(StaminaController))]
 public class HeroMovement : MonoBehaviour
 {
     [SerializeField] [Range(0.0f, 50.0f)] private float _maxStepSpeed = 4.0f;
@@ -10,19 +11,29 @@ public class HeroMovement : MonoBehaviour
     [SerializeField] [Range(0.0f, 0.3f)] private float _linearDragXZ = .05f;
     [SerializeField] [Range(0.0f, 20.0f)] private float _gravity = 10.0f;
     [SerializeField] [Range(0.0f, 10.0f)] private float _jumpPower = 4.5f;
-    [SerializeField] [Range(0, 5)] private float _sittingHeight = 1;
+
+    [Header("Sitting")]
+    [SerializeField] [Range(0, 3)] private float _sittingHeight = 1;
+    [SerializeField] [Range(0, 1)] private float _sittingSpeedMultiplier = 0.5f;
+
+    [Header("Sprinting")]
+    [SerializeField] [Range(0.0f, 50f)] private float _sprintStaminaDrain;
+    [SerializeField] [Range(0.0f, 10f)] private float _sprintSpeedMultiplier;
 
     [SerializeField] private Vector3 velocity = Vector3.zero; // Debug SerializeField
-    private readonly Collider[] standUpCheckOverlapResult = new Collider[2];
-
+    
     private CharacterController characterC;
+    private StaminaController staminaController;
 
     private float standingHeight;
-    private bool standUpRequest;
+    private bool standUpRequested;
+    private bool isSitting;
+    private readonly Collider[] standUpCheckOverlapResult = new Collider[2];
 
     private void Awake()
     {
         characterC = GetComponent<CharacterController>();
+        staminaController = GetComponent<StaminaController>();
         InputHandler.SpacePressed += Jump;
         InputHandler.LeftCtrlDowned += SitDown;
         InputHandler.LeftCtrlUped += StandUp;
@@ -42,14 +53,21 @@ public class HeroMovement : MonoBehaviour
             velocity = Vector3.MoveTowards(velocity, Vector3.zero, _linearDragXZ);
         }
 
+        var maxSpeed = _maxStepSpeed;
+
+        if (TrySprint())
+            maxSpeed *= _sprintSpeedMultiplier;
+
+        if (isSitting)
+            maxSpeed *= _sittingSpeedMultiplier;
+
         velocity += deltaV;
         var vy = velocity.y;
-        velocity = Vector3.ClampMagnitude(velocity.WithY(0), _maxStepSpeed).WithY(vy);
+        velocity = Vector3.ClampMagnitude(velocity.WithY(0), maxSpeed).WithY(vy);
 
         characterC.Move(velocity * Time.fixedDeltaTime);
 
-        if (standUpRequest && TryStandUp())
-            standUpRequest = false;
+        TryStandUp();
     }
 
     private void OnDestroy()
@@ -64,23 +82,30 @@ public class HeroMovement : MonoBehaviour
 
     private void StandUp()
     {
-        standUpRequest = true;
+        standUpRequested = true;
     }
 
     private void SitDown()
     {
-        if (standUpRequest)
+        if (standUpRequested)
             return;
+
+        standUpRequested = false;
+        isSitting = true;
 
         standingHeight = characterC.height;
         characterC.height = _sittingHeight;
+
         var offsetY = (standingHeight - _sittingHeight) / 2;
+
         characterC.center = new Vector3(0, offsetY, 0);
-        standUpRequest = false;
     }
 
     private bool TryStandUp()
     {
+        if (!standUpRequested)
+            return false;
+
         var heroYOffset = characterC.center.y + characterC.height / 2;
         var heroTopPoint = transform.position + new Vector3(0, heroYOffset, 0);
 
@@ -98,6 +123,9 @@ public class HeroMovement : MonoBehaviour
         characterC.center = characterCStandingCenter;
         characterC.height = standingHeight;
 
+        standUpRequested = false;
+        isSitting = false;
+
         return true;
     }
 
@@ -105,5 +133,21 @@ public class HeroMovement : MonoBehaviour
     {
         if (characterC.isGrounded)
             velocity.y = _jumpPower;
+    }
+
+    private bool TrySprint()
+    {
+        if (!characterC.isGrounded || isSitting)
+            return false;
+
+        var staminaDrainDelta = _sprintStaminaDrain * Time.fixedDeltaTime;
+
+        if (InputHandler.IsShift && staminaController.Stamina > staminaDrainDelta)
+        {
+            staminaController.ChangeAmount(-staminaDrainDelta);
+            return true;
+        }
+
+        return false;
     }
 }
