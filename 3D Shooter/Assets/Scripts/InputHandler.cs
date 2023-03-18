@@ -20,6 +20,8 @@ public class InputHandler : MonoBehaviour
     public static event Action FDowned;
     public static event Action ShiftDowned;
     public static event Action ShiftUped;
+    public static event Action LeftCtrlDowned;
+    public static event Action LeftCtrlUped;
     public static event Action ShiftPressed;
     public static event Action FirstWeaponChoosed;
     public static event Action SecondWeaponChoosed;
@@ -34,6 +36,7 @@ public class InputHandler : MonoBehaviour
     public static bool IsLeftMouse { get; private set; } = false;
     public static bool IsRightMouse { get; private set; } = false;
     public static bool IsShift { get; private set; } = false;
+    public static bool IsLeftCtrl { get; private set; }
     public static Vector2 MousePos => Input.mousePosition;
 
     private void Update()
@@ -89,6 +92,18 @@ public class InputHandler : MonoBehaviour
             IsShift = false;
             ShiftUped?.Invoke();
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            IsLeftCtrl = true;
+            LeftCtrlDowned?.Invoke();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            IsRightMouse = false;
+            LeftCtrlUped?.Invoke();
+        }
+        
         if (Input.GetKeyDown(KeyCode.V))
             VDowned?.Invoke();
 

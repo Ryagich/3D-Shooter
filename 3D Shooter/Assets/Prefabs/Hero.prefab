@@ -3354,6 +3354,7 @@ MonoBehaviour:
   _linearDragXZ: 0.05
   _gravity: 10
   _jumpPower: 4.5
+  _sittingHeight: 1
   velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &6659417335419396315
 MonoBehaviour:
