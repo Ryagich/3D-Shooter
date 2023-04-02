@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class HpController : MonoBehaviour
 {
     public UnityEvent OnDeath { get; } = new ();
+    public UnityEvent<float> OnAmountChanged = new();
 
     public bool IsAlive { get; private set; } = true;
     public BarModel BarM
@@ -36,6 +37,9 @@ public class HpController : MonoBehaviour
         if (!IsAlive)
             return;
         BarM.ChangeAmount(value);
+        
+        OnAmountChanged.Invoke(value);
+        
         Debug.Log(BarM.Amount);
         if (BarM.Amount == 0)
         {
