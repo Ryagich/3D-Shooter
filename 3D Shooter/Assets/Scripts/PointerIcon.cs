@@ -15,10 +15,7 @@ public class PointerIcon : MonoBehaviour
     }
 
     public void SetIconPosition(Vector3 position, Quaternion rotation)
-    {
-        transform.position = position;
-        transform.rotation = rotation;
-    }
+    => transform.SetPositionAndRotation(position, rotation);
 
     public void Show()
     {

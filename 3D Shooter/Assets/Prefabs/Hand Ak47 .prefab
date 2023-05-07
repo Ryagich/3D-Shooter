@@ -224,8 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shootPoint: {fileID: 6855700781784723197}
-  _speed: 600
-  _damage: 59
+  _speed: 550
+  _damage: 55
   _spread: 0.35
 --- !u!114 &4518285864959935157
 MonoBehaviour:
@@ -476,7 +476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c771dcc9ebf994ba95fad634782822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanFollow: 1
 --- !u!114 &-2238771124323906779
 MonoBehaviour:
   m_ObjectHideFlags: 0

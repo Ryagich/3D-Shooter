@@ -3596,7 +3596,7 @@ MonoBehaviour:
   _parentTrans: {fileID: 6659417336628548430}
   items: []
   handIndex: 0
-  inventoryMCreator: {fileID: 6659417335419396407}
+  inventoryCreator: {fileID: 6659417335419396407}
 --- !u!114 &6659417335419396407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4650,6 +4650,7 @@ MonoBehaviour:
   _gridVs:
   - {fileID: 6659417335143197316}
   - {fileID: 6659417335330674883}
+  _itemMenuController: {fileID: 0}
   _tileSize: {x: 32, y: 32}
   IsOpen: 0
 --- !u!114 &6659417335722672407

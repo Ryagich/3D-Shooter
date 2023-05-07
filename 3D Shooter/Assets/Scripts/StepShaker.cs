@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class StepShaker : MonoBehaviour
 {
-    [SerializeField] private float _stepDistance = 5.0f;
-
-    [Header("Shake Stats")]
-    [SerializeField, Min(0.0f)] private float _time = 1.0f, _stepAngle = 2.0f, _sideAngle = 5.0f, _treshold = 0.05f;
+    [SerializeField, Min(0.0f)]
+    private float _time = 1.0f,
+                  _stepAngle = 2.0f, _sideAngle = 5.0f, _treshold = 0.05f;
 
     private CharacterController characterC;
     private CameraShaker shaker;
-    private bool isRotate;
-    private float currT = 0.0f;
+    private bool isRotate = false, isShake = false;
 
     private void Awake()
     {
@@ -24,11 +22,19 @@ public class StepShaker : MonoBehaviour
     {
         if (!characterC.isGrounded)
             return;
-
-
+        if (InputHandler.Movement.magnitude > _treshold && !isShake)
+            Shake();
     }
 
-    private void TurnCamera(Vector3 move)
+    private void Shake()
     {
+        shaker.ShakeCamera(_time, _stepAngle, isRotate);
+        isRotate = !isRotate;
+        isShake = true;
+        Invoke(nameof(ShakeCor), _time + _treshold);
+    }
+    private void ShakeCor()
+    {
+        isShake = false;
     }
 }
