@@ -58,3 +58,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+**/.idea/
+**/3D Shooter/.idea/
+3D Shooter/UserSettings

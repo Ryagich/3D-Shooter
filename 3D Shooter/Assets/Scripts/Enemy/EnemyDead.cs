@@ -7,20 +7,19 @@ public class EnemyDead : MonoBehaviour
 {
     private Animator animator;
     private HpController hp;
-    private EnemyMovement movement;
-    
+    private ZombieLogic movement;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         hp = GetComponent<HpController>();
-        movement = GetComponent<EnemyMovement>();
+        movement = GetComponent<ZombieLogic>();
 
-        hp.Deaded += Die;
+        hp.OnDeath.AddListener(Die);
     }
 
     private void Die()
     {
-        animator.SetTrigger("isDead");
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         GetComponent<NavMeshAgent>().speed = 0.0f;
         movement.enabled = false;

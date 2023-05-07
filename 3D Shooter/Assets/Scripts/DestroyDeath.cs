@@ -6,7 +6,7 @@ public class DestroyDeath : MonoBehaviour
 {
     private void Awake()
     {
-        GetComponent<HpController>().Deaded += Destroy; 
+        GetComponent<HpController>().OnDeath.AddListener(Destroy);
     }
 
     private void Destroy()
