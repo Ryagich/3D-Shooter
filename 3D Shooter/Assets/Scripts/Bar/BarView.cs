@@ -11,9 +11,7 @@ public class BarView : MonoBehaviour
     [SerializeField] private Image _fillBar;
 
     public void UpdateBar(float value, float maxValue)
-    {
-        _fillBar.fillAmount = value / maxValue;
-    }
+    => _fillBar.fillAmount = value / maxValue;
 
     public void ChangeState(bool state)
     {

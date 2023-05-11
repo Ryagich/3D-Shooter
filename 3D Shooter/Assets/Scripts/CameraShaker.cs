@@ -10,10 +10,7 @@ public class CameraShaker : MonoBehaviour
 
     private static CameraShaker _instance;
 
-    private void Awake()
-    {
-        _instance = this;
-    }
+    private void Awake() => _instance = this;
 
     public void ShakeCamera(float time, float angleDeg, bool isRight)
     {

@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _materials:
-  - {fileID: 2100000, guid: 5b19a045171d2b048ab54e2a44dc1012, type: 2}
+  - {fileID: 0}
   _effectPrefabs:
   - {fileID: 363918979369291548, guid: 27db9dcf9dacde648ae89f56e1001473, type: 3}
   _defHitEffect: {fileID: 6951347464883340117, guid: 654c57e401345764b91ed2ef45a1485b,

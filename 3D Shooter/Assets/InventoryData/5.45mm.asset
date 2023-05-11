@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
-  m_Name: 5
+  m_Name: 5.45mm
   m_EditorClassIdentifier: 
   _maxAmount: 30
   _defaultAmount: 30
@@ -20,3 +20,4 @@ MonoBehaviour:
   _dropItem: {fileID: 5341557251856953734, guid: b3403cc4c9fc6a043aa469772f8497d9,
     type: 3}
   _handItem: {fileID: 0}
+  _additionalData: []

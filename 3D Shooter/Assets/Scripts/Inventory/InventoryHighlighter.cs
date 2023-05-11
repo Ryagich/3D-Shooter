@@ -11,10 +11,7 @@ public class InventoryHighlighter : MonoBehaviour
 
     private Image img;
 
-    private void Awake()
-    {
-        img = hightlighter.GetComponent<Image>();
-    }
+    private void Awake() => img = hightlighter.GetComponent<Image>();
 
     private void Update()
     {
@@ -110,10 +107,8 @@ public class InventoryHighlighter : MonoBehaviour
     }
 
     private void SetXYPos(Vector2 pos)
-    {
-        hightlighter.localPosition = new Vector3(pos.x, pos.y,
-            hightlighter.localPosition.z);
-    }
+        =>hightlighter.localPosition = new Vector3(pos.x, pos.y,
+          hightlighter.localPosition.z);
 
     private void CheckSetParent(Transform parent)
     {
@@ -127,8 +122,5 @@ public class InventoryHighlighter : MonoBehaviour
             img.enabled = active;
     }
 
-    public void Disable()
-    {
-        CheckSetActive(false);
-    }
+    public void Disable() =>  CheckSetActive(false);
 }

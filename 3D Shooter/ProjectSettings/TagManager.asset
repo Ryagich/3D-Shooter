@@ -27,7 +27,7 @@ TagManager:
   - Enemy
   - DeadEnemy
   - Wall
-  - 
+  - NavMesh
   - 
   - 
   - 

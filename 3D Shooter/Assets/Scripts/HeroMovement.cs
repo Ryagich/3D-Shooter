@@ -70,20 +70,11 @@ public class HeroMovement : MonoBehaviour
         TryStandUp();
     }
 
-    private void OnDestroy()
-    {
-        InputHandler.SpacePressed -= Jump;
-    }
+    private void OnDestroy() => InputHandler.SpacePressed -= Jump;
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position, 0.1f);
-    }
+    private void OnDrawGizmos() => Gizmos.DrawSphere(transform.position, 0.1f);
 
-    private void StandUp()
-    {
-        standUpRequested = true;
-    }
+    private void StandUp() => standUpRequested = true;
 
     private void SitDown()
     {

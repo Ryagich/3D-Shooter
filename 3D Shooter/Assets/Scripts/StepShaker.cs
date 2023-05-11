@@ -33,8 +33,5 @@ public class StepShaker : MonoBehaviour
         isShake = true;
         Invoke(nameof(ShakeCor), _time + _treshold);
     }
-    private void ShakeCor()
-    {
-        isShake = false;
-    }
+    private void ShakeCor() => isShake = false;
 }

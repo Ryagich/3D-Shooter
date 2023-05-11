@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d83f82780113db40bcb91091f09badd, type: 3}
   m_Name: BackPack
   m_EditorClassIdentifier: 
-  _maxAmount: 4
+  _maxAmount: 1
   _defaultAmount: 1
   _size: {x: 4, y: 4}
   _itemIcon: {fileID: 21300000, guid: fa9196a2067c5064baded94541ee8cb3, type: 3}
