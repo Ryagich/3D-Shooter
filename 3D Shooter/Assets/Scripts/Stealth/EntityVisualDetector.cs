@@ -34,14 +34,14 @@ namespace Stealth
         public bool CheckDetection()
         {
             var colliders = Physics.OverlapSphere(DetectionPoint, Radius, Detects);
-            Log($"Entities in radius: {colliders.Length}");
+            //Log($"Entities in radius: {colliders.Length}");
 
             var detected = colliders
                 .Where(IsInFov)
                 .Where(HasNoObstaclesBetween)
                 .FirstOrDefault();
 
-            Log($"Detected: {detected?.gameObject.name}");
+            //Log($"Detected: {detected?.gameObject.name}");
             return detected != null;
         }
 
@@ -54,7 +54,7 @@ namespace Stealth
 
             var isInFov = angle <= HorizontalFov / 2;
 
-            Log($"Entity: {target.gameObject.name}, Angle: {angle}, IsInFov: {isInFov}");
+            //Log($"Entity: {target.gameObject.name}, Angle: {angle}, IsInFov: {isInFov}");
             return isInFov;
         }
 

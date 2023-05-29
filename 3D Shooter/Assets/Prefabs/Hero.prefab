@@ -3619,8 +3619,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxStepSpeed: 4
   _stepAcceleration: 8
-  _expDragXZ: 0.15
-  _linearDragXZ: 0.05
+  _expDragXZ: 0.175
+  _linearDragXZ: 0.075
   _gravity: 10
   _jumpPower: 4.5
   _sittingHeight: 1
@@ -5712,7 +5712,6 @@ GameObject:
   - component: {fileID: 6659417336307102774}
   - component: {fileID: 6659417336307102775}
   - component: {fileID: 6659417336307102772}
-  - component: {fileID: 6659417336307102769}
   m_Layer: 12
   m_Name: Hero Canvas
   m_TagString: Untagged
@@ -5809,23 +5808,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6659417336307102769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6659417336307102730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c2012e4251f8b46aef4eb29563f492, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  a: 1000
-  _pointerPrefab: {fileID: 978378551422719186, guid: 415fc04ee48981a4f83f0d3bca3efefe,
-    type: 3}
-  _point: {fileID: 6659417336292700960}
-  _camera: {fileID: 6659417336677607334}
 --- !u!1 &6659417336362259772
 GameObject:
   m_ObjectHideFlags: 0
