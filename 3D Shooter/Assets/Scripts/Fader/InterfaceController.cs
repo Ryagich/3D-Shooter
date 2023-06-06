@@ -1,19 +1,25 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class InterfaceController : MonoBehaviour
 {
     [SerializeField, Min(.0f)] private float _startTime = 5.0f, _defHoldTime = 10.0f, _endTime = 5f;
     [SerializeField] private Fader[] _faders;
+    [SerializeField] private bool _alwaysShow = true;
 
     private void Awake()
     {
         foreach (var fader in _faders)
             fader.SetDigits(_startTime, _defHoldTime, _endTime);
 
-        InputHandler.TabDowned += Show;
-        InputHandler.TabUped += Hide;
+        if (_alwaysShow)
+        {
+            Show();
+        }
+        else
+        {
+            InputHandler.TabDowned += Show;
+            InputHandler.TabUped += Hide;
+        }
     }
 
     private void Show()
@@ -32,6 +38,7 @@ public class InterfaceController : MonoBehaviour
             if (maxTime < lastStartTime)
                 maxTime = lastStartTime;
         }
+
         foreach (var fader in _faders)
             if (fader.State == FaderState.start)
             {
