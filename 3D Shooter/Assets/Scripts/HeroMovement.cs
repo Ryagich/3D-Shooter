@@ -21,7 +21,7 @@ public class HeroMovement : MonoBehaviour
     [SerializeField] [Range(0.0f, 10f)] private float _sprintSpeedMultiplier;
 
     [SerializeField] private Vector3 velocity = Vector3.zero; // Debug SerializeField
-    
+
     private CharacterController characterC;
     private StaminaController staminaController;
 
@@ -113,6 +113,8 @@ public class HeroMovement : MonoBehaviour
 
         characterC.center = characterCStandingCenter;
         characterC.height = standingHeight;
+        
+        transform.position = new Vector3(0, heroYOffset, 0) + transform.position;
 
         standUpRequested = false;
         isSitting = false;
