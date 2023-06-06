@@ -1068,24 +1068,27 @@ MonoBehaviour:
 
     Space - Jump
 
-    F - Interaction with objects
+    C - Crouch
 
-    I
-    - Inventory
+    F - Interaction
+    with objects
 
-    R - Reload/ Rotate item in inventory
+    I - Inventory
 
-    LMB - Shoot / Drag
-    item in inventory
+    R - Reload / Rotate item in inventory
+
+    LMB
+    - Shoot / Drag item in inventory
 
     RMB - Aiming (only in new weapons)
 
-    V - Change shooting
-    type
+    V
+    - Change shooting type
 
-    Shift - Hold breath while aiming
+    Shift - Sprint / Hold breath while aiming
 
-    1, 2, 3 - Weapon change'
+    1,
+    2, 3 - Weapon change'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}

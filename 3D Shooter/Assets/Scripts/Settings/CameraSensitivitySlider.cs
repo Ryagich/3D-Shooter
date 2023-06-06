@@ -7,16 +7,17 @@ namespace Settings
     public class CameraSensitivitySlider : MonoBehaviour
     {
         private Slider slider;
+        private const int Modifier = 20;
 
         private void Awake()
         {
             slider = GetComponent<Slider>();
-            slider.onValueChanged.AddListener(value =>  UserSettings.CameraSensitivity = value * 100);
+            slider.onValueChanged.AddListener(value =>  UserSettings.CameraSensitivity = value * Modifier);
         }
 
         private void OnEnable()
         {
-            slider.value = UserSettings.CameraSensitivity / 100;
+            slider.value = UserSettings.CameraSensitivity / Modifier;
         }
     }
 }

@@ -35,8 +35,8 @@ public class HeroMovement : MonoBehaviour
         characterC = GetComponent<CharacterController>();
         staminaController = GetComponent<StaminaController>();
         InputHandler.SpacePressed += Jump;
-        InputHandler.LeftCtrlDowned += SitDown;
-        InputHandler.LeftCtrlUped += StandUp;
+        InputHandler.CDowned += SitDown;
+        InputHandler.CUpded += StandUp;
     }
 
     private void FixedUpdate()

@@ -22,6 +22,8 @@ public class InputHandler : MonoBehaviour
     public static event Action ShiftUped;
     public static event Action LeftCtrlDowned;
     public static event Action LeftCtrlUped;
+    public static event Action CDowned;
+    public static event Action CUpded;
     public static event Action ShiftPressed;
     public static event Action FirstWeaponChoosed;
     public static event Action SecondWeaponChoosed;
@@ -104,6 +106,12 @@ public class InputHandler : MonoBehaviour
             LeftCtrlUped?.Invoke();
         }
         
+        if(Input.GetKeyDown(KeyCode.C))
+            CDowned?.Invoke();
+        
+        if(Input.GetKeyUp(KeyCode.C))
+            CUpded?.Invoke();
+
         if (Input.GetKeyDown(KeyCode.V))
             VDowned?.Invoke();
 

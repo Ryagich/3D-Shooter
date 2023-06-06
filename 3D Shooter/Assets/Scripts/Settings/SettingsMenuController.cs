@@ -14,7 +14,7 @@ namespace Settings
         {
             Menu.SetActive(InitialActive);
             
-            InputHandler.EscUped += () =>
+            InputHandler.TabDowned += () =>
             {
                 var newIsActive = !Menu.activeSelf;
                 
