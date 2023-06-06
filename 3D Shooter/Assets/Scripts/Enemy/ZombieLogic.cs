@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Utils;
 
-[RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(EntityVisualDetector))]
+[RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
 [RequireComponent(typeof(HpController), typeof(EntitySoundDetector))]
 public class ZombieLogic : MonoBehaviour
 {
@@ -45,7 +45,7 @@ public class ZombieLogic : MonoBehaviour
         Animator = GetComponent<Animator>();
         stateMachine = new StateMachine();
 
-        var detector = GetComponent<EntityVisualDetector>();
+        // var detector = GetComponent<EntityVisualDetector>();
         var soundDetector = GetComponent<EntitySoundDetector>();
 
         var randomWalking = new RandomWalking(this);
@@ -53,7 +53,7 @@ public class ZombieLogic : MonoBehaviour
         var attacking = new Attacking(this);
 
         var toHeroChasing = new StateTransition(
-            () => soundDetector.CheckDetection() || detector.CheckDetection(), heroChasing);
+            () => soundDetector.CheckDetection(), heroChasing);
 
         randomWalking.Transitions.Add(toHeroChasing);
 
