@@ -33,6 +33,10 @@ public class InputHandler : MonoBehaviour
     public static event Action TabUped;
     public static event Action EscUped;
 
+    public static event Action TU;
+
+    public static event Action TD;
+
     public static Vector3 Movement;
 
     public static bool IsLeftMouse { get; private set; } = false;
@@ -82,6 +86,11 @@ public class InputHandler : MonoBehaviour
             RDowned?.Invoke();
         if (Input.GetKeyDown(KeyCode.F))
             FDowned?.Invoke();
+        
+        if (Input.GetKeyDown(KeyCode.T))
+            TD?.Invoke();
+
+
         if (Input.GetKey(KeyCode.LeftShift))
             ShiftPressed?.Invoke();
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -124,6 +133,7 @@ public class InputHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
             TabDowned?.Invoke();
+        
         if (Input.GetKeyUp(KeyCode.Tab))
             TabUped?.Invoke();
         

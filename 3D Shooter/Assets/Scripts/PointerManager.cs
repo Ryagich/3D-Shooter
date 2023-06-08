@@ -82,6 +82,6 @@ public class PointerManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(_camera.transform.position, a);
+       // Gizmos.DrawWireSphere(_camera.transform.position, a);
     }
 }

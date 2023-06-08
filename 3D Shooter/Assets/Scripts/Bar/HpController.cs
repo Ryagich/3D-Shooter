@@ -18,7 +18,7 @@ public class HpController : MonoBehaviour
 
     [SerializeField] private Fader _hpFader;
     [SerializeField] private BarView _hpV;
-    [SerializeField, Min(.0f)] private float _hp = 100.0f, _maxHp = 100.0f;
+    [SerializeField, Min(.0f)] public float _hp = 100.0f, _maxHp = 100.0f;
 
     private BarModel hpM;
 
@@ -32,20 +32,18 @@ public class HpController : MonoBehaviour
 
     public void ChangeAmount(float value)
     {
-        Debug.Log(value);
-
         if (!IsAlive)
             return;
+        
         BarM.ChangeAmount(value);
         
         OnAmountChanged.Invoke(value);
         
-        Debug.Log(BarM.Amount);
         if (BarM.Amount == 0)
         {
-            Debug.Log("����");
             if (_hpV)
                 _hpV.ChangeState(false);
+            
             IsAlive = false;
             OnDeath?.Invoke();
             return;

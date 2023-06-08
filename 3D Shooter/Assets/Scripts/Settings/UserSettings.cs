@@ -10,7 +10,11 @@ namespace Settings
 
         public static void Load()
         {
+# if DEBUG
+            CameraSensitivity = 100;
+# else
             CameraSensitivity = PlayerPrefs.GetFloat(CameraSensitivityPref, 10);
+#endif
         }
 
         public static void Save()

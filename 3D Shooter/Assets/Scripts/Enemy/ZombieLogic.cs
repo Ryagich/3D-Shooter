@@ -8,7 +8,7 @@ using UnityEngine.AI;
 using Utils;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
-[RequireComponent(typeof(HpController), typeof(EntitySoundDetector))]
+[RequireComponent(typeof(HpController))]
 public class ZombieLogic : MonoBehaviour
 {
     [field: SerializeField] public float Speed { get; set; }
@@ -30,6 +30,8 @@ public class ZombieLogic : MonoBehaviour
     [SerializeField] private bool _logsEnabled;
     [SerializeField] private bool _drawPath;
 
+    public bool ChaseByDefault = true;
+
     public NavMeshAgent Agent { get; private set; }
     public Animator Animator { get; private set; }
     public Transform Hero { get; private set; }
@@ -45,34 +47,50 @@ public class ZombieLogic : MonoBehaviour
         Animator = GetComponent<Animator>();
         stateMachine = new StateMachine();
 
-        // var detector = GetComponent<EntityVisualDetector>();
+        //var detector = GetComponent<EntityVisualDetector>();
         var soundDetector = GetComponent<EntitySoundDetector>();
 
         var randomWalking = new RandomWalking(this);
         var heroChasing = new HeroChasing(this);
         var attacking = new Attacking(this);
 
-        var toHeroChasing = new StateTransition(
-            () => soundDetector.CheckDetection(), heroChasing);
+        if (ChaseByDefault)
+        {
+            var toAttack = new StateTransition(
+                () => Vector3.Distance(Hero.position, transform.position) < AttackRange, attacking);
 
-        randomWalking.Transitions.Add(toHeroChasing);
+            var toExit = new StateTransition(
+                () => Vector3.Distance(Hero.position, transform.position) > AttackRange, stateMachine.Exit);
 
-        var toRandomWalking = new StateTransition(
-            () => Vector3.Distance(Hero.position, transform.position) > ChasingRange, randomWalking);
+            attacking.Transitions.Add(toExit);
 
-        heroChasing.Transitions.Add(toRandomWalking);
+            stateMachine.Entry.Transitions.Add(() => true, heroChasing);
+            stateMachine.AnyState.Transitions.Add(toAttack);
+        }
+        else
+        {
+            var toHeroChasing = new StateTransition(
+                () => soundDetector.CheckDetection(), heroChasing);
 
-        var toAttack = new StateTransition(
-            () => Vector3.Distance(Hero.position, transform.position) < AttackRange, attacking);
+            randomWalking.Transitions.Add(toHeroChasing);
 
-        var toExit = new StateTransition(
-            () => Vector3.Distance(Hero.position, transform.position) > AttackRange, stateMachine.Exit);
+            var toRandomWalking = new StateTransition(
+                () => Vector3.Distance(Hero.position, transform.position) > ChasingRange, randomWalking);
 
-        attacking.Transitions.Add(toExit);
+            heroChasing.Transitions.Add(toRandomWalking);
 
-        stateMachine.Entry.Transitions.Add(() => true, randomWalking);
-        stateMachine.AnyState.Transitions.Add(toAttack);
+            var toAttack = new StateTransition(
+                () => Vector3.Distance(Hero.position, transform.position) < AttackRange, attacking);
 
+            var toExit = new StateTransition(
+                () => Vector3.Distance(Hero.position, transform.position) > AttackRange, stateMachine.Exit);
+
+            attacking.Transitions.Add(toExit);
+
+            stateMachine.Entry.Transitions.Add(() => true, randomWalking);
+            stateMachine.AnyState.Transitions.Add(toAttack);
+        }
+        
         var hpController = GetComponent<HpController>();
         animator = new ZombieAnimator(this, Animator, attacking, hpController);
     }
